@@ -1,0 +1,40 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:instagram_clone/firebase_options.dart';
+import 'package:instagram_clone/splash_screen.dart';
+
+import 'constants/colors.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Instagram',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(width: 1, color: Colors.white.withOpacity(0.2)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(width: 1, color: Colors.white.withOpacity(0.2)),
+          ),
+        ),
+      ),
+      home: const SplashScreen(),
+    );
+  }
+}
