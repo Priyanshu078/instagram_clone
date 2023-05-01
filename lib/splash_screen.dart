@@ -7,37 +7,10 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
     return AnimatedSplashScreen(
         duration: 3000,
         centered: true,
-        splash: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-                height: height * 0.2,
-                width: width * 0.2,
-                child: Image.asset('assets/images/instagram_logo.jpg')),
-            SizedBox(
-              height: height * 0.28,
-            ),
-            Column(children: [
-              const Text(
-                "from",
-                style: TextStyle(color: Colors.white),
-              ),
-              SizedBox(
-                height: height * 0.05,
-                width: width * 0.4,
-                child: Image.asset('assets/images/meta.png'),
-              ),
-            ]),
-            SizedBox(
-              height: height * 0.1,
-            )
-          ],
-        ),
+        splash: Image.asset('assets/images/instagram_logo.jpg'),
         nextScreen: const LoginPage(),
         backgroundColor: Colors.black);
   }
