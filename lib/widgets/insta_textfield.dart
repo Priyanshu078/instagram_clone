@@ -13,7 +13,10 @@ class InstaTextField extends StatelessWidget {
       required this.color,
       required this.fontWeight,
       required this.hintColor,
-      required this.obscureText});
+      required this.obscureText,
+      required this.icon,
+      required this.borderRadius,
+      required this.backgroundColor});
 
   final TextEditingController controller;
   final String hintText;
@@ -22,6 +25,9 @@ class InstaTextField extends StatelessWidget {
   final Color hintColor;
   final FontWeight fontWeight;
   final bool obscureText;
+  final Widget? icon;
+  final double borderRadius;
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +40,10 @@ class InstaTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        prefixIcon: icon,
         filled: true,
-        fillColor: textFieldBackgroundColor,
+        fillColor: backgroundColor,
         hintText: hintText,
         hintStyle: GoogleFonts.sourceSansPro(
           fontSize: fontSize,
@@ -43,7 +51,7 @@ class InstaTextField extends StatelessWidget {
           color: hintColor,
         ),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(borderRadius),
             borderSide: const BorderSide(width: 1, color: Colors.grey)),
       ),
     );

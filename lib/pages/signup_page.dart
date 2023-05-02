@@ -53,6 +53,9 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.04,
             ),
             InstaTextField(
+              backgroundColor: textFieldBackgroundColor,
+              borderRadius: 5,
+              icon: null,
               controller: emailController,
               hintText: "Phone number or email",
               fontSize: 14,
@@ -65,6 +68,9 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.02,
             ),
             InstaTextField(
+              backgroundColor: textFieldBackgroundColor,
+              borderRadius: 5,
+              icon: null,
               controller: fullnameController,
               hintText: "Full name",
               fontSize: 14,
@@ -77,6 +83,9 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.02,
             ),
             InstaTextField(
+              backgroundColor: textFieldBackgroundColor,
+              borderRadius: 5,
+              icon: null,
               controller: usernameController,
               hintText: "Username",
               fontSize: 14,
@@ -89,6 +98,9 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.02,
             ),
             InstaTextField(
+              backgroundColor: textFieldBackgroundColor,
+              borderRadius: 5,
+              icon: null,
               controller: passwordController,
               hintText: "Password",
               fontSize: 14,

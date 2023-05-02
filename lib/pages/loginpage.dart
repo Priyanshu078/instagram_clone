@@ -46,6 +46,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: height * 0.05,
               ),
               InstaTextField(
+                backgroundColor: textFieldBackgroundColor,
+                borderRadius: 5,
+                icon: null,
                 controller: userNameController,
                 hintText: "Username",
                 fontSize: 14,
@@ -58,6 +61,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: height * 0.02,
               ),
               InstaTextField(
+                backgroundColor: textFieldBackgroundColor,
+                borderRadius: 5,
+                icon: null,
                 controller: passwordController,
                 hintText: "Password",
                 fontSize: 14,
