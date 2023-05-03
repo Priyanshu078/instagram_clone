@@ -90,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: height * 0.035,
               ),
               InstaButton(
+                  buttonColor: instablue,
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => BlocProvider(
@@ -99,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   text: "Log in",
                   fontSize: 14,
-                  color: Colors.white,
+                  textColor: Colors.white,
                   fontWeight: FontWeight.w700),
               SizedBox(
                 height: height * 0.05,

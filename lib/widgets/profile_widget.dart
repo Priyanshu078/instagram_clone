@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/constants/colors.dart';
 
-class ProfilePhoto extends StatelessWidget {
-  const ProfilePhoto(
+class ProfileWidget extends StatelessWidget {
+  const ProfileWidget(
       {super.key,
       required this.height,
       required this.width,
@@ -15,17 +14,13 @@ class ProfilePhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(5),
+      decoration: wantBorder
+          ? BoxDecoration(
+              border: Border.all(color: Colors.white, width: 1.5),
+              shape: BoxShape.circle)
+          : null,
       height: height,
       width: width,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: wantBorder
-            ? Border.all(
-                color: profilePhotoBorder,
-              )
-            : null,
-      ),
       child: const CircleAvatar(
         backgroundImage: AssetImage('assets/images/priyanshuphoto.jpg'),
       ),

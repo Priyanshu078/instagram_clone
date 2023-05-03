@@ -7,7 +7,7 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/post.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
-import 'package:instagram_clone/widgets/profile_photo.dart';
+import 'package:instagram_clone/widgets/profile_widget.dart';
 
 import '../../constants/colors.dart';
 import '../chat_page.dart';
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                               child: const Align(
                                 alignment: Alignment.centerLeft,
                                 child: InstaText(
-                                    fontSize: 16,
+                                    fontSize: 20,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
                                     text: "priyanshu paliwal"),
