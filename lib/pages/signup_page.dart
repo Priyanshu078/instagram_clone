@@ -113,6 +113,7 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.05,
             ),
             InstaButton(
+                height: height * 0.065,
                 buttonColor: instablue,
                 onPressed: () {},
                 text: "Sign up",

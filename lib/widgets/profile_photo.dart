@@ -6,11 +6,13 @@ class ProfilePhoto extends StatelessWidget {
       {super.key,
       required this.height,
       required this.width,
-      required this.wantBorder});
+      required this.wantBorder,
+      required this.storyAdder});
 
   final double height;
   final double width;
   final bool wantBorder;
+  final bool storyAdder;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,17 @@ class ProfilePhoto extends StatelessWidget {
               )
             : null,
       ),
-      child: const CircleAvatar(
-        backgroundImage: AssetImage('assets/images/priyanshuphoto.jpg'),
-      ),
+      child: storyAdder
+          ? Center(
+              child: Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Image.asset(
+                    'assets/images/add_Chat.png',
+                  )),
+            )
+          : const CircleAvatar(
+              backgroundImage: AssetImage('assets/images/priyanshuphoto.jpg'),
+            ),
     );
   }
 }

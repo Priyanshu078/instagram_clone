@@ -90,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: height * 0.035,
               ),
               InstaButton(
+                  height: height * 0.065,
                   buttonColor: instablue,
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(

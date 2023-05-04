@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 
 class InstaButton extends StatelessWidget {
@@ -10,7 +9,8 @@ class InstaButton extends StatelessWidget {
       required this.fontSize,
       required this.textColor,
       required this.fontWeight,
-      required this.buttonColor});
+      required this.buttonColor,
+      required this.height});
 
   final VoidCallback onPressed;
   final String text;
@@ -18,10 +18,10 @@ class InstaButton extends StatelessWidget {
   final Color textColor;
   final Color buttonColor;
   final FontWeight fontWeight;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -29,7 +29,7 @@ class InstaButton extends StatelessWidget {
             ? BorderSide(width: 1, color: Colors.white.withOpacity(0.15))
             : null,
         backgroundColor: buttonColor,
-        minimumSize: Size(double.infinity, height * 0.065),
+        minimumSize: Size(double.infinity, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),

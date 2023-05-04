@@ -4,8 +4,22 @@ import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
+  late final TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +38,11 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ProfilePhoto(
-                        height: height * 0.13,
-                        width: height * 0.13,
-                        wantBorder: true),
+                      height: height * 0.13,
+                      width: height * 0.13,
+                      wantBorder: true,
+                      storyAdder: false,
+                    ),
                     SizedBox(
                       width: width * 0.1,
                     ),
@@ -121,15 +137,87 @@ class ProfilePage extends StatelessWidget {
                   height: height * 0.015,
                 ),
                 InstaButton(
+                    height: height * 0.05,
                     buttonColor: Colors.black,
                     onPressed: () {},
                     text: "Edit Profile",
                     fontSize: 13,
                     textColor: Colors.white,
-                    fontWeight: FontWeight.w700)
+                    fontWeight: FontWeight.w700),
+                SizedBox(
+                  height: height * 0.015,
+                ),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        ProfilePhoto(
+                            height: height * 0.1,
+                            width: height * 0.1,
+                            wantBorder: true,
+                            storyAdder: true),
+                        const InstaText(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            text: "New")
+                      ],
+                    ),
+                    SizedBox(
+                      height: height * 0.125,
+                      width: width * 0.7,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 10.5),
+                            child: Column(
+                              children: [
+                                ProfilePhoto(
+                                    height: height * 0.1,
+                                    width: height * 0.1,
+                                    wantBorder: true,
+                                    storyAdder: false),
+                                InstaText(
+                                    fontSize: 12,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal,
+                                    text: "Party ${index + 1}")
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: height * 0.015,
+                ),
               ],
             ),
-          )
+          ),
+          // Divider(
+          //   color: textFieldBackgroundColor,
+          //   height: height * 0.01,
+          // ),
+          TabBar(controller: tabController, tabs: [
+            Tab(
+              icon: Image.asset('assets/images/grid_icon.png'),
+            ),
+            Tab(
+              icon: Image.asset('assets/images/grid_icon.png'),
+            )
+          ]),
+          TabBarView(controller: tabController, children: [
+            Center(
+              child: Icon(Icons.abc),
+            ),
+            Center(
+              child: Icon(Icons.abc),
+            )
+          ]),
         ],
       ),
     );
