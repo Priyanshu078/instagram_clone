@@ -30,7 +30,8 @@ class _ProfilePageState extends State<ProfilePage>
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10.0, left: 12.0, right: 12.0),
+            padding:
+                EdgeInsets.only(top: height * 0.01, left: 12.0, right: 12.0),
             child: Column(
               children: [
                 Row(
@@ -101,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage>
                   ],
                 ),
                 SizedBox(
-                  height: height * 0.015,
+                  height: height * 0.01,
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -134,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage>
                   ),
                 ),
                 SizedBox(
-                  height: height * 0.015,
+                  height: height * 0.01,
                 ),
                 InstaButton(
                     height: height * 0.05,
@@ -145,14 +146,14 @@ class _ProfilePageState extends State<ProfilePage>
                     textColor: Colors.white,
                     fontWeight: FontWeight.w700),
                 SizedBox(
-                  height: height * 0.015,
+                  height: height * 0.01,
                 ),
                 Row(
                   children: [
                     Column(
                       children: [
                         ProfilePhoto(
-                            height: height * 0.1,
+                            height: height * 0.09,
                             width: height * 0.1,
                             wantBorder: true,
                             storyAdder: true),
@@ -164,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage>
                       ],
                     ),
                     SizedBox(
-                      height: height * 0.125,
+                      height: height * 0.12,
                       width: width * 0.7,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -175,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage>
                             child: Column(
                               children: [
                                 ProfilePhoto(
-                                    height: height * 0.1,
+                                    height: height * 0.09,
                                     width: height * 0.1,
                                     wantBorder: true,
                                     storyAdder: false),
@@ -193,31 +194,49 @@ class _ProfilePageState extends State<ProfilePage>
                   ],
                 ),
                 SizedBox(
-                  height: height * 0.015,
+                  height: height * 0.01,
                 ),
               ],
             ),
           ),
-          // Divider(
-          //   color: textFieldBackgroundColor,
-          //   height: height * 0.01,
-          // ),
-          TabBar(controller: tabController, tabs: [
-            Tab(
-              icon: Image.asset('assets/images/grid_icon.png'),
-            ),
-            Tab(
-              icon: Image.asset('assets/images/grid_icon.png'),
-            )
-          ]),
-          TabBarView(controller: tabController, children: [
-            Center(
-              child: Icon(Icons.abc),
-            ),
-            Center(
-              child: Icon(Icons.abc),
-            )
-          ]),
+          Column(
+            children: [
+              Divider(
+                color: profilePhotoBorder,
+                thickness: 0.5,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: height * 0.05,
+            width: double.infinity,
+            child: TabBar(
+                indicatorWeight: 1,
+                indicatorColor: Colors.white,
+                controller: tabController,
+                tabs: [
+                  Tab(
+                    icon: SizedBox(
+                        height: height * 0.03,
+                        child: Image.asset('assets/images/grid_icon.png')),
+                  ),
+                  Tab(
+                    icon: SizedBox(
+                        height: height * 0.03,
+                        child: Image.asset('assets/images/tag_icon.png')),
+                  )
+                ]),
+          ),
+          Expanded(
+            child: TabBarView(controller: tabController, children: [
+              Center(
+                child: Icon(Icons.abc),
+              ),
+              Center(
+                child: Icon(Icons.abc),
+              )
+            ]),
+          ),
         ],
       ),
     );

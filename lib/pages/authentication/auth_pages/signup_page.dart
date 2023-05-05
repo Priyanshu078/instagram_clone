@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
-import 'package:instagram_clone/pages/loginpage.dart';
+import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
@@ -53,6 +53,9 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.04,
             ),
             InstaTextField(
+              forPassword: false,
+              suffixIcon: null,
+              suffixIconCallback: () {},
               backgroundColor: textFieldBackgroundColor,
               borderRadius: 5,
               icon: null,
@@ -68,6 +71,9 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.02,
             ),
             InstaTextField(
+              forPassword: false,
+              suffixIcon: null,
+              suffixIconCallback: () {},
               backgroundColor: textFieldBackgroundColor,
               borderRadius: 5,
               icon: null,
@@ -83,6 +89,9 @@ class _SignupPageState extends State<SignupPage> {
               height: height * 0.02,
             ),
             InstaTextField(
+              forPassword: false,
+              suffixIcon: null,
+              suffixIconCallback: () {},
               backgroundColor: textFieldBackgroundColor,
               borderRadius: 5,
               icon: null,
@@ -108,6 +117,9 @@ class _SignupPageState extends State<SignupPage> {
               fontWeight: FontWeight.normal,
               hintColor: Colors.white.withOpacity(0.6),
               obscureText: false,
+              forPassword: true,
+              suffixIcon: const Icon(Icons.remove_red_eye),
+              suffixIconCallback: () {},
             ),
             SizedBox(
               height: height * 0.05,

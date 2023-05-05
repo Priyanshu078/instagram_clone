@@ -58,6 +58,9 @@ class _HomePageState extends State<HomePage> {
                             padding:
                                 const EdgeInsets.only(top: 8.0, bottom: 8.0),
                             child: InstaTextField(
+                                forPassword: false,
+                                suffixIcon: null,
+                                suffixIconCallback: () {},
                                 backgroundColor: searchTextFieldColor,
                                 borderRadius: 15,
                                 icon: Icon(

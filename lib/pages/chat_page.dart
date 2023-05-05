@@ -50,19 +50,23 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             InstaTextField(
-                controller: textEditingController,
-                hintText: "Search",
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                hintColor: searchHintText,
-                obscureText: false,
-                icon: Icon(
-                  Icons.search,
-                  color: searchHintText,
-                ),
-                borderRadius: 10,
-                backgroundColor: searchTextFieldColor)
+              controller: textEditingController,
+              hintText: "Search",
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.normal,
+              hintColor: searchHintText,
+              obscureText: false,
+              icon: Icon(
+                Icons.search,
+                color: searchHintText,
+              ),
+              borderRadius: 10,
+              backgroundColor: searchTextFieldColor,
+              forPassword: false,
+              suffixIcon: null,
+              suffixIconCallback: () {},
+            )
           ],
         ),
       ),

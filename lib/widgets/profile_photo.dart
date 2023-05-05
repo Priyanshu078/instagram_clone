@@ -31,7 +31,7 @@ class ProfilePhoto extends StatelessWidget {
       child: storyAdder
           ? Center(
               child: Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(18),
                   child: Image.asset(
                     'assets/images/add_Chat.png',
                   )),
