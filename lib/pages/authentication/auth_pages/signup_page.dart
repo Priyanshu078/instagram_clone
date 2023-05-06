@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
+import 'package:instagram_clone/pages/authentication/cubit/gender_cubit.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+
+enum Gender { male, female, other }
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -18,6 +21,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController fullnameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  Gender value = Gender.other;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +144,72 @@ class _SignupPageState extends State<SignupPage> {
               },
             ),
             SizedBox(
-              height: height * 0.05,
+              height: height * 0.03,
+            ),
+            Row(
+              children: [
+                const InstaText(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    text: "Gender"),
+                SizedBox(
+                  width: width * 0.1,
+                ),
+                Row(
+                  children: [
+                    BlocBuilder<GenderCubit, GenderState>(
+                      builder: (context, state) {
+                        return Radio(
+                            fillColor: MaterialStateColor.resolveWith(
+                                (states) => state.gender == Gender.male
+                                    ? Colors.white
+                                    : profilePhotoBorder),
+                            value: Gender.male,
+                            groupValue: state.gender,
+                            onChanged: (val) {
+                              context
+                                  .read<GenderCubit>()
+                                  .changeGender(val ?? Gender.male);
+                            });
+                      },
+                    ),
+                    const InstaText(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Male")
+                  ],
+                ),
+                Row(
+                  children: [
+                    BlocBuilder<GenderCubit, GenderState>(
+                      builder: (context, state) {
+                        return Radio(
+                            fillColor: MaterialStateColor.resolveWith(
+                                (states) => state.gender == Gender.female
+                                    ? Colors.white
+                                    : profilePhotoBorder),
+                            value: Gender.female,
+                            groupValue: state.gender,
+                            onChanged: (val) {
+                              context
+                                  .read<GenderCubit>()
+                                  .changeGender(val ?? Gender.female);
+                            });
+                      },
+                    ),
+                    const InstaText(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Female")
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              height: height * 0.03,
             ),
             InstaButton(
                 height: height * 0.065,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
+import 'package:instagram_clone/pages/authentication/cubit/gender_cubit.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
@@ -140,8 +141,15 @@ class _LoginPageState extends State<LoginPage> {
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: ((context) => BlocProvider(
-                                create: (context) => AuthBloc(),
+                          builder: ((context) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider(
+                                    create: (create) => AuthBloc(),
+                                  ),
+                                  BlocProvider(
+                                    create: (context) => GenderCubit(),
+                                  ),
+                                ],
                                 child: const SignupPage(),
                               ))));
                     },

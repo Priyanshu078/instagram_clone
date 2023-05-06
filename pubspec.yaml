@@ -40,6 +40,8 @@ dependencies:
   google_fonts: ^4.0.4
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
+  cloud_firestore: ^4.6.0
+  uuid: ^3.0.7
   
 
 dev_dependencies:
