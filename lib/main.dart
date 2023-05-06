@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/firebase_options.dart';
 import 'package:instagram_clone/splash_screen.dart';
 
-import 'constants/colors.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

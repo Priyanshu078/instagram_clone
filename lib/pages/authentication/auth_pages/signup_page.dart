@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
-import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
+import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
@@ -106,20 +107,37 @@ class _SignupPageState extends State<SignupPage> {
             SizedBox(
               height: height * 0.02,
             ),
-            InstaTextField(
-              backgroundColor: textFieldBackgroundColor,
-              borderRadius: 5,
-              icon: null,
-              controller: passwordController,
-              hintText: "Password",
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.normal,
-              hintColor: Colors.white.withOpacity(0.6),
-              obscureText: false,
-              forPassword: true,
-              suffixIcon: const Icon(Icons.remove_red_eye),
-              suffixIconCallback: () {},
+            BlocSelector<AuthBloc, AuthState, bool>(
+              selector: (state) {
+                return state.obscurePassword;
+              },
+              builder: (context, state) {
+                return InstaTextField(
+                  backgroundColor: textFieldBackgroundColor,
+                  borderRadius: 5,
+                  icon: null,
+                  controller: passwordController,
+                  hintText: "Password",
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.normal,
+                  hintColor: Colors.white.withOpacity(0.6),
+                  obscureText: state,
+                  forPassword: true,
+                  suffixIcon: state
+                      ? const Icon(
+                          Icons.visibility,
+                          color: Colors.white,
+                        )
+                      : const Icon(
+                          Icons.visibility_off,
+                          color: Colors.white,
+                        ),
+                  suffixIconCallback: () {
+                    context.read<AuthBloc>().add(ShowPassword(!state));
+                  },
+                );
+              },
             ),
             SizedBox(
               height: height * 0.05,

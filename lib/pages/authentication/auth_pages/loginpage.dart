@@ -140,7 +140,10 @@ class _LoginPageState extends State<LoginPage> {
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: ((context) => const SignupPage())));
+                          builder: ((context) => BlocProvider(
+                                create: (context) => AuthBloc(),
+                                child: const SignupPage(),
+                              ))));
                     },
                     child: InstaText(
                         fontSize: 14,
