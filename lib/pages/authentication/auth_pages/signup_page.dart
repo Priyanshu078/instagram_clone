@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/pages/authentication/cubit/gender_cubit.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+import 'package:uuid/uuid.dart';
 
 enum Gender { male, female, other }
 
@@ -214,7 +218,15 @@ class _SignupPageState extends State<SignupPage> {
             InstaButton(
                 height: height * 0.065,
                 buttonColor: instablue,
-                onPressed: () {},
+                onPressed: () async {
+                  String uId = const Uuid().v4();
+                  UserData userData = UserData(uId, "name", "username",
+                      "phoneNumber", "email", "password", Gender.male);
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uId)
+                      .set(userData.toJson());
+                },
                 text: "Sign up",
                 fontSize: 14,
                 textColor: Colors.white,
