@@ -146,9 +146,6 @@ class _LoginPageState extends State<LoginPage> {
                                   BlocProvider(
                                     create: (create) => AuthBloc(),
                                   ),
-                                  BlocProvider(
-                                    create: (context) => GenderCubit(),
-                                  ),
                                 ],
                                 child: const SignupPage(),
                               ))));

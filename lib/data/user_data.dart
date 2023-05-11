@@ -4,17 +4,16 @@ class UserData {
   final String id;
   final String name;
   final String username;
-  final String phoneNumber;
-  final String email;
+  final String contact;
   final String password;
   final Gender gender;
 
-  UserData(this.id, this.name, this.username, this.phoneNumber, this.email,
-      this.password, this.gender);
+  UserData(this.id, this.name, this.username, this.contact, this.password,
+      this.gender);
 
   factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(json['id'], json['name'], json['username'],
-        json['phoneNumber'], json['email'], json['password'], json['gender']);
+    return UserData(json['id'], json['name'], json['username'], json['contact'],
+        json['password'], json['gender']);
   }
 
   Map<String, dynamic> toJson() {
@@ -22,8 +21,7 @@ class UserData {
       "id": id,
       "name": name,
       "username": username,
-      "phoneNumber": phoneNumber,
-      "email": email,
+      "contact": contact,
       "password": password,
       "gender": gender,
     };

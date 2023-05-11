@@ -162,7 +162,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 Row(
                   children: [
-                    BlocBuilder<GenderCubit, GenderState>(
+                    BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         return Radio(
                             fillColor: MaterialStateColor.resolveWith(
@@ -173,8 +173,8 @@ class _SignupPageState extends State<SignupPage> {
                             groupValue: state.gender,
                             onChanged: (val) {
                               context
-                                  .read<GenderCubit>()
-                                  .changeGender(val ?? Gender.male);
+                                  .read<AuthBloc>()
+                                  .add(ChangeGender(val ?? Gender.male));
                             });
                       },
                     ),
@@ -187,7 +187,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 Row(
                   children: [
-                    BlocBuilder<GenderCubit, GenderState>(
+                    BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         return Radio(
                             fillColor: MaterialStateColor.resolveWith(
@@ -198,8 +198,8 @@ class _SignupPageState extends State<SignupPage> {
                             groupValue: state.gender,
                             onChanged: (val) {
                               context
-                                  .read<GenderCubit>()
-                                  .changeGender(val ?? Gender.female);
+                                  .read<AuthBloc>()
+                                  .add(ChangeGender(val ?? Gender.female));
                             });
                       },
                     ),
@@ -220,12 +220,13 @@ class _SignupPageState extends State<SignupPage> {
                 buttonColor: instablue,
                 onPressed: () async {
                   String uId = const Uuid().v4();
-                  UserData userData = UserData(uId, "name", "username",
-                      "phoneNumber", "email", "password", Gender.male);
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(uId)
-                      .set(userData.toJson());
+                  String name = fullnameController.text;
+                  String username = usernameController.text;
+                  String contact = emailController.text;
+                  String password = passwordController.text;
+                  Gender gender = context.read<AuthBloc>().state.gender;
+                  UserData userData =
+                      UserData(uId, name, username, contact, password, gender);
                 },
                 text: "Sign up",
                 fontSize: 14,

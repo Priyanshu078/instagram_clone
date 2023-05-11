@@ -13,3 +13,10 @@ class ShowPassword extends AuthEvent {
   @override
   List<Object> get props => [status];
 }
+
+class ChangeGender extends AuthEvent {
+  final Gender gender;
+  const ChangeGender(this.gender);
+  @override
+  List<Object> get props => [gender];
+}
