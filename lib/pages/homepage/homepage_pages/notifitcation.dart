@@ -16,6 +16,5 @@ class NotificationPage extends StatelessWidget {
             text: "Notification"),
       ),
     );
-    ;
   }
 }

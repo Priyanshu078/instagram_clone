@@ -16,6 +16,5 @@ class FeedPage extends StatelessWidget {
             text: "Feed"),
       ),
     );
-    ;
   }
 }

@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
-
 part 'auth_event.dart';
 part 'auth_state.dart';
 

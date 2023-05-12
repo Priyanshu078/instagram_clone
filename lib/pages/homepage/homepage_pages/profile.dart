@@ -228,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage>
                 ]),
           ),
           Expanded(
-            child: TabBarView(controller: tabController, children: [
+            child: TabBarView(controller: tabController, children: const [
               Center(
                 child: Icon(Icons.abc),
               ),

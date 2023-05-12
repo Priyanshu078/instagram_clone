@@ -16,6 +16,5 @@ class SearchPage extends StatelessWidget {
             text: "Search"),
       ),
     );
-    ;
   }
 }
