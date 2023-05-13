@@ -224,6 +224,7 @@ class _SignupPageState extends State<SignupPage> {
                   Gender gender = context.read<AuthBloc>().state.gender;
                   UserData userData =
                       UserData(uId, name, username, contact, password, gender);
+                  context.read<AuthBloc>().add(RequestSignUpEvent(userData));
                 },
                 text: "Sign up",
                 fontSize: 14,

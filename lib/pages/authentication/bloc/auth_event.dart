@@ -20,3 +20,10 @@ class ChangeGender extends AuthEvent {
   @override
   List<Object> get props => [gender];
 }
+
+class RequestSignUpEvent extends AuthEvent {
+  final UserData userData;
+  const RequestSignUpEvent(this.userData);
+  @override
+  List<Object> get props => [userData];
+}
