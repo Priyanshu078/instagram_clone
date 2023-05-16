@@ -28,3 +28,17 @@ class ChangedGender extends AuthState {
   @override
   List<Object> get props => [obscurePassword, gender];
 }
+
+class LoadingState extends AuthState {
+  const LoadingState(super.obscurePassword, super.gender);
+
+  @override
+  List<Object> get props => [obscurePassword, gender];
+}
+
+class SignUpDone extends AuthState {
+  const SignUpDone(super.obscurePassword, super.gender);
+
+  @override
+  List<Object> get props => [obscurePassword, gender];
+}
