@@ -27,3 +27,11 @@ class RequestSignUpEvent extends AuthEvent {
   @override
   List<Object> get props => [userData];
 }
+
+class RequestLoginEvent extends AuthEvent {
+  final String username;
+  final String password;
+  const RequestLoginEvent(this.username, this.password);
+  @override
+  List<Object> get props => [username, password];
+}

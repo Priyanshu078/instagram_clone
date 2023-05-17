@@ -32,11 +32,12 @@ class _SignupPageState extends State<SignupPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is SignUpDone) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                    create: (context) => AuthBloc(),
-                    child: const LoginPage(),
-                  )));
+          // Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //     builder: (context) => BlocProvider(
+          //           create: (context) => AuthBloc(),
+          //           child: const LoginPage(),
+          //         )));
+          Navigator.of(context).pop();
         }
       },
       child: Scaffold(

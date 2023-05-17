@@ -24,140 +24,167 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is LoginDone) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                    create: (context) => HomepageBloc(),
+                    child: const HomePage(),
+                  )));
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.black,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: height * 0.1,
-              ),
-              SizedBox(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.black,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
                   height: height * 0.1,
-                  width: width * 0.5,
-                  child: Image.asset('assets/images/instagram.png')),
-              SizedBox(
-                height: height * 0.05,
-              ),
-              InstaTextField(
-                forPassword: false,
-                suffixIcon: null,
-                suffixIconCallback: () {},
-                backgroundColor: textFieldBackgroundColor,
-                borderRadius: 5,
-                icon: null,
-                controller: userNameController,
-                hintText: "Username",
-                fontSize: 14,
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                hintColor: Colors.white.withOpacity(0.6),
-                obscureText: false,
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  return InstaTextField(
-                    forPassword: true,
-                    suffixIcon: state.obscurePassword
-                        ? const Icon(
-                            Icons.visibility,
-                            color: Colors.white,
-                          )
-                        : const Icon(
-                            Icons.visibility_off,
-                            color: Colors.white,
-                          ),
-                    suffixIconCallback: () {
-                      context
-                          .read<AuthBloc>()
-                          .add(ShowPassword(!state.obscurePassword));
-                    },
-                    backgroundColor: textFieldBackgroundColor,
-                    borderRadius: 5,
-                    icon: null,
-                    controller: passwordController,
-                    hintText: "Password",
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.normal,
-                    hintColor: Colors.white.withOpacity(0.6),
-                    obscureText: state.obscurePassword,
-                  );
-                },
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {},
-                  child: InstaText(
-                      fontSize: 12,
-                      color: instablue,
-                      fontWeight: FontWeight.w500,
-                      text: "Forgot password?"),
                 ),
-              ),
-              SizedBox(
-                height: height * 0.035,
-              ),
-              InstaButton(
-                  height: height * 0.065,
-                  buttonColor: instablue,
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                              create: (context) => HomepageBloc(),
-                              child: const HomePage(),
-                            )));
-                  },
-                  text: "Log in",
+                SizedBox(
+                    height: height * 0.1,
+                    width: width * 0.5,
+                    child: Image.asset('assets/images/instagram.png')),
+                SizedBox(
+                  height: height * 0.05,
+                ),
+                InstaTextField(
+                  forPassword: false,
+                  suffixIcon: null,
+                  suffixIconCallback: () {},
+                  backgroundColor: textFieldBackgroundColor,
+                  borderRadius: 5,
+                  icon: null,
+                  controller: userNameController,
+                  hintText: "Username",
                   fontSize: 14,
-                  textColor: Colors.white,
-                  fontWeight: FontWeight.w700),
-              SizedBox(
-                height: height * 0.05,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InstaText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.normal,
+                  hintColor: Colors.white.withOpacity(0.6),
+                  obscureText: false,
+                ),
+                SizedBox(
+                  height: height * 0.02,
+                ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return InstaTextField(
+                      forPassword: true,
+                      suffixIcon: state.obscurePassword
+                          ? const Icon(
+                              Icons.visibility,
+                              color: Colors.white,
+                            )
+                          : const Icon(
+                              Icons.visibility_off,
+                              color: Colors.white,
+                            ),
+                      suffixIconCallback: () {
+                        context
+                            .read<AuthBloc>()
+                            .add(ShowPassword(!state.obscurePassword));
+                      },
+                      backgroundColor: textFieldBackgroundColor,
+                      borderRadius: 5,
+                      icon: null,
+                      controller: passwordController,
+                      hintText: "Password",
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white,
                       fontWeight: FontWeight.normal,
-                      text: "Dont have an account? "),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: ((context) => MultiBlocProvider(
-                                providers: [
-                                  BlocProvider(
-                                    create: (create) => AuthBloc(),
-                                  ),
-                                ],
-                                child: const SignupPage(),
-                              ))));
-                    },
+                      hintColor: Colors.white.withOpacity(0.6),
+                      obscureText: state.obscurePassword,
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: height * 0.02,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {},
                     child: InstaText(
-                        fontSize: 14,
+                        fontSize: 12,
                         color: instablue,
+                        fontWeight: FontWeight.w500,
+                        text: "Forgot password?"),
+                  ),
+                ),
+                SizedBox(
+                  height: height * 0.035,
+                ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    if (state is LoadingState) {
+                      return SizedBox(
+                        height: height * 0.065,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 1,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return InstaButton(
+                          height: height * 0.065,
+                          buttonColor: instablue,
+                          onPressed: () {
+                            String username = userNameController.text;
+                            String password = passwordController.text;
+                            context
+                                .read<AuthBloc>()
+                                .add(RequestLoginEvent(username, password));
+                          },
+                          text: "Log in",
+                          fontSize: 14,
+                          textColor: Colors.white,
+                          fontWeight: FontWeight.w700);
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: height * 0.05,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InstaText(
+                        fontSize: 14,
+                        color: Colors.white.withOpacity(0.6),
                         fontWeight: FontWeight.normal,
-                        text: "Sign up."),
-                  )
-                ],
-              )
-            ],
+                        text: "Dont have an account? "),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: ((context) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider(
+                                      create: (create) => AuthBloc(),
+                                    ),
+                                  ],
+                                  child: const SignupPage(),
+                                ))));
+                      },
+                      child: InstaText(
+                          fontSize: 14,
+                          color: instablue,
+                          fontWeight: FontWeight.normal,
+                          text: "Sign up."),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
