@@ -224,24 +224,43 @@ class _SignupPageState extends State<SignupPage> {
               SizedBox(
                 height: height * 0.03,
               ),
-              InstaButton(
-                  height: height * 0.065,
-                  buttonColor: instablue,
-                  onPressed: () async {
-                    String uId = const Uuid().v4();
-                    String name = fullnameController.text;
-                    String username = usernameController.text;
-                    String contact = emailController.text;
-                    String password = passwordController.text;
-                    Gender gender = context.read<AuthBloc>().state.gender;
-                    UserData userData = UserData(
-                        uId, name, username, contact, password, gender);
-                    context.read<AuthBloc>().add(RequestSignUpEvent(userData));
-                  },
-                  text: "Sign up",
-                  fontSize: 14,
-                  textColor: Colors.white,
-                  fontWeight: FontWeight.w700),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is LoadingState) {
+                    return SizedBox(
+                      height: height * 0.065,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return InstaButton(
+                      height: height * 0.065,
+                      buttonColor: instablue,
+                      onPressed: () async {
+                        String uId = const Uuid().v4();
+                        String name = fullnameController.text;
+                        String username = usernameController.text;
+                        String contact = emailController.text;
+                        String password = passwordController.text;
+                        Gender gender = context.read<AuthBloc>().state.gender;
+                        UserData userData = UserData(
+                            uId, name, username, contact, password, gender);
+                        context
+                            .read<AuthBloc>()
+                            .add(RequestSignUpEvent(userData));
+                      },
+                      text: "Sign up",
+                      fontSize: 14,
+                      textColor: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    );
+                  }
+                },
+              ),
               SizedBox(
                 height: height * 0.05,
               ),
