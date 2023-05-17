@@ -6,7 +6,7 @@ class UserData {
   final String username;
   final String contact;
   final String password;
-  final Gender gender;
+  final int gender;
 
   UserData(this.id, this.name, this.username, this.contact, this.password,
       this.gender);

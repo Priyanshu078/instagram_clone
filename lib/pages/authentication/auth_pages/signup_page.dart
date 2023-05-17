@@ -246,7 +246,10 @@ class _SignupPageState extends State<SignupPage> {
                         String username = usernameController.text;
                         String contact = emailController.text;
                         String password = passwordController.text;
-                        Gender gender = context.read<AuthBloc>().state.gender;
+                        int gender =
+                            context.read<AuthBloc>().state.gender == Gender.male
+                                ? 1
+                                : 0;
                         UserData userData = UserData(
                             uId, name, username, contact, password, gender);
                         context
