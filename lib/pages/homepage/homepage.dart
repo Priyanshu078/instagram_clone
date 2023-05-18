@@ -176,11 +176,14 @@ class _HomePageState extends State<HomePage> {
                     ? ProfileWidget(
                         height: height * 0.035,
                         width: width * 0.065,
-                        wantBorder: true)
+                        wantBorder: true,
+                        photoSelected: true,
+                      )
                     : ProfileWidget(
                         height: height * 0.035,
                         width: width * 0.065,
                         wantBorder: false,
+                        photoSelected: true,
                       ),
                 label: "Profile"),
           ],

@@ -7,6 +7,8 @@ import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+import 'package:instagram_clone/widgets/profile_photo.dart';
+import 'package:instagram_clone/widgets/profile_widget.dart';
 import 'package:uuid/uuid.dart';
 
 enum Gender { male, female, other }
@@ -68,8 +70,14 @@ class _SignupPageState extends State<SignupPage> {
                   child: Image.asset('assets/images/instagram.png'),
                 ),
               ),
+              ProfileWidget(
+                height: height * 0.1,
+                width: height * 0.1,
+                wantBorder: true,
+                photoSelected: false,
+              ),
               SizedBox(
-                height: height * 0.04,
+                height: height * 0.02,
               ),
               InstaTextField(
                 forPassword: false,
