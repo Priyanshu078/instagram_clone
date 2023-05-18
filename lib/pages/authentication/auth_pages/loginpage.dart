@@ -32,6 +32,24 @@ class _LoginPageState extends State<LoginPage> {
                     create: (context) => HomepageBloc(),
                     child: const HomePage(),
                   )));
+        } else if (state is UserDataNotAvailable) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              backgroundColor: Colors.white,
+              duration: Duration(seconds: 2),
+              content: InstaText(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  text: "Incorrect username or password")));
+        } else if (state is FillAllDetails) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              backgroundColor: Colors.white,
+              duration: Duration(seconds: 2),
+              content: InstaText(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  text: "Please fill all the details !!!")));
         }
       },
       child: Scaffold(

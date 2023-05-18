@@ -28,7 +28,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> login(RequestLoginEvent event, Emitter emit) async {
-    emit(LoadingState(state.obscurePassword, state.gender));
-    await FirebaseFirestore.instance.collection('users');
+    if (event.password.isNotEmpty && event.username.isNotEmpty) {
+      emit(LoadingState(state.obscurePassword, state.gender));
+      Query<Map> userdata = FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: event.username)
+          .where('password', isEqualTo: event.password);
+      var snapshotData = await userdata.get();
+      List docsList = snapshotData.docs;
+      if (docsList.isNotEmpty) {
+        UserData userData = UserData.fromJson(docsList.first.data());
+        print(userData.gender);
+        print(userData.name);
+        emit(LoginDone(state.obscurePassword, state.gender));
+      } else {
+        emit(UserDataNotAvailable(state.obscurePassword, state.gender));
+      }
+    } else {
+      emit(FillAllDetails(state.obscurePassword, state.gender));
+      emit(AuthInitial(state.obscurePassword, state.gender));
+    }
   }
 }

@@ -49,3 +49,17 @@ class LoginDone extends AuthState {
   @override
   List<Object> get props => [obscurePassword, gender];
 }
+
+class UserDataNotAvailable extends AuthState {
+  const UserDataNotAvailable(super.obscurePassword, super.gender);
+
+  @override
+  List<Object> get props => [obscurePassword, gender];
+}
+
+class FillAllDetails extends AuthState {
+  const FillAllDetails(super.obscurePassword, super.gender);
+
+  @override
+  List<Object> get props => [obscurePassword, gender];
+}
