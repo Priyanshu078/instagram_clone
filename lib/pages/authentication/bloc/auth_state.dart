@@ -63,3 +63,10 @@ class FillAllDetails extends AuthState {
   @override
   List<Object> get props => [obscurePassword, gender];
 }
+
+class ErrorState extends AuthState {
+  const ErrorState(super.obscurePassword, super.gender);
+
+  @override
+  List<Object> get props => [obscurePassword, gender];
+}

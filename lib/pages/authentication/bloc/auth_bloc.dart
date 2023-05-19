@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
 part 'auth_event.dart';
@@ -20,33 +22,54 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> signUp(RequestSignUpEvent event, Emitter emit) async {
     emit(LoadingState(state.obscurePassword, state.gender));
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(event.userData.id)
-        .set(event.userData.toJson());
-    emit(SignUpDone(state.obscurePassword, state.gender));
+    try {
+      UserData data = event.userData;
+      if (data.contact.isNotEmpty &&
+          data.name.isNotEmpty &&
+          data.password.isNotEmpty &&
+          data.username.isNotEmpty) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(event.userData.id)
+            .set(event.userData.toJson());
+        emit(SignUpDone(state.obscurePassword, state.gender));
+      } else {
+        emit(FillAllDetails(state.obscurePassword, state.gender));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(ErrorState(state.obscurePassword, state.gender));
+    }
   }
 
   Future<void> login(RequestLoginEvent event, Emitter emit) async {
-    if (event.password.isNotEmpty && event.username.isNotEmpty) {
-      emit(LoadingState(state.obscurePassword, state.gender));
-      Query<Map> userdata = FirebaseFirestore.instance
-          .collection('users')
-          .where('username', isEqualTo: event.username)
-          .where('password', isEqualTo: event.password);
-      var snapshotData = await userdata.get();
-      List docsList = snapshotData.docs;
-      if (docsList.isNotEmpty) {
-        UserData userData = UserData.fromJson(docsList.first.data());
-        print(userData.gender);
-        print(userData.name);
-        emit(LoginDone(state.obscurePassword, state.gender));
+    emit(LoadingState(state.obscurePassword, state.gender));
+    try {
+      if (event.password.isNotEmpty && event.username.isNotEmpty) {
+        Query<Map> userdata = FirebaseFirestore.instance
+            .collection('users')
+            .where('username', isEqualTo: event.username)
+            .where('password', isEqualTo: event.password);
+        var snapshotData = await userdata.get();
+        List docsList = snapshotData.docs;
+        if (docsList.isNotEmpty) {
+          UserData userData = UserData.fromJson(docsList.first.data());
+          print(userData.gender);
+          print(userData.name);
+          emit(LoginDone(state.obscurePassword, state.gender));
+        } else {
+          emit(UserDataNotAvailable(state.obscurePassword, state.gender));
+        }
       } else {
-        emit(UserDataNotAvailable(state.obscurePassword, state.gender));
+        emit(FillAllDetails(state.obscurePassword, state.gender));
       }
-    } else {
-      emit(FillAllDetails(state.obscurePassword, state.gender));
-      emit(AuthInitial(state.obscurePassword, state.gender));
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(ErrorState(state.obscurePassword, state.gender));
     }
   }
 }

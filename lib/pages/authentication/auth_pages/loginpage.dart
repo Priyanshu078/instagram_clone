@@ -6,6 +6,7 @@ import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
+import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 
@@ -27,29 +28,20 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoginDone) {
+          const InstaSnackbar(text: "Login Successfull !!!").show(context);
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => BlocProvider(
                     create: (context) => HomepageBloc(),
                     child: const HomePage(),
                   )));
         } else if (state is UserDataNotAvailable) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: Colors.white,
-              duration: Duration(seconds: 2),
-              content: InstaText(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  text: "Incorrect username or password")));
+          const InstaSnackbar(text: "Incorrect username or password")
+              .show(context);
         } else if (state is FillAllDetails) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: Colors.white,
-              duration: Duration(seconds: 2),
-              content: InstaText(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  text: "Please fill all the details !!!")));
+          const InstaSnackbar(text: "Please fill all the details !!!")
+              .show(context);
+        } else if (state is ErrorState) {
+          const InstaSnackbar(text: "Something went wrong !!!").show(context);
         }
       },
       child: Scaffold(

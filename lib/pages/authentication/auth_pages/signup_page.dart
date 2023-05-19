@@ -5,6 +5,7 @@ import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
 import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
+import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
@@ -34,12 +35,14 @@ class _SignupPageState extends State<SignupPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is SignUpDone) {
-          // Navigator.of(context).pushReplacement(MaterialPageRoute(
-          //     builder: (context) => BlocProvider(
-          //           create: (context) => AuthBloc(),
-          //           child: const LoginPage(),
-          //         )));
           Navigator.of(context).pop();
+        } else if (state is ErrorState) {
+          const InstaSnackbar(
+                  text: "Please try again, something went wrong !!!")
+              .show(context);
+        } else if (state is FillAllDetails) {
+          const InstaSnackbar(text: "Please fill all the details !!!")
+              .show(context);
         }
       },
       child: Scaffold(
@@ -70,14 +73,8 @@ class _SignupPageState extends State<SignupPage> {
                   child: Image.asset('assets/images/instagram.png'),
                 ),
               ),
-              ProfileWidget(
-                height: height * 0.1,
-                width: height * 0.1,
-                wantBorder: true,
-                photoSelected: false,
-              ),
               SizedBox(
-                height: height * 0.02,
+                height: height * 0.03,
               ),
               InstaTextField(
                 forPassword: false,
@@ -225,7 +222,7 @@ class _SignupPageState extends State<SignupPage> {
                           fontSize: 14,
                           color: Colors.white,
                           fontWeight: FontWeight.normal,
-                          text: "Female")
+                          text: "Female"),
                     ],
                   )
                 ],
