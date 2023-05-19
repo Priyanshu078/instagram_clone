@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -48,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(LoadingState(state.obscurePassword, state.gender));
     try {
       if (event.password.isNotEmpty && event.username.isNotEmpty) {
-        Query<Map> userdata = FirebaseFirestore.instance
+        Query<Map<String, dynamic>> userdata = FirebaseFirestore.instance
             .collection('users')
             .where('username', isEqualTo: event.username)
             .where('password', isEqualTo: event.password);
@@ -58,6 +58,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           UserData userData = UserData.fromJson(docsList.first.data());
           print(userData.gender);
           print(userData.name);
+          var sharedPreferences = await SharedPreferences.getInstance();
+          await sharedPreferences.setString("userId", userData.id);
+          print("UserId: ${sharedPreferences.getString("userId")}");
           emit(LoginDone(state.obscurePassword, state.gender));
         } else {
           emit(UserDataNotAvailable(state.obscurePassword, state.gender));
