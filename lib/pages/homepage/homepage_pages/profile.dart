@@ -27,6 +27,32 @@ class _ProfilePageState extends State<ProfilePage>
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: textFieldBackgroundColor,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: textFieldBackgroundColor,
+        title: SizedBox(
+          height: AppBar().preferredSize.height,
+          width: width,
+          child: const Align(
+            alignment: Alignment.centerLeft,
+            child: InstaText(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                text: "priyanshu paliwal"),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: SizedBox(
+              height: AppBar().preferredSize.height * 0.7,
+              width: width * 0.065,
+              child: Image.asset('assets/images/menu_insta.png'),
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(

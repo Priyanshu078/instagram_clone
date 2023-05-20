@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/constants/colors.dart';
 
 import '../../../widgets/instatext.dart';
 
@@ -7,9 +8,19 @@ class PostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: textFieldBackgroundColor,
+          title: SizedBox(
+            height: AppBar().preferredSize.height * 0.8,
+            width: width * 0.3,
+            child: Image.asset('assets/images/instagram.png'),
+          )),
+      body: const Center(
         child: InstaText(
             fontSize: 14,
             color: Colors.white,
