@@ -4,44 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'pages/authentication/auth_pages/loginpage.dart';
-import 'pages/authentication/bloc/auth_bloc.dart';
+import '../authentication/auth_pages/loginpage.dart';
+import '../authentication/bloc/auth_bloc.dart';
+import 'splash_cubit/splash_cubit.dart';
+import 'splash_cubit/splash_state.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  bool dataSaved = false;
-
-  @override
-  void initState() {
-    super.initState();
-    checkSavedDetails();
-  }
-
-  Future checkSavedDetails() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    var data = sharedPreferences.getString('userId');
-    print(data);
-    if (data != null) {
-      setState(() {
-        dataSaved = true;
-      });
-    }
-    print(dataSaved);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen(
+    return BlocBuilder<SplashCubit, SplashState>(builder: (context, state) {
+      return AnimatedSplashScreen(
         duration: 3000,
         centered: true,
         splash: Image.asset('assets/images/instagram_logo.jpg'),
-        nextScreen: dataSaved
+        backgroundColor: Colors.black,
+        nextScreen: state.dataSaved
             ? BlocProvider(
                 create: (context) => HomepageBloc(),
                 child: const HomePage(),
@@ -50,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 create: (context) => AuthBloc(),
                 child: const LoginPage(),
               ),
-        backgroundColor: Colors.black);
+      );
+    });
   }
 }

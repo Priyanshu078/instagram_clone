@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/firebase_options.dart';
-import 'package:instagram_clone/splash_screen.dart';
+import 'package:instagram_clone/pages/splash_screen/splash_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'insta_bloc_observer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'insta_bloc_observer.dart';
+import 'pages/splash_screen/splash_cubit/splash_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +38,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const SplashScreen(),
+      home: BlocProvider(
+        create: (context) => SplashCubit()..checkSavedDetails(),
+        child: const SplashScreen(),
+      ),
     );
   }
 }
