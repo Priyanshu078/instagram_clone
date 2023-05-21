@@ -5,7 +5,6 @@ import 'package:instagram_clone/pages/splash_screen/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'insta_bloc_observer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'pages/splash_screen/splash_cubit/splash_cubit.dart';
 
 void main() async {

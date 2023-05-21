@@ -5,6 +5,7 @@ import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
@@ -30,8 +31,15 @@ class _LoginPageState extends State<LoginPage> {
         if (state is LoginDone) {
           const InstaSnackbar(text: "Login Successfull !!!").show(context);
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                    create: (context) => HomepageBloc(),
+              builder: (context) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => HomepageBloc(),
+                      ),
+                      BlocProvider(
+                        create: (context) => ProfileBloc(),
+                      ),
+                    ],
                     child: const HomePage(),
                   )));
         } else if (state is UserDataNotAvailable) {

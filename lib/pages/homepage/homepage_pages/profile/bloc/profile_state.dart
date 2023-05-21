@@ -1,10 +1,21 @@
 part of 'profile_bloc.dart';
 
 abstract class ProfileState extends Equatable {
-  const ProfileState();
-  
+  final UserData userdata;
+  const ProfileState(this.userdata);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [userdata];
 }
 
-class ProfileInitial extends ProfileState {}
+class ProfileLoading extends ProfileState {
+  const ProfileLoading(super.userdata);
+  @override
+  List<Object> get props => [userdata];
+}
+
+class UserDataFetched extends ProfileState {
+  const UserDataFetched(super.userdata);
+  @override
+  List<Object> get props => [userdata];
+}

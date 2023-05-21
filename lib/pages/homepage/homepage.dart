@@ -4,6 +4,7 @@ import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notifitcation.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/post.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/search.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
@@ -186,6 +187,9 @@ class _HomePageState extends State<HomePage> {
           ],
           onTap: (index) {
             context.read<HomepageBloc>().add(TabChange(index));
+            if (index == 4) {
+              context.read<ProfileBloc>().add(GetUserDetails());
+            }
           },
         );
       }),

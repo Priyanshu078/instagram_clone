@@ -8,6 +8,7 @@ class UserData {
   final String password;
   final int gender;
   final String bio;
+  final String tagline;
   final List<dynamic> stories;
   final List<dynamic> posts;
   final int followers;
@@ -21,11 +22,17 @@ class UserData {
     this.password,
     this.gender,
     this.bio,
+    this.tagline,
     this.posts,
     this.stories,
     this.followers,
     this.following,
   );
+
+  factory UserData.temp() {
+    return UserData("id", "name", "username", "contact", "password", 1, "bio",
+        "tagline", [], [], 0, 0);
+  }
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
@@ -36,6 +43,7 @@ class UserData {
       json['password'],
       json['gender'],
       json['bio'],
+      json['tagline'],
       json['posts'],
       json['stories'],
       json['followers'],
@@ -52,6 +60,7 @@ class UserData {
       "password": password,
       "gender": gender,
       "bio": bio,
+      "tagline": tagline,
       "stories": stories,
       "posts": posts,
       "followers": followers,
