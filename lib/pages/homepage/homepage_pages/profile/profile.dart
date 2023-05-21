@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/edit_profile.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
@@ -173,7 +174,10 @@ class _ProfilePageState extends State<ProfilePage>
                       InstaButton(
                           height: height * 0.05,
                           buttonColor: Colors.black,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const EditProfile()));
+                          },
                           text: "Edit Profile",
                           fontSize: 13,
                           textColor: Colors.white,
