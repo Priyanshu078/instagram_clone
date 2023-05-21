@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/feed.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/notifitcation.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/post.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/search.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notifitcation.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/posts/post.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/search.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_widget.dart';
-
 import '../../constants/colors.dart';
 import '../chat_page.dart';
-import 'homepage_pages/profile.dart';
+import 'homepage_pages/profile/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

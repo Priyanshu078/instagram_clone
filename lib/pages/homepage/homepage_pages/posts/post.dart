@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
 
-import '../../../widgets/instatext.dart';
+import '../../../../widgets/instatext.dart';
 
 class PostPage extends StatelessWidget {
   const PostPage({super.key});

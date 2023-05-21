@@ -256,8 +256,8 @@ class _SignupPageState extends State<SignupPage> {
                             context.read<AuthBloc>().state.gender == Gender.male
                                 ? 1
                                 : 0;
-                        UserData userData = UserData(
-                            uId, name, username, contact, password, gender);
+                        UserData userData = UserData(uId, name, username,
+                            contact, password, gender, "", [], [], 0, 0);
                         context
                             .read<AuthBloc>()
                             .add(RequestSignUpEvent(userData));
