@@ -77,6 +77,7 @@ class _SignupPageState extends State<SignupPage> {
                 height: height * 0.03,
               ),
               InstaTextField(
+                editProfileTextfield: false,
                 forPassword: false,
                 suffixIcon: null,
                 suffixIconCallback: () {},
@@ -95,6 +96,7 @@ class _SignupPageState extends State<SignupPage> {
                 height: height * 0.02,
               ),
               InstaTextField(
+                editProfileTextfield: false,
                 forPassword: false,
                 suffixIcon: null,
                 suffixIconCallback: () {},
@@ -113,6 +115,7 @@ class _SignupPageState extends State<SignupPage> {
                 height: height * 0.02,
               ),
               InstaTextField(
+                editProfileTextfield: false,
                 forPassword: false,
                 suffixIcon: null,
                 suffixIconCallback: () {},
@@ -136,6 +139,7 @@ class _SignupPageState extends State<SignupPage> {
                 },
                 builder: (context, state) {
                   return InstaTextField(
+                    editProfileTextfield: false,
                     backgroundColor: textFieldBackgroundColor,
                     borderRadius: 5,
                     icon: null,

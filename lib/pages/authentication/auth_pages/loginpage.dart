@@ -75,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: height * 0.05,
                 ),
                 InstaTextField(
+                  editProfileTextfield: false,
                   forPassword: false,
                   suffixIcon: null,
                   suffixIconCallback: () {},
@@ -95,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
                     return InstaTextField(
+                      editProfileTextfield: false,
                       forPassword: true,
                       suffixIcon: state.obscurePassword
                           ? const Icon(

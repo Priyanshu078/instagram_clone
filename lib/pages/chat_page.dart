@@ -50,6 +50,7 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             InstaTextField(
+              editProfileTextfield: false,
               controller: textEditingController,
               hintText: "Search",
               fontSize: 16,

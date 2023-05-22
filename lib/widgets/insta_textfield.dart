@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InstaTextField extends StatelessWidget {
-  const InstaTextField(
-      {super.key,
-      required this.controller,
-      required this.hintText,
-      required this.fontSize,
-      required this.color,
-      required this.fontWeight,
-      required this.hintColor,
-      required this.obscureText,
-      required this.icon,
-      required this.borderRadius,
-      required this.backgroundColor,
-      required this.forPassword,
-      required this.suffixIconCallback,
-      this.suffixIcon});
+  const InstaTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    required this.fontSize,
+    required this.color,
+    required this.fontWeight,
+    required this.hintColor,
+    required this.obscureText,
+    required this.icon,
+    required this.borderRadius,
+    required this.backgroundColor,
+    required this.forPassword,
+    required this.suffixIconCallback,
+    this.suffixIcon,
+    required this.editProfileTextfield,
+  });
 
   final TextEditingController controller;
   final String hintText;
@@ -31,10 +33,12 @@ class InstaTextField extends StatelessWidget {
   final bool forPassword;
   final VoidCallback suffixIconCallback;
   final Icon? suffixIcon;
+  final bool editProfileTextfield;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      cursorColor: Colors.white,
       style: GoogleFonts.sourceSansPro(
         fontSize: fontSize,
         fontWeight: fontWeight,
@@ -42,32 +46,34 @@ class InstaTextField extends StatelessWidget {
       ),
       controller: controller,
       obscureText: obscureText,
-      decoration: InputDecoration(
-        suffixIcon: forPassword
-            ? IconButton(
-                icon: suffixIcon!,
-                onPressed: suffixIconCallback,
-              )
-            : const SizedBox(
-                height: 0,
-                width: 0,
+      decoration: editProfileTextfield
+          ? null
+          : InputDecoration(
+              suffixIcon: forPassword
+                  ? IconButton(
+                      icon: suffixIcon!,
+                      onPressed: suffixIconCallback,
+                    )
+                  : const SizedBox(
+                      height: 0,
+                      width: 0,
+                    ),
+              contentPadding: const EdgeInsets.only(left: 8),
+              prefixIcon: icon,
+              isDense: true,
+              filled: true,
+              fillColor: backgroundColor,
+              hintText: hintText,
+              hintStyle: GoogleFonts.sourceSansPro(
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+                color: hintColor,
               ),
-        contentPadding: const EdgeInsets.only(left: 8),
-        prefixIcon: icon,
-        isDense: true,
-        filled: true,
-        fillColor: backgroundColor,
-        hintText: hintText,
-        hintStyle: GoogleFonts.sourceSansPro(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          color: hintColor,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: const BorderSide(width: 1, color: Colors.grey),
-        ),
-      ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(borderRadius),
+                borderSide: const BorderSide(width: 1, color: Colors.grey),
+              ),
+            ),
     );
   }
 }

@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+import 'package:instagram_clone/widgets/profile_photo.dart';
+import 'package:instagram_clone/widgets/profile_widget.dart';
 
-class EditProfile extends StatelessWidget {
+class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
+
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  final TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +52,81 @@ class EditProfile extends StatelessWidget {
             child: TextButton(
               style: TextButton.styleFrom(foregroundColor: Colors.black),
               onPressed: () {},
-              child: const InstaText(
+              child: InstaText(
                   fontSize: 16,
-                  color: Colors.white,
+                  color: instablue,
                   fontWeight: FontWeight.w700,
                   text: "Done"),
+            ),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: height * 0.01,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: ProfileWidget(
+              height: height * 0.15,
+              width: height * 0.15,
+              wantBorder: true,
+              photoSelected: false,
+              editProfileImage: true,
+            ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.black),
+            onPressed: () {},
+            child: InstaText(
+                fontSize: 13,
+                color: instablue,
+                fontWeight: FontWeight.w700,
+                text: "Change Profile Photo"),
+          ),
+          SizedBox(
+            height: height * 0.01,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const InstaText(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Name"),
+                    SizedBox(
+                      width: width * 0.05,
+                    ),
+                    Expanded(
+                      child: InstaTextField(
+                          controller: nameController,
+                          hintText: "name",
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          hintColor: Colors.white.withOpacity(0.6),
+                          obscureText: false,
+                          icon: null,
+                          borderRadius: 0,
+                          backgroundColor: Colors.black,
+                          forPassword: false,
+                          suffixIconCallback: () {},
+                          editProfileTextfield: true),
+                    )
+                  ],
+                ),
+                Row(),
+                Row(),
+                Row(),
+                Row(),
+              ],
             ),
           )
         ],
