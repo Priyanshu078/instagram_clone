@@ -176,7 +176,10 @@ class _ProfilePageState extends State<ProfilePage>
                           buttonColor: Colors.black,
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const EditProfile()));
+                                builder: (_) => BlocProvider.value(
+                                      value: context.read<ProfileBloc>(),
+                                      child: const EditProfile(),
+                                    )));
                           },
                           text: "Edit Profile",
                           fontSize: 13,
