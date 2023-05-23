@@ -16,12 +16,29 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController taglineController = TextEditingController();
+  final TextEditingController contactController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     nameController.text =
         BlocProvider.of<ProfileBloc>(context).state.userdata.name;
+    usernameController.text =
+        BlocProvider.of<ProfileBloc>(context).state.userdata.username;
+    bioController.text =
+        BlocProvider.of<ProfileBloc>(context).state.userdata.bio;
+    taglineController.text =
+        BlocProvider.of<ProfileBloc>(context).state.userdata.tagline;
+    contactController.text =
+        BlocProvider.of<ProfileBloc>(context).state.userdata.contact;
+    genderController.text =
+        BlocProvider.of<ProfileBloc>(context).state.userdata.gender == 1
+            ? "Male"
+            : "Female";
   }
 
   @override
@@ -111,9 +128,7 @@ class _EditProfileState extends State<EditProfile> {
                         fontWeight: FontWeight.normal,
                         text: "Name"),
                     SizedBox(
-                      width: width * 0.05,
-                    ),
-                    Expanded(
+                      width: width * 0.65,
                       child: InstaTextField(
                           controller: nameController,
                           hintText: "name",
@@ -131,10 +146,155 @@ class _EditProfileState extends State<EditProfile> {
                     )
                   ],
                 ),
-                Row(),
-                Row(),
-                Row(),
-                Row(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const InstaText(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Username"),
+                    SizedBox(
+                      width: width * 0.65,
+                      child: InstaTextField(
+                          controller: usernameController,
+                          hintText: "username",
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          hintColor: Colors.white.withOpacity(0.6),
+                          obscureText: false,
+                          icon: null,
+                          borderRadius: 0,
+                          backgroundColor: Colors.black,
+                          forPassword: false,
+                          suffixIconCallback: () {},
+                          editProfileTextfield: true),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const InstaText(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Bio"),
+                    SizedBox(
+                      width: width * 0.65,
+                      child: InstaTextField(
+                          controller: bioController,
+                          hintText: "bio",
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          hintColor: Colors.white.withOpacity(0.6),
+                          obscureText: false,
+                          icon: null,
+                          borderRadius: 0,
+                          backgroundColor: Colors.black,
+                          forPassword: false,
+                          suffixIconCallback: () {},
+                          editProfileTextfield: true),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const InstaText(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Tagline"),
+                    SizedBox(
+                      width: width * 0.65,
+                      child: InstaTextField(
+                          controller: taglineController,
+                          hintText: "tagline",
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          hintColor: Colors.white.withOpacity(0.6),
+                          obscureText: false,
+                          icon: null,
+                          borderRadius: 0,
+                          backgroundColor: Colors.black,
+                          forPassword: false,
+                          suffixIconCallback: () {},
+                          editProfileTextfield: true),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: height * 0.03,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: InstaText(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      text: "Private Information"),
+                ),
+                SizedBox(
+                  height: height * 0.02,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const InstaText(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Contact"),
+                    SizedBox(
+                      width: width * 0.65,
+                      child: InstaTextField(
+                          controller: contactController,
+                          hintText: "tagline",
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          hintColor: Colors.white.withOpacity(0.6),
+                          obscureText: false,
+                          icon: null,
+                          borderRadius: 0,
+                          backgroundColor: Colors.black,
+                          forPassword: false,
+                          suffixIconCallback: () {},
+                          editProfileTextfield: true),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const InstaText(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        text: "Gender"),
+                    SizedBox(
+                      width: width * 0.65,
+                      child: InstaTextField(
+                          controller: genderController,
+                          hintText: "tagline",
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          hintColor: Colors.white.withOpacity(0.6),
+                          obscureText: false,
+                          icon: null,
+                          borderRadius: 0,
+                          backgroundColor: Colors.black,
+                          forPassword: false,
+                          suffixIconCallback: () {},
+                          editProfileTextfield: true),
+                    )
+                  ],
+                ),
               ],
             ),
           )
@@ -146,6 +306,9 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void dispose() {
     nameController.dispose();
+    bioController.dispose();
+    taglineController.dispose();
+    usernameController.dispose();
     super.dispose();
   }
 }

@@ -47,7 +47,17 @@ class InstaTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       decoration: editProfileTextfield
-          ? null
+          ? InputDecoration(
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white.withOpacity(0.15)),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),
+              disabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white.withOpacity(0.15)),
+              ),
+            )
           : InputDecoration(
               suffixIcon: forPassword
                   ? IconButton(
