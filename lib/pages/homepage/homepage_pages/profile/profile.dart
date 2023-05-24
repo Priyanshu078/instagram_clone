@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage>
     final width = MediaQuery.of(context).size.width;
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        if (state is UserDataFetched) {
+        if (state is UserDataFetched || state is UserDataEdited) {
           return Scaffold(
             backgroundColor: textFieldBackgroundColor,
             appBar: AppBar(

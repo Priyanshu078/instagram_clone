@@ -19,3 +19,9 @@ class UserDataFetched extends ProfileState {
   @override
   List<Object> get props => [userdata];
 }
+
+class UserDataEdited extends ProfileState {
+  const UserDataEdited(super.userdata);
+  @override
+  List<Object> get props => [userdata];
+}

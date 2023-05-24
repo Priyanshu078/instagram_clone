@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
@@ -77,7 +78,23 @@ class _EditProfileState extends State<EditProfile> {
             alignment: Alignment.centerRight,
             child: TextButton(
               style: TextButton.styleFrom(foregroundColor: Colors.black),
-              onPressed: () {},
+              onPressed: () {
+                var bloc = context.read<ProfileBloc>();
+                UserData userData = UserData(
+                    bloc.state.userdata.id,
+                    nameController.text,
+                    usernameController.text,
+                    bloc.state.userdata.contact,
+                    bloc.state.userdata.password,
+                    bloc.state.userdata.gender,
+                    bioController.text,
+                    taglineController.text,
+                    bloc.state.userdata.posts,
+                    bloc.state.userdata.stories,
+                    bloc.state.userdata.followers,
+                    bloc.state.userdata.following);
+                bloc.add(EditUserDetails(userData));
+              },
               child: InstaText(
                   fontSize: 16,
                   color: instablue,
@@ -87,218 +104,220 @@ class _EditProfileState extends State<EditProfile> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: height * 0.01,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: ProfileWidget(
-              height: height * 0.15,
-              width: height * 0.15,
-              wantBorder: true,
-              photoSelected: false,
-              editProfileImage: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: height * 0.01,
             ),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(foregroundColor: Colors.black),
-            onPressed: () {},
-            child: InstaText(
-                fontSize: 13,
-                color: instablue,
-                fontWeight: FontWeight.w700,
-                text: "Change Profile Photo"),
-          ),
-          SizedBox(
-            height: height * 0.01,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const InstaText(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        text: "Name"),
-                    SizedBox(
-                      width: width * 0.65,
-                      child: InstaTextField(
-                          controller: nameController,
-                          hintText: "name",
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          hintColor: Colors.white.withOpacity(0.6),
-                          obscureText: false,
-                          icon: null,
-                          borderRadius: 0,
-                          backgroundColor: Colors.black,
-                          forPassword: false,
-                          suffixIconCallback: () {},
-                          editProfileTextfield: true),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const InstaText(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        text: "Username"),
-                    SizedBox(
-                      width: width * 0.65,
-                      child: InstaTextField(
-                          controller: usernameController,
-                          hintText: "username",
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          hintColor: Colors.white.withOpacity(0.6),
-                          obscureText: false,
-                          icon: null,
-                          borderRadius: 0,
-                          backgroundColor: Colors.black,
-                          forPassword: false,
-                          suffixIconCallback: () {},
-                          editProfileTextfield: true),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const InstaText(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        text: "Bio"),
-                    SizedBox(
-                      width: width * 0.65,
-                      child: InstaTextField(
-                          controller: bioController,
-                          hintText: "bio",
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          hintColor: Colors.white.withOpacity(0.6),
-                          obscureText: false,
-                          icon: null,
-                          borderRadius: 0,
-                          backgroundColor: Colors.black,
-                          forPassword: false,
-                          suffixIconCallback: () {},
-                          editProfileTextfield: true),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const InstaText(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        text: "Tagline"),
-                    SizedBox(
-                      width: width * 0.65,
-                      child: InstaTextField(
-                          controller: taglineController,
-                          hintText: "tagline",
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          hintColor: Colors.white.withOpacity(0.6),
-                          obscureText: false,
-                          icon: null,
-                          borderRadius: 0,
-                          backgroundColor: Colors.black,
-                          forPassword: false,
-                          suffixIconCallback: () {},
-                          editProfileTextfield: true),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: height * 0.03,
-                ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: InstaText(
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      text: "Private Information"),
-                ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const InstaText(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        text: "Contact"),
-                    SizedBox(
-                      width: width * 0.65,
-                      child: InstaTextField(
-                          controller: contactController,
-                          hintText: "tagline",
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          hintColor: Colors.white.withOpacity(0.6),
-                          obscureText: false,
-                          icon: null,
-                          borderRadius: 0,
-                          backgroundColor: Colors.black,
-                          forPassword: false,
-                          suffixIconCallback: () {},
-                          editProfileTextfield: true),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const InstaText(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        text: "Gender"),
-                    SizedBox(
-                      width: width * 0.65,
-                      child: InstaTextField(
-                          controller: genderController,
-                          hintText: "tagline",
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          hintColor: Colors.white.withOpacity(0.6),
-                          obscureText: false,
-                          icon: null,
-                          borderRadius: 0,
-                          backgroundColor: Colors.black,
-                          forPassword: false,
-                          suffixIconCallback: () {},
-                          editProfileTextfield: true),
-                    )
-                  ],
-                ),
-              ],
+            Align(
+              alignment: Alignment.center,
+              child: ProfileWidget(
+                height: height * 0.15,
+                width: height * 0.15,
+                wantBorder: true,
+                photoSelected: false,
+                editProfileImage: true,
+              ),
             ),
-          )
-        ],
+            TextButton(
+              style: TextButton.styleFrom(foregroundColor: Colors.black),
+              onPressed: () {},
+              child: InstaText(
+                  fontSize: 13,
+                  color: instablue,
+                  fontWeight: FontWeight.w700,
+                  text: "Change Profile Photo"),
+            ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const InstaText(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          text: "Name"),
+                      SizedBox(
+                        width: width * 0.65,
+                        child: InstaTextField(
+                            controller: nameController,
+                            hintText: "name",
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            hintColor: Colors.white.withOpacity(0.6),
+                            obscureText: false,
+                            icon: null,
+                            borderRadius: 0,
+                            backgroundColor: Colors.black,
+                            forPassword: false,
+                            suffixIconCallback: () {},
+                            editProfileTextfield: true),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const InstaText(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          text: "Username"),
+                      SizedBox(
+                        width: width * 0.65,
+                        child: InstaTextField(
+                            controller: usernameController,
+                            hintText: "username",
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            hintColor: Colors.white.withOpacity(0.6),
+                            obscureText: false,
+                            icon: null,
+                            borderRadius: 0,
+                            backgroundColor: Colors.black,
+                            forPassword: false,
+                            suffixIconCallback: () {},
+                            editProfileTextfield: true),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const InstaText(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          text: "Bio"),
+                      SizedBox(
+                        width: width * 0.65,
+                        child: InstaTextField(
+                            controller: bioController,
+                            hintText: "bio",
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            hintColor: Colors.white.withOpacity(0.6),
+                            obscureText: false,
+                            icon: null,
+                            borderRadius: 0,
+                            backgroundColor: Colors.black,
+                            forPassword: false,
+                            suffixIconCallback: () {},
+                            editProfileTextfield: true),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const InstaText(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          text: "Tagline"),
+                      SizedBox(
+                        width: width * 0.65,
+                        child: InstaTextField(
+                            controller: taglineController,
+                            hintText: "tagline",
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            hintColor: Colors.white.withOpacity(0.6),
+                            obscureText: false,
+                            icon: null,
+                            borderRadius: 0,
+                            backgroundColor: Colors.black,
+                            forPassword: false,
+                            suffixIconCallback: () {},
+                            editProfileTextfield: true),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: height * 0.03,
+                  ),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: InstaText(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        text: "Private Information"),
+                  ),
+                  SizedBox(
+                    height: height * 0.02,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const InstaText(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          text: "Contact"),
+                      SizedBox(
+                        width: width * 0.65,
+                        child: InstaTextField(
+                            controller: contactController,
+                            hintText: "tagline",
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            hintColor: Colors.white.withOpacity(0.6),
+                            obscureText: false,
+                            icon: null,
+                            borderRadius: 0,
+                            backgroundColor: Colors.black,
+                            forPassword: false,
+                            suffixIconCallback: () {},
+                            editProfileTextfield: true),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const InstaText(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                          text: "Gender"),
+                      SizedBox(
+                        width: width * 0.65,
+                        child: InstaTextField(
+                            controller: genderController,
+                            hintText: "tagline",
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            hintColor: Colors.white.withOpacity(0.6),
+                            obscureText: false,
+                            icon: null,
+                            borderRadius: 0,
+                            backgroundColor: Colors.black,
+                            forPassword: false,
+                            suffixIconCallback: () {},
+                            editProfileTextfield: true),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

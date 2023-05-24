@@ -10,6 +10,7 @@ part 'profile_state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(ProfileLoading(UserData.temp())) {
     on<GetUserDetails>((event, emit) => getUserDetails(event, emit));
+    on<EditUserDetails>((event, emit) => editUserDetails(event, emit));
   }
 
   Future<void> getUserDetails(GetUserDetails event, Emitter emit) async {
@@ -22,5 +23,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     UserData userData = UserData.fromJson(snapshotData.docs.first.data());
     print(userData);
     emit(UserDataFetched(userData));
+  }
+
+  Future<void> editUserDetails(EditUserDetails event, Emitter emit) async {
+    var collectionRef = FirebaseFirestore.instance.collection("users");
+    await collectionRef.doc(event.userData.id).set(event.userData.toJson());
+    emit(UserDataEdited(event.userData));
   }
 }

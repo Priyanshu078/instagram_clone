@@ -8,3 +8,11 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class GetUserDetails extends ProfileEvent {}
+
+class EditUserDetails extends ProfileEvent {
+  final UserData userData;
+  const EditUserDetails(this.userData);
+
+  @override
+  List<Object> get props => [userData];
+}
