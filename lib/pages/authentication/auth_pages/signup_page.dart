@@ -77,6 +77,7 @@ class _SignupPageState extends State<SignupPage> {
                 height: height * 0.03,
               ),
               InstaTextField(
+                enabled: true,
                 editProfileTextfield: false,
                 forPassword: false,
                 suffixIcon: null,
@@ -96,6 +97,7 @@ class _SignupPageState extends State<SignupPage> {
                 height: height * 0.02,
               ),
               InstaTextField(
+                enabled: true,
                 editProfileTextfield: false,
                 forPassword: false,
                 suffixIcon: null,
@@ -115,6 +117,7 @@ class _SignupPageState extends State<SignupPage> {
                 height: height * 0.02,
               ),
               InstaTextField(
+                enabled: true,
                 editProfileTextfield: false,
                 forPassword: false,
                 suffixIcon: null,
@@ -139,6 +142,7 @@ class _SignupPageState extends State<SignupPage> {
                 },
                 builder: (context, state) {
                   return InstaTextField(
+                    enabled: true,
                     editProfileTextfield: false,
                     backgroundColor: textFieldBackgroundColor,
                     borderRadius: 5,
@@ -260,8 +264,21 @@ class _SignupPageState extends State<SignupPage> {
                             context.read<AuthBloc>().state.gender == Gender.male
                                 ? 1
                                 : 0;
-                        UserData userData = UserData(uId, name, username,
-                            contact, password, gender, "", "", [], [], 0, 0);
+                        UserData userData = UserData(
+                          uId,
+                          name,
+                          username,
+                          contact,
+                          password,
+                          gender,
+                          "",
+                          "",
+                          [],
+                          [],
+                          0,
+                          0,
+                          "",
+                        );
                         context
                             .read<AuthBloc>()
                             .add(RequestSignUpEvent(userData));

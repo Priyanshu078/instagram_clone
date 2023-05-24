@@ -25,3 +25,9 @@ class UserDataEdited extends ProfileState {
   @override
   List<Object> get props => [userdata];
 }
+
+class ProfilePhotoEdited extends ProfileState {
+  const ProfilePhotoEdited(super.userdata);
+  @override
+  List<Object> get props => [userdata];
+}

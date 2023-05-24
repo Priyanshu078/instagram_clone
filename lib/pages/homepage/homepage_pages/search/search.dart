@@ -21,6 +21,7 @@ class SearchPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: InstaTextField(
+                enabled: true,
                 editProfileTextfield: false,
                 forPassword: false,
                 suffixIcon: null,

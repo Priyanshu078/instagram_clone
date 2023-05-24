@@ -13,6 +13,7 @@ class UserData {
   final List<dynamic> posts;
   final int followers;
   final int following;
+  final String profilePhotoUrl;
 
   UserData(
     this.id,
@@ -27,11 +28,12 @@ class UserData {
     this.stories,
     this.followers,
     this.following,
+    this.profilePhotoUrl,
   );
 
   factory UserData.temp() {
     return UserData("id", "name", "username", "contact", "password", 1, "bio",
-        "tagline", [], [], 0, 0);
+        "tagline", [], [], 0, 0, "");
   }
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -48,6 +50,7 @@ class UserData {
       json['stories'],
       json['followers'],
       json['following'],
+      json['profilePhotoUrl'],
     );
   }
 
@@ -65,6 +68,7 @@ class UserData {
       "posts": posts,
       "followers": followers,
       "following": following,
+      "profilePhotoUrl": profilePhotoUrl,
     };
   }
 }

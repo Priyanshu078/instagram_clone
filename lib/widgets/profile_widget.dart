@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/data/user_data.dart';
 
 class ProfileWidget extends StatelessWidget {
   const ProfileWidget({
@@ -9,6 +11,7 @@ class ProfileWidget extends StatelessWidget {
     required this.wantBorder,
     required this.photoSelected,
     required this.editProfileImage,
+    required this.userData,
   });
 
   final double height;
@@ -16,9 +19,11 @@ class ProfileWidget extends StatelessWidget {
   final bool wantBorder;
   final bool photoSelected;
   final bool editProfileImage;
+  final UserData userData;
 
   @override
   Widget build(BuildContext context) {
+    print(userData.profilePhotoUrl);
     return Container(
       decoration: wantBorder
           ? BoxDecoration(
@@ -34,8 +39,12 @@ class ProfileWidget extends StatelessWidget {
       height: height,
       width: width,
       child: photoSelected
-          ? const CircleAvatar(
-              backgroundImage: AssetImage('assets/images/priyanshuphoto.jpg'),
+          ? Container(
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                imageUrl: userData.profilePhotoUrl,
+              ),
             )
           : Center(
               child: Icon(

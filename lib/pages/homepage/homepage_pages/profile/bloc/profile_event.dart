@@ -16,3 +16,11 @@ class EditUserDetails extends ProfileEvent {
   @override
   List<Object> get props => [userData];
 }
+
+class ChangeProfilePhotoEvent extends ProfileEvent {
+  final UserData userData;
+  const ChangeProfilePhotoEvent(this.userData);
+
+  @override
+  List<Object> get props => [userData];
+}

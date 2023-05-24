@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notifitcation.dart';
@@ -172,6 +173,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
                 icon: state.index == 4
                     ? ProfileWidget(
+                        userData: UserData.temp(),
                         height: height * 0.035,
                         width: width * 0.065,
                         wantBorder: true,
@@ -184,6 +186,7 @@ class _HomePageState extends State<HomePage> {
                         wantBorder: false,
                         photoSelected: true,
                         editProfileImage: false,
+                        userData: UserData.temp(),
                       ),
                 label: "Profile"),
           ],
