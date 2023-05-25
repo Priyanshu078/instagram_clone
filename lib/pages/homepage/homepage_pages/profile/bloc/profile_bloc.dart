@@ -54,20 +54,21 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .collection("users")
         .doc(event.userData.id)
         .update({"profilePhotoUrl": imagePath});
-    UserData userData = UserData(
-        event.userData.id,
-        event.userData.name,
-        event.userData.username,
-        event.userData.contact,
-        event.userData.password,
-        event.userData.gender,
-        event.userData.bio,
-        event.userData.tagline,
-        event.userData.posts,
-        event.userData.stories,
-        event.userData.followers,
-        event.userData.following,
-        imagePath);
+    // UserData userData = UserData(
+    //     event.userData.id,
+    //     event.userData.name,
+    //     event.userData.username,
+    //     event.userData.contact,
+    //     event.userData.password,
+    //     event.userData.gender,
+    //     event.userData.bio,
+    //     event.userData.tagline,
+    //     event.userData.posts,
+    //     event.userData.stories,
+    //     event.userData.followers,
+    //     event.userData.following,
+    //     imagePath);
+    UserData userData = event.userData.copyWith(profilePhotoUrl: imagePath);
     emit(ProfilePhotoEdited(userData));
   }
 }

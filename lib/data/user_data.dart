@@ -1,5 +1,3 @@
-import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
-
 class UserData {
   final String id;
   final String name;
@@ -34,6 +32,38 @@ class UserData {
   factory UserData.temp() {
     return UserData("id", "name", "username", "contact", "password", 1, "bio",
         "tagline", [], [], 0, 0, "");
+  }
+
+  UserData copyWith({
+    String? id,
+    String? name,
+    String? username,
+    String? contact,
+    String? password,
+    int? gender,
+    String? bio,
+    String? tagline,
+    List? posts,
+    List? stories,
+    int? followers,
+    int? following,
+    String? profilePhotoUrl,
+  }) {
+    return UserData(
+      id ?? this.id,
+      name ?? this.name,
+      username ?? this.username,
+      contact ?? this.contact,
+      password ?? this.password,
+      gender ?? this.gender,
+      bio ?? this.bio,
+      tagline ?? this.tagline,
+      posts ?? this.posts,
+      stories ?? this.stories,
+      followers ?? this.followers,
+      following ?? this.following,
+      profilePhotoUrl ?? this.profilePhotoUrl,
+    );
   }
 
   factory UserData.fromJson(Map<String, dynamic> json) {
