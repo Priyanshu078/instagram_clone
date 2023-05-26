@@ -40,6 +40,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> changeProfilePhotoEvent(
       ChangeProfilePhotoEvent event, Emitter emit) async {
+    emit(ProfilePhotoLoading(event.userData.copyWith()));
     var profileImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     var storageRef = FirebaseStorage.instance.ref();

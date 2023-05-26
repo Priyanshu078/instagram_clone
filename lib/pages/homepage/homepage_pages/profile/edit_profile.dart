@@ -123,17 +123,49 @@ class _EditProfileState extends State<EditProfile> {
               ),
               BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
-                  return Align(
-                    alignment: Alignment.center,
-                    child: ProfileWidget(
-                      userData: state.userdata,
-                      height: height * 0.15,
-                      width: height * 0.15,
-                      wantBorder: true,
-                      photoSelected: state.userdata.profilePhotoUrl.isNotEmpty,
-                      editProfileImage: true,
-                    ),
-                  );
+                  if (state is ProfilePhotoLoading) {
+                    return Align(
+                      alignment: Alignment.center,
+                      child: ProfileWidget(
+                        userData: state.userdata,
+                        height: height * 0.15,
+                        width: height * 0.15,
+                        wantBorder: true,
+                        photoSelected:
+                            state.userdata.profilePhotoUrl.isNotEmpty,
+                        editProfileImage: true,
+                        loading: true,
+                      ),
+                    );
+                  } else if (state is ProfilePhotoEdited) {
+                    return Align(
+                      alignment: Alignment.center,
+                      child: ProfileWidget(
+                        userData: state.userdata,
+                        height: height * 0.15,
+                        width: height * 0.15,
+                        wantBorder: true,
+                        photoSelected:
+                            state.userdata.profilePhotoUrl.isNotEmpty,
+                        editProfileImage: true,
+                        loading: false,
+                      ),
+                    );
+                  } else {
+                    return Align(
+                      alignment: Alignment.center,
+                      child: ProfileWidget(
+                        userData: state.userdata,
+                        height: height * 0.15,
+                        width: height * 0.15,
+                        wantBorder: true,
+                        photoSelected:
+                            state.userdata.profilePhotoUrl.isNotEmpty,
+                        editProfileImage: true,
+                        loading: false,
+                      ),
+                    );
+                  }
                 },
               ),
               TextButton(

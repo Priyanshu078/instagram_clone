@@ -31,3 +31,9 @@ class ProfilePhotoEdited extends ProfileState {
   @override
   List<Object> get props => [userdata];
 }
+
+class ProfilePhotoLoading extends ProfileState {
+  const ProfilePhotoLoading(super.userdata);
+  @override
+  List<Object> get props => [userdata];
+}

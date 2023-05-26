@@ -12,6 +12,7 @@ class ProfileWidget extends StatelessWidget {
     required this.photoSelected,
     required this.editProfileImage,
     required this.userData,
+    required this.loading,
   });
 
   final double height;
@@ -20,6 +21,7 @@ class ProfileWidget extends StatelessWidget {
   final bool photoSelected;
   final bool editProfileImage;
   final UserData userData;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +48,19 @@ class ProfileWidget extends StatelessWidget {
                 imageUrl: userData.profilePhotoUrl,
               ),
             )
-          : Center(
-              child: Icon(
-                Icons.person,
-                color: searchHintText,
-                size: height * 0.3,
-              ),
-            ),
+          : loading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                  color: Colors.white,
+                ))
+              : Center(
+                  child: Icon(
+                    Icons.person,
+                    color: searchHintText,
+                    size: height * 0.3,
+                  ),
+                ),
     );
   }
 }
