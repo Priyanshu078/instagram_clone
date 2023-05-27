@@ -6,7 +6,6 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profi
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
-import 'package:instagram_clone/widgets/profile_photo.dart';
 import 'package:instagram_clone/widgets/profile_widget.dart';
 
 class EditProfile extends StatefulWidget {

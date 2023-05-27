@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/data/user_data.dart';
-import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
 import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
-import 'package:instagram_clone/widgets/profile_photo.dart';
-import 'package:instagram_clone/widgets/profile_widget.dart';
 import 'package:uuid/uuid.dart';
 
 enum Gender { male, female, other }
@@ -197,7 +194,7 @@ class _SignupPageState extends State<SignupPage> {
                               onChanged: (val) {
                                 context
                                     .read<AuthBloc>()
-                                    .add(ChangeGender(val ?? Gender.male));
+                                    .add(ChangeGender(value));
                               });
                         },
                       ),
@@ -222,7 +219,7 @@ class _SignupPageState extends State<SignupPage> {
                               onChanged: (val) {
                                 context
                                     .read<AuthBloc>()
-                                    .add(ChangeGender(val ?? Gender.female));
+                                    .add(ChangeGender(value));
                               });
                         },
                       ),

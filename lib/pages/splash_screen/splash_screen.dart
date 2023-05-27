@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../authentication/auth_pages/loginpage.dart';
 import '../authentication/bloc/auth_bloc.dart';
 import 'splash_cubit/splash_cubit.dart';

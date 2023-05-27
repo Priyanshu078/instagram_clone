@@ -1,9 +1,7 @@
-import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';

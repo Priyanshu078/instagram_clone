@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
-
 import '../../../../widgets/instatext.dart';
 
 class PostPage extends StatelessWidget {
@@ -28,6 +27,5 @@ class PostPage extends StatelessWidget {
             text: "Post"),
       ),
     );
-    ;
   }
 }

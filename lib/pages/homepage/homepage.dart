@@ -7,11 +7,8 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notif
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/post.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/search.dart';
-import 'package:instagram_clone/widgets/insta_textfield.dart';
-import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_widget.dart';
 import '../../constants/colors.dart';
-import '../chat_page.dart';
 import 'homepage_pages/profile/profile.dart';
 
 class HomePage extends StatefulWidget {
