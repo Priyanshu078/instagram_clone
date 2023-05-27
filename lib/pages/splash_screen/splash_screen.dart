@@ -24,7 +24,7 @@ class SplashScreen extends StatelessWidget {
             ? MultiBlocProvider(
                 providers: [
                   BlocProvider(
-                    create: (context) => HomepageBloc(),
+                    create: (context) => HomepageBloc()..add(GetDetails()),
                   ),
                   BlocProvider(
                     create: (context) => ProfileBloc(),

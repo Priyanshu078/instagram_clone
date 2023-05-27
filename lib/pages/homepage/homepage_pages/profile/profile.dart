@@ -77,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage>
                             width: height * 0.13,
                             wantBorder: true,
                             storyAdder: false,
+                            imageUrl: state.userdata.profilePhotoUrl,
                           ),
                           SizedBox(
                             width: width * 0.1,
@@ -195,10 +196,12 @@ class _ProfilePageState extends State<ProfilePage>
                           Column(
                             children: [
                               ProfilePhoto(
-                                  height: height * 0.09,
-                                  width: height * 0.1,
-                                  wantBorder: true,
-                                  storyAdder: true),
+                                height: height * 0.09,
+                                width: height * 0.1,
+                                wantBorder: true,
+                                storyAdder: true,
+                                imageUrl: "",
+                              ),
                               const InstaText(
                                   fontSize: 12,
                                   color: Colors.white,
@@ -218,10 +221,12 @@ class _ProfilePageState extends State<ProfilePage>
                                   child: Column(
                                     children: [
                                       ProfilePhoto(
-                                          height: height * 0.09,
-                                          width: height * 0.1,
-                                          wantBorder: true,
-                                          storyAdder: false),
+                                        height: height * 0.09,
+                                        width: height * 0.1,
+                                        wantBorder: true,
+                                        storyAdder: false,
+                                        imageUrl: "",
+                                      ),
                                       InstaText(
                                           fontSize: 12,
                                           color: Colors.white,

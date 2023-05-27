@@ -11,7 +11,7 @@ class ProfileWidget extends StatelessWidget {
     required this.wantBorder,
     required this.photoSelected,
     required this.editProfileImage,
-    required this.userData,
+    required this.url,
     required this.loading,
   });
 
@@ -20,12 +20,12 @@ class ProfileWidget extends StatelessWidget {
   final bool wantBorder;
   final bool photoSelected;
   final bool editProfileImage;
-  final UserData userData;
+  final String url;
   final bool loading;
 
   @override
   Widget build(BuildContext context) {
-    print(userData.profilePhotoUrl);
+    print(url);
     return Container(
       decoration: wantBorder
           ? BoxDecoration(
@@ -48,7 +48,15 @@ class ProfileWidget extends StatelessWidget {
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: CachedNetworkImage(
                   fit: BoxFit.fill,
-                  imageUrl: userData.profilePhotoUrl,
+                  imageUrl: url,
+                  placeholder: (context, val) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
                 ),
               ),
             )

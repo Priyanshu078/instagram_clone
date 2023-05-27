@@ -35,7 +35,16 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.black,
       body: BlocBuilder<HomepageBloc, HomepageState>(
         builder: (context, state) {
-          return pages[state.index];
+          if (state is HomePageLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 1,
+                color: Colors.white,
+              ),
+            );
+          } else {
+            return pages[state.index];
+          }
         },
       ),
       bottomNavigationBar:
@@ -81,11 +90,11 @@ class _HomePageState extends State<HomePage> {
                 label: "Notification"),
             BottomNavigationBarItem(
                 icon: ProfileWidget(
-                  userData: UserData.temp(),
+                  url: state.homePageData.url,
                   height: height * 0.035,
                   width: width * 0.065,
                   wantBorder: state.index == 4 ? true : false,
-                  photoSelected: false,
+                  photoSelected: true,
                   editProfileImage: false,
                   loading: false,
                 ),

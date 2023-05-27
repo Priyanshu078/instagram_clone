@@ -126,7 +126,7 @@ class _EditProfileState extends State<EditProfile> {
                     return Align(
                       alignment: Alignment.center,
                       child: ProfileWidget(
-                        userData: state.userdata,
+                        url: state.userdata.profilePhotoUrl,
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
@@ -139,7 +139,7 @@ class _EditProfileState extends State<EditProfile> {
                     return Align(
                       alignment: Alignment.center,
                       child: ProfileWidget(
-                        userData: state.userdata,
+                        url: state.userdata.profilePhotoUrl,
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
@@ -152,7 +152,7 @@ class _EditProfileState extends State<EditProfile> {
                     return Align(
                       alignment: Alignment.center,
                       child: ProfileWidget(
-                        userData: state.userdata,
+                        url: state.userdata.profilePhotoUrl,
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
