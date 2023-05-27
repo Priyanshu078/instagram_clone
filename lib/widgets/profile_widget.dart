@@ -29,23 +29,27 @@ class ProfileWidget extends StatelessWidget {
     return Container(
       decoration: wantBorder
           ? BoxDecoration(
-              border: Border.all(
-                  color: editProfileImage
-                      ? profilePhotoBorder
-                      : photoSelected
-                          ? Colors.white
-                          : searchHintText,
-                  width: 1.5),
+              border: (editProfileImage && photoSelected)
+                  ? null
+                  : Border.all(
+                      color: editProfileImage
+                          ? profilePhotoBorder
+                          : photoSelected
+                              ? Colors.white
+                              : searchHintText,
+                      width: 1.5),
               shape: BoxShape.circle)
           : null,
       height: height,
       width: width,
       child: photoSelected
-          ? Container(
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              child: CachedNetworkImage(
-                fit: BoxFit.fill,
-                imageUrl: userData.profilePhotoUrl,
+          ? ClipOval(
+              child: Container(
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  imageUrl: userData.profilePhotoUrl,
+                ),
               ),
             )
           : loading

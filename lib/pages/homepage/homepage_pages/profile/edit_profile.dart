@@ -130,8 +130,7 @@ class _EditProfileState extends State<EditProfile> {
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
-                        photoSelected:
-                            state.userdata.profilePhotoUrl.isNotEmpty,
+                        photoSelected: false,
                         editProfileImage: true,
                         loading: true,
                       ),
@@ -144,8 +143,7 @@ class _EditProfileState extends State<EditProfile> {
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
-                        photoSelected:
-                            state.userdata.profilePhotoUrl.isNotEmpty,
+                        photoSelected: true,
                         editProfileImage: true,
                         loading: false,
                       ),
