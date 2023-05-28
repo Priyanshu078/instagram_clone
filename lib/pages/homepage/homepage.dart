@@ -49,64 +49,68 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar:
           BlocBuilder<HomepageBloc, HomepageState>(builder: (context, state) {
-        return BottomNavigationBar(
-          elevation: 0,
-          currentIndex: state.index,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: textFieldBackgroundColor,
-          items: [
-            BottomNavigationBarItem(
-                icon: SizedBox(
-                  // height: height * 0.05,
-                  width: width * 0.065,
-                  child: state.index == 0
-                      ? Image.asset('assets/images/home_filled.png')
-                      : Image.asset('assets/images/home.png'),
-                ),
-                label: "Home"),
-            BottomNavigationBarItem(
-                icon: SizedBox(
+        if (state is HomePageLoadingState) {
+          return Container();
+        } else {
+          return BottomNavigationBar(
+            elevation: 0,
+            currentIndex: state.index,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: textFieldBackgroundColor,
+            items: [
+              BottomNavigationBarItem(
+                  icon: SizedBox(
                     // height: height * 0.05,
                     width: width * 0.065,
-                    child: state.index == 1
-                        ? Image.asset('assets/images/search_insta_filled.png')
-                        : Image.asset('assets/images/search_insta.png')),
-                label: "Search"),
-            BottomNavigationBarItem(
-                icon: SizedBox(
-                    // height: height * 0.05,
+                    child: state.index == 0
+                        ? Image.asset('assets/images/home_filled.png')
+                        : Image.asset('assets/images/home.png'),
+                  ),
+                  label: "Home"),
+              BottomNavigationBarItem(
+                  icon: SizedBox(
+                      // height: height * 0.05,
+                      width: width * 0.065,
+                      child: state.index == 1
+                          ? Image.asset('assets/images/search_insta_filled.png')
+                          : Image.asset('assets/images/search_insta.png')),
+                  label: "Search"),
+              BottomNavigationBarItem(
+                  icon: SizedBox(
+                      // height: height * 0.05,
+                      width: width * 0.065,
+                      child: Image.asset('assets/images/post.png')),
+                  label: "Post"),
+              BottomNavigationBarItem(
+                  icon: SizedBox(
+                      // height: height * 0.05,
+                      width: width * 0.065,
+                      child: state.index == 3
+                          ? Image.asset('assets/images/notification_filled.png')
+                          : Image.asset('assets/images/notification.png')),
+                  label: "Notification"),
+              BottomNavigationBarItem(
+                  icon: ProfileWidget(
+                    url: state.homePageData.url,
+                    height: height * 0.035,
                     width: width * 0.065,
-                    child: Image.asset('assets/images/post.png')),
-                label: "Post"),
-            BottomNavigationBarItem(
-                icon: SizedBox(
-                    // height: height * 0.05,
-                    width: width * 0.065,
-                    child: state.index == 3
-                        ? Image.asset('assets/images/notification_filled.png')
-                        : Image.asset('assets/images/notification.png')),
-                label: "Notification"),
-            BottomNavigationBarItem(
-                icon: ProfileWidget(
-                  url: state.homePageData.url,
-                  height: height * 0.035,
-                  width: width * 0.065,
-                  wantBorder: state.index == 4 ? true : false,
-                  photoSelected: true,
-                  editProfileImage: false,
-                  loading: false,
-                ),
-                label: "Profile"),
-          ],
-          onTap: (index) {
-            context.read<HomepageBloc>().add(TabChange(index));
-            if (index == 4) {
-              context.read<ProfileBloc>().add(GetUserDetails());
-            }
-          },
-        );
+                    wantBorder: state.index == 4 ? true : false,
+                    photoSelected: true,
+                    editProfileImage: false,
+                    loading: false,
+                  ),
+                  label: "Profile"),
+            ],
+            onTap: (index) {
+              context.read<HomepageBloc>().add(TabChange(index));
+              if (index == 4) {
+                context.read<ProfileBloc>().add(GetUserDetails());
+              }
+            },
+          );
+        }
       }),
     );
   }

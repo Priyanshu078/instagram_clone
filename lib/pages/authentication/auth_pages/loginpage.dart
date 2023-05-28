@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) => MultiBlocProvider(
                     providers: [
                       BlocProvider(
-                        create: (context) => HomepageBloc(),
+                        create: (context) => HomepageBloc()..add(GetDetails()),
                       ),
                       BlocProvider(
                         create: (context) => ProfileBloc(),
