@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
-import 'package:instagram_clone/data/user_data.dart';
 
 class ProfileWidget extends StatelessWidget {
   const ProfileWidget({
