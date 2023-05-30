@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/widgets/insta_button.dart';
 import '../../../../widgets/instatext.dart';
 
 class PostPage extends StatelessWidget {
@@ -19,12 +20,29 @@ class PostPage extends StatelessWidget {
             width: width * 0.3,
             child: Image.asset('assets/images/instagram.png'),
           )),
-      body: const Center(
-        child: InstaText(
-            fontSize: 14,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-            text: "Post"),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const InstaText(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                text: "Post your Photos on Instagram"),
+            SizedBox(
+              height: height * 0.1,
+            ),
+            InstaButton(
+                onPressed: () {},
+                text: "Choose Image",
+                fontSize: 14,
+                textColor: Colors.white,
+                fontWeight: FontWeight.w700,
+                buttonColor: Colors.black,
+                height: height * 0.08)
+          ],
+        ),
       ),
     );
   }
