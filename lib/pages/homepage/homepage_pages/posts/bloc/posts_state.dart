@@ -8,3 +8,13 @@ abstract class PostsState extends Equatable {
 }
 
 class PostsInitial extends PostsState {}
+
+class PostReady extends PostsState {
+  final File image;
+  const PostReady(this.image);
+
+  @override
+  List<Object> get props => [image];
+}
+
+class PostDone extends PostsState {}

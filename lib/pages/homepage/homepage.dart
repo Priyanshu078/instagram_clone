@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List pages = [
     const FeedPage(),
-    SearchPage(),
+    const SearchPage(),
     const PostPage(),
     const NotificationPage(),
     const ProfilePage()

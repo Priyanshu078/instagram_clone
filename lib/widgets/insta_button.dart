@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 
 class InstaButton extends StatelessWidget {
-  const InstaButton(
-      {super.key,
-      required this.onPressed,
-      required this.text,
-      required this.fontSize,
-      required this.textColor,
-      required this.fontWeight,
-      required this.buttonColor,
-      required this.height,
-      required this.postButton});
+  const InstaButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    required this.fontSize,
+    required this.textColor,
+    required this.fontWeight,
+    required this.buttonColor,
+    required this.height,
+    required this.postButton,
+    required this.width,
+  });
 
   final VoidCallback onPressed;
   final String text;
@@ -21,6 +23,7 @@ class InstaButton extends StatelessWidget {
   final FontWeight fontWeight;
   final double height;
   final bool postButton;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class InstaButton extends StatelessWidget {
                     postButton ? Colors.white : Colors.white.withOpacity(0.15))
             : null,
         backgroundColor: buttonColor,
-        minimumSize: Size(double.infinity, height),
+        minimumSize: Size(width, height),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),

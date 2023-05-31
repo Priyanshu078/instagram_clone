@@ -162,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     } else {
                       return InstaButton(
+                          width: double.infinity,
                           postButton: false,
                           height: height * 0.065,
                           buttonColor: instablue,

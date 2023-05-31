@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
+import 'package:instagram_clone/widgets/insta_textfield.dart';
 import '../../../../widgets/instatext.dart';
+import 'bloc/posts_bloc.dart';
 
-class PostPage extends StatelessWidget {
+class PostPage extends StatefulWidget {
   const PostPage({super.key});
+
+  @override
+  State<PostPage> createState() => _PostPageState();
+}
+
+class _PostPageState extends State<PostPage> {
+  final TextEditingController captionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +32,103 @@ class PostPage extends StatelessWidget {
           )),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const InstaText(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                text: "Post on Instagram"),
-            SizedBox(
-              height: height * 0.1,
-            ),
-            InstaButton(
-                postButton: true,
-                onPressed: () {},
-                text: "Choose Image",
-                fontSize: 14,
-                textColor: Colors.white,
-                fontWeight: FontWeight.w700,
-                buttonColor: Colors.black,
-                height: height * 0.08)
-          ],
+        child: BlocBuilder<PostsBloc, PostsState>(
+          builder: (context, state) {
+            if (state is PostsInitial) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const InstaText(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    text: "Post on Instagram",
+                  ),
+                  SizedBox(
+                    height: height * 0.05,
+                  ),
+                  InstaButton(
+                    width: double.infinity,
+                    postButton: true,
+                    onPressed: () {
+                      context.read<PostsBloc>().add(ChooseImage());
+                    },
+                    text: "Choose Image",
+                    fontSize: 14,
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    buttonColor: Colors.black,
+                    height: height * 0.08,
+                  )
+                ],
+              );
+            } else if (state is PostReady) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: Image.file(
+                      state.image,
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.04,
+                  ),
+                  InstaTextField(
+                    enabled: true,
+                    editProfileTextfield: false,
+                    backgroundColor: textFieldBackgroundColor,
+                    borderRadius: 5,
+                    icon: null,
+                    controller: captionController,
+                    hintText: "Post Caption",
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    hintColor: Colors.white.withOpacity(0.6),
+                    obscureText: false,
+                    forPassword: false,
+                    suffixIcon: null,
+                    suffixIconCallback: () {},
+                  ),
+                  SizedBox(
+                    height: height * 0.04,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InstaButton(
+                          width: width * 0.4,
+                          onPressed: () {
+                            context.read<PostsBloc>().add(CancelEvent());
+                          },
+                          text: "Cancel",
+                          fontSize: 14,
+                          textColor: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          buttonColor: Colors.black,
+                          height: height * 0.05,
+                          postButton: true),
+                      SizedBox(
+                        width: width * 0.01,
+                      ),
+                      InstaButton(
+                          width: width * 0.4,
+                          onPressed: () {},
+                          text: "Post",
+                          fontSize: 14,
+                          textColor: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          buttonColor: instablue,
+                          height: height * 0.05,
+                          postButton: true),
+                    ],
+                  )
+                ],
+              );
+            } else {
+              return Container();
+            }
+          },
         ),
       ),
     );

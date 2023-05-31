@@ -7,4 +7,6 @@ abstract class PostsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PostImage extends PostsEvent {}
+class ChooseImage extends PostsEvent {}
+
+class CancelEvent extends PostsEvent {}
