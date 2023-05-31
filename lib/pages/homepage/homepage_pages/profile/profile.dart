@@ -175,6 +175,7 @@ class _ProfilePageState extends State<ProfilePage>
                         height: height * 0.01,
                       ),
                       InstaButton(
+                          postButton: false,
                           height: height * 0.05,
                           buttonColor: Colors.black,
                           onPressed: () {

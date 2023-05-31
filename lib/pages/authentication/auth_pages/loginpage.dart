@@ -5,6 +5,7 @@ import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/posts/bloc/posts_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
@@ -38,6 +39,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       BlocProvider(
                         create: (context) => ProfileBloc(),
+                      ),
+                      BlocProvider(
+                        create: (context) => PostsBloc(),
                       ),
                     ],
                     child: const HomePage(),
@@ -158,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     } else {
                       return InstaButton(
+                          postButton: false,
                           height: height * 0.065,
                           buttonColor: instablue,
                           onPressed: () {

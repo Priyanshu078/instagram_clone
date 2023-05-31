@@ -29,11 +29,12 @@ class PostPage extends StatelessWidget {
                 fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                text: "Post your Photos on Instagram"),
+                text: "Post on Instagram"),
             SizedBox(
               height: height * 0.1,
             ),
             InstaButton(
+                postButton: true,
                 onPressed: () {},
                 text: "Choose Image",
                 fontSize: 14,

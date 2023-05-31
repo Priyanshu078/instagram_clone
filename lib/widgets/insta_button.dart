@@ -10,7 +10,8 @@ class InstaButton extends StatelessWidget {
       required this.textColor,
       required this.fontWeight,
       required this.buttonColor,
-      required this.height});
+      required this.height,
+      required this.postButton});
 
   final VoidCallback onPressed;
   final String text;
@@ -19,6 +20,7 @@ class InstaButton extends StatelessWidget {
   final Color buttonColor;
   final FontWeight fontWeight;
   final double height;
+  final bool postButton;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,10 @@ class InstaButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         side: buttonColor == Colors.black
-            ? BorderSide(width: 1, color: Colors.white.withOpacity(0.15))
+            ? BorderSide(
+                width: 1,
+                color:
+                    postButton ? Colors.white : Colors.white.withOpacity(0.15))
             : null,
         backgroundColor: buttonColor,
         minimumSize: Size(double.infinity, height),

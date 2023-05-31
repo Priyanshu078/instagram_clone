@@ -249,6 +249,7 @@ class _SignupPageState extends State<SignupPage> {
                     );
                   } else {
                     return InstaButton(
+                      postButton: false,
                       height: height * 0.065,
                       buttonColor: instablue,
                       onPressed: () async {
