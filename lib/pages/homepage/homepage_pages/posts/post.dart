@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
@@ -63,12 +65,13 @@ class _PostPageState extends State<PostPage> {
                   )
                 ],
               );
-            } else if (state is PostReady || state is PostingImageState) {
+            } else if (state is PostReady) {
               return Column(
                 children: [
                   Expanded(
                     child: Image.file(
-                      state.,
+                      File(state.imagePath),
+                      fit: BoxFit.fill,
                     ),
                   ),
                   SizedBox(
@@ -115,9 +118,8 @@ class _PostPageState extends State<PostPage> {
                       InstaButton(
                           width: width * 0.4,
                           onPressed: () {
-                            if(state is PostReady){
-                            context.read<PostsBloc>().add(PostImage(state.image));
-                            }
+                            String caption = captionController.text;
+                            context.read<PostsBloc>().add(PostImage(caption));
                           },
                           text: "Post",
                           fontSize: 14,
@@ -128,6 +130,46 @@ class _PostPageState extends State<PostPage> {
                           postButton: true),
                     ],
                   )
+                ],
+              );
+            } else if (state is PostingImageState) {
+              return Column(
+                children: [
+                  Expanded(
+                    child: Image.file(
+                      File(state.imagePath),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.04,
+                  ),
+                  InstaTextField(
+                    enabled: true,
+                    editProfileTextfield: false,
+                    backgroundColor: textFieldBackgroundColor,
+                    borderRadius: 5,
+                    icon: null,
+                    controller: captionController,
+                    hintText: "Post Caption",
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    hintColor: Colors.white.withOpacity(0.6),
+                    obscureText: false,
+                    forPassword: false,
+                    suffixIcon: null,
+                    suffixIconCallback: () {},
+                  ),
+                  SizedBox(
+                    height: height * 0.04,
+                  ),
+                  const Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 1,
+                    ),
+                  ),
                 ],
               );
             } else {

@@ -1,27 +1,36 @@
 part of 'posts_bloc.dart';
 
 abstract class PostsState extends Equatable {
-  const PostsState();
+  final String imagePath;
+  const PostsState(this.imagePath);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [imagePath];
 }
 
-class PostsInitial extends PostsState {}
+class PostsInitial extends PostsState {
+  const PostsInitial(super.imagePath);
+  @override
+  List<Object> get props => [imagePath];
+}
 
 class PostReady extends PostsState {
-  final File image;
-  const PostReady(this.image);
+  const PostReady(super.imagePath);
 
   @override
-  List<Object> get props => [image];
+  List<Object> get props => [imagePath];
 }
 
-class PostDone extends PostsState {}
-
-class PostingImageState extends PostReady {
-  const PostingImageState(super.image);
+class PostDone extends PostsState {
+  const PostDone(super.imagePath);
 
   @override
-  List<Object> get props => [image];
+  List<Object> get props => [imagePath];
+}
+
+class PostingImageState extends PostsState {
+  const PostingImageState(super.imagePath);
+
+  @override
+  List<Object> get props => [imagePath];
 }

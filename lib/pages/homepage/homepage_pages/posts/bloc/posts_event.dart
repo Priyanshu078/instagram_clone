@@ -12,9 +12,9 @@ class ChooseImage extends PostsEvent {}
 class CancelEvent extends PostsEvent {}
 
 class PostImage extends PostsEvent {
-  final File image;
-  const PostImage(this.image);
+  final String caption;
+  const PostImage(this.caption);
 
   @override
-  List<Object> get props => [image];
+  List<Object> get props => [caption];
 }
