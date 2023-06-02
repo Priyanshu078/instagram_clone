@@ -10,6 +10,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   PostsBloc() : super(PostsInitial()) {
     on<ChooseImage>((event, emit) => chooseImage(event, emit));
     on<CancelEvent>((event, emit) => emit(PostsInitial()));
+    on<PostImage>((event, emit) => postImage(event, emit));
   }
 
   Future<void> chooseImage(ChooseImage event, Emitter emit) async {
@@ -20,5 +21,9 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     } else {
       emit(PostsInitial());
     }
+  }
+
+  Future<void> postImage(PostImage event, Emitter emit) async {
+    emit(PostingImageState(event.image));
   }
 }

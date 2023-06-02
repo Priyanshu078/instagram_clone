@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import '../../../../widgets/instatext.dart';
@@ -62,12 +63,12 @@ class _PostPageState extends State<PostPage> {
                   )
                 ],
               );
-            } else if (state is PostReady) {
+            } else if (state is PostReady || state is PostingImageState) {
               return Column(
                 children: [
                   Expanded(
                     child: Image.file(
-                      state.image,
+                      state.,
                     ),
                   ),
                   SizedBox(
@@ -113,12 +114,16 @@ class _PostPageState extends State<PostPage> {
                       ),
                       InstaButton(
                           width: width * 0.4,
-                          onPressed: () {},
+                          onPressed: () {
+                            if(state is PostReady){
+                            context.read<PostsBloc>().add(PostImage(state.image));
+                            }
+                          },
                           text: "Post",
                           fontSize: 14,
-                          textColor: Colors.white,
+                          textColor: Colors.black,
                           fontWeight: FontWeight.w700,
-                          buttonColor: instablue,
+                          buttonColor: Colors.white,
                           height: height * 0.05,
                           postButton: true),
                     ],

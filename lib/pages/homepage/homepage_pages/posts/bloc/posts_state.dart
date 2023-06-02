@@ -18,3 +18,10 @@ class PostReady extends PostsState {
 }
 
 class PostDone extends PostsState {}
+
+class PostingImageState extends PostReady {
+  const PostingImageState(super.image);
+
+  @override
+  List<Object> get props => [image];
+}
