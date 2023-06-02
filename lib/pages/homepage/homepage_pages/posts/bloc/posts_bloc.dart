@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -6,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 part 'posts_event.dart';
 part 'posts_state.dart';
 
@@ -34,8 +36,14 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     var data = await collectionRef.doc(userId).get();
     UserData userData = UserData.fromJson(data.data()!);
     String username = userData.username;
-    var ref = FirebaseStorage.instance.ref();
-
+    var storageRef = FirebaseStorage.instance.ref();
+    Reference childRef = storageRef.child(userId!);
+    File image = File(state.imagePath);
+    var hash = const Uuid().v4();
+    String imageName = "posts/post$hash.jpg";
+    var imageRef = childRef.child(imageName);
+    await imageRef.putFile(image);
+    var imageUrl = await imageRef.getDownloadURL();
     Post post = Post(
       username: username,
       imageUrl: imageUrl,
@@ -43,5 +51,9 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       comments: <String>[],
       caption: caption,
     );
+    List posts = userData.posts;
+    posts.add(post.toJson());
+    await collectionRef.doc(userId).update({"posts": posts});
+    emit(const PostsInitial(""));
   }
 }
