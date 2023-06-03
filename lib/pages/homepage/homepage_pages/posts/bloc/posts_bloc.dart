@@ -52,12 +52,13 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         username: username,
         imageUrl: imageUrl,
         likes: 0,
-        comments: <String>[],
+        comments: [],
         caption: caption,
       );
-      List posts = userData.posts;
-      posts.add(post.toJson());
-      await fireStoreCollectionRef.doc(userId).update({"posts": posts});
+      List<Post> posts = userData.posts;
+      List newPosts = posts.map((post) => post.toJson()).toList();
+      newPosts.add(post.toJson());
+      await fireStoreCollectionRef.doc(userId).update({"posts": newPosts});
       emit(const PostsInitial(""));
     } catch (e) {
       if (kDebugMode) {
