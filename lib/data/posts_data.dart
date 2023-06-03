@@ -4,6 +4,7 @@ class Post {
   int likes;
   List comments;
   String caption;
+  String userId;
 
   Post({
     required this.username,
@@ -11,6 +12,7 @@ class Post {
     required this.likes,
     required this.comments,
     required this.caption,
+    required this.userId,
   });
 
   Post copyWith({
@@ -19,6 +21,7 @@ class Post {
     int? likes,
     List<String>? comments,
     String? caption,
+    String? userId,
   }) {
     return Post(
       username: username ?? this.username,
@@ -26,6 +29,7 @@ class Post {
       likes: likes ?? this.likes,
       comments: comments ?? this.comments,
       caption: caption ?? this.caption,
+      userId: userId ?? this.userId,
     );
   }
 
@@ -36,6 +40,7 @@ class Post {
       likes: json["likes"],
       comments: json["comments"],
       caption: json["caption"],
+      userId: json['userId'],
     );
   }
 
@@ -46,6 +51,7 @@ class Post {
       "likes": likes,
       "comments": comments,
       "caption": caption,
+      "userId": userId,
     };
   }
 }

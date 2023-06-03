@@ -54,6 +54,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
         likes: 0,
         comments: [],
         caption: caption,
+        userId: userId,
       );
       List<Post> posts = userData.posts;
       List newPosts = posts.map((post) => post.toJson()).toList();
