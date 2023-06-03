@@ -2,7 +2,7 @@ class Post {
   String username;
   String imageUrl;
   int likes;
-  List<String> comments;
+  List comments;
   String caption;
 
   Post({

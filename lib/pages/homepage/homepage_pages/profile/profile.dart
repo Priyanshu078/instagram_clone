@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
@@ -278,11 +279,30 @@ class _ProfilePageState extends State<ProfilePage>
                       ]),
                 ),
                 Expanded(
-                  child: TabBarView(controller: tabController, children: const [
-                    Center(
-                      child: Icon(Icons.abc),
+                  child: TabBarView(controller: tabController, children: [
+                    GridView.builder(
+                      itemCount: state.userdata.posts.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 4.0,
+                              mainAxisSpacing: 4.0),
+                      itemBuilder: ((context, index) {
+                        return CachedNetworkImage(
+                          imageUrl: state.userdata.posts[index].imageUrl,
+                          fit: BoxFit.fill,
+                          placeholder: (context, val) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1,
+                                color: Colors.white,
+                              ),
+                            );
+                          },
+                        );
+                      }),
                     ),
-                    Center(
+                    const Center(
                       child: Icon(Icons.abc),
                     )
                   ]),

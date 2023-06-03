@@ -1,3 +1,5 @@
+import 'package:instagram_clone/data/posts_data.dart';
+
 class UserData {
   final String id;
   final String name;
@@ -8,7 +10,7 @@ class UserData {
   final String bio;
   final String tagline;
   final List<dynamic> stories;
-  final List<dynamic> posts;
+  final List<Post> posts;
   final int followers;
   final int following;
   final String profilePhotoUrl;
@@ -43,7 +45,7 @@ class UserData {
     int? gender,
     String? bio,
     String? tagline,
-    List? posts,
+    List<Post>? posts,
     List? stories,
     int? followers,
     int? following,
@@ -76,13 +78,38 @@ class UserData {
       json['gender'],
       json['bio'],
       json['tagline'],
-      json['posts'],
+      List<Post>.from(
+        json['posts'].map(
+          (post) => Post(
+              username: post['username'],
+              imageUrl: post['imageUrl'],
+              likes: post['likes'],
+              comments: post['comments'],
+              caption: post['caption']),
+        ),
+      ),
       json['stories'],
       json['followers'],
       json['following'],
       json['profilePhotoUrl'],
     );
   }
+
+  // List<Post> getPosts(List<dynamic> posts) {
+  //   List<Post> postsList = [];
+  //   for (int i = 0; i < posts.length; i++) {
+  //     postsList.add(
+  //       Post(
+  //         username: posts[i]['username'],
+  //         imageUrl: posts[i]['imageUrl'],
+  //         likes: posts[i]['likes'],
+  //         comments: posts[i]['comments'],
+  //         caption: posts[i]['caption'],
+  //       ),
+  //     );
+  //   }
+  //   return postsList;
+  // }
 
   Map<String, dynamic> toJson() {
     return {
