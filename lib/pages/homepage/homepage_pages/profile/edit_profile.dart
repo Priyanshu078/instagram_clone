@@ -100,6 +100,7 @@ class _EditProfileState extends State<EditProfile> {
                     bloc.state.userdata.followers,
                     bloc.state.userdata.following,
                     bloc.state.userdata.profilePhotoUrl,
+                    bloc.state.userdata.private,
                   );
                   const InstaSnackbar(text: "Saving, Please wait !!!")
                       .show(context);

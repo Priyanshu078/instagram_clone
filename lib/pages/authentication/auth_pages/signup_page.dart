@@ -278,6 +278,7 @@ class _SignupPageState extends State<SignupPage> {
                           0,
                           0,
                           "",
+                          false,
                         );
                         context
                             .read<AuthBloc>()

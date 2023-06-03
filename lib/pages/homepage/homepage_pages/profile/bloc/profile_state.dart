@@ -43,3 +43,10 @@ class LogoutDoneState extends ProfileState {
   @override
   List<Object> get props => [userdata];
 }
+
+class ProfilePrivateState extends ProfileState {
+  const ProfilePrivateState(super.userdata);
+
+  @override
+  List<Object> get props => [userdata];
+}

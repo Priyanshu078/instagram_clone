@@ -26,3 +26,11 @@ class ChangeProfilePhotoEvent extends ProfileEvent {
 }
 
 class LogoutEvent extends ProfileEvent {}
+
+class ProfilePrivateEvent extends ProfileEvent {
+  final UserData userData;
+  const ProfilePrivateEvent(this.userData);
+
+  @override
+  List<Object> get props => [userData];
+}

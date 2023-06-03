@@ -14,6 +14,7 @@ class UserData {
   final int followers;
   final int following;
   final String profilePhotoUrl;
+  final bool private;
 
   UserData(
     this.id,
@@ -29,11 +30,12 @@ class UserData {
     this.followers,
     this.following,
     this.profilePhotoUrl,
+    this.private,
   );
 
   factory UserData.temp() {
     return UserData("id", "name", "username", "contact", "password", 1, "bio",
-        "tagline", [], [], 0, 0, "");
+        "tagline", [], [], 0, 0, "", false);
   }
 
   UserData copyWith({
@@ -50,6 +52,7 @@ class UserData {
     int? followers,
     int? following,
     String? profilePhotoUrl,
+    bool? private,
   }) {
     return UserData(
       id ?? this.id,
@@ -65,6 +68,7 @@ class UserData {
       followers ?? this.followers,
       following ?? this.following,
       profilePhotoUrl ?? this.profilePhotoUrl,
+      private ?? this.private,
     );
   }
 
@@ -94,24 +98,9 @@ class UserData {
       json['followers'],
       json['following'],
       json['profilePhotoUrl'],
+      json['private'],
     );
   }
-
-  // List<Post> getPosts(List<dynamic> posts) {
-  //   List<Post> postsList = [];
-  //   for (int i = 0; i < posts.length; i++) {
-  //     postsList.add(
-  //       Post(
-  //         username: posts[i]['username'],
-  //         imageUrl: posts[i]['imageUrl'],
-  //         likes: posts[i]['likes'],
-  //         comments: posts[i]['comments'],
-  //         caption: posts[i]['caption'],
-  //       ),
-  //     );
-  //   }
-  //   return postsList;
-  // }
 
   Map<String, dynamic> toJson() {
     return {
@@ -128,6 +117,7 @@ class UserData {
       "followers": followers,
       "following": following,
       "profilePhotoUrl": profilePhotoUrl,
+      "private": private,
     };
   }
 }

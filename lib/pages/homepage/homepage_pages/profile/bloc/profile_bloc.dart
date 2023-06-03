@@ -17,6 +17,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ChangeProfilePhotoEvent>(
         (event, emit) => changeProfilePhotoEvent(event, emit));
     on<LogoutEvent>((event, emit) => logout(event, emit));
+    on<ProfilePrivateEvent>((event, emit) => changeProfileStatus(event, emit));
+  }
+
+  Future<void> changeProfileStatus(
+      ProfilePrivateEvent event, Emitter emit) async {
+    var firestoreCollectionRef = FirebaseFirestore.instance.collection('users');
+    await firestoreCollectionRef
+        .doc(event.userData.id)
+        .update({"private": event.userData.private});
+    emit(ProfilePrivateState(event.userData));
   }
 
   Future<void> logout(LogoutEvent event, Emitter emit) async {

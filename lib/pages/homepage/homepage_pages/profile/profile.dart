@@ -10,6 +10,7 @@ import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
 
+import '../../../../data/user_data.dart';
 import '../../../authentication/bloc/auth_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -30,7 +31,8 @@ class _ProfilePageState extends State<ProfilePage>
   }
 
   Widget buildModelBottomSheet(
-      BuildContext context, double height, double width, ProfileBloc bloc) {
+      BuildContext context, double height, double width) {
+    var bloc = context.read<ProfileBloc>();
     return SizedBox(
       height: height * 0.3,
       child: Padding(
@@ -39,6 +41,34 @@ class _ProfilePageState extends State<ProfilePage>
           children: [
             SizedBox(
               height: height * 0.02,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const InstaText(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    text: "Private"),
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, state) {
+                    return Switch(
+                      value: state.userdata.private,
+                      onChanged: (val) {
+                        UserData userData =
+                            bloc.state.userdata.copyWith(private: val);
+                        bloc.add(ProfilePrivateEvent(userData));
+                      },
+                      activeColor: Colors.white,
+                      activeTrackColor: Colors.white.withOpacity(0.3),
+                      inactiveTrackColor: Colors.white.withOpacity(0.3),
+                    );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: height * 0.01,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,12 +114,23 @@ class _ProfilePageState extends State<ProfilePage>
                     create: (context) => AuthBloc(),
                     child: const LoginPage(),
                   )));
+        } else if (state is ProfilePrivateState) {
+          if (state.userdata.private) {
+            Navigator.of(context).pop();
+            const InstaSnackbar(text: "Your profile is now Private!!!")
+                .show(context);
+          } else {
+            Navigator.of(context).pop();
+            const InstaSnackbar(text: "Your profile is now Public!!!")
+                .show(context);
+          }
         }
       },
       builder: (context, state) {
         if (state is UserDataFetched ||
             state is UserDataEdited ||
-            state is ProfilePhotoEdited) {
+            state is ProfilePhotoEdited ||
+            state is ProfilePrivateState) {
           return Scaffold(
             backgroundColor: textFieldBackgroundColor,
             appBar: AppBar(
@@ -115,8 +156,14 @@ class _ProfilePageState extends State<ProfilePage>
                           borderRadius: BorderRadius.circular(10)),
                       backgroundColor: textFieldBackgroundColor,
                       context: context,
-                      builder: (_) => buildModelBottomSheet(
-                          context, height, width, context.read<ProfileBloc>()),
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<ProfileBloc>(),
+                        child: buildModelBottomSheet(
+                          context,
+                          height,
+                          width,
+                        ),
+                      ),
                     );
                   },
                   icon: SizedBox(
