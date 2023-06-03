@@ -51,6 +51,7 @@ class _PostPageState extends State<PostPage> {
                     height: height * 0.05,
                   ),
                   InstaButton(
+                    borderWidth: 1,
                     width: double.infinity,
                     postButton: true,
                     onPressed: () {
@@ -101,6 +102,7 @@ class _PostPageState extends State<PostPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InstaButton(
+                          borderWidth: 1,
                           width: width * 0.4,
                           onPressed: () {
                             context.read<PostsBloc>().add(CancelEvent());
@@ -116,6 +118,7 @@ class _PostPageState extends State<PostPage> {
                         width: width * 0.01,
                       ),
                       InstaButton(
+                          borderWidth: 1,
                           width: width * 0.4,
                           onPressed: () {
                             String caption = captionController.text;

@@ -2,11 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/edit_profile.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
+import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
+
+import '../../../authentication/bloc/auth_bloc.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -25,11 +29,63 @@ class _ProfilePageState extends State<ProfilePage>
     tabController = TabController(length: 2, vsync: this);
   }
 
+  Widget buildModelBottomSheet(
+      BuildContext context, double height, double width, ProfileBloc bloc) {
+    return SizedBox(
+      height: height * 0.3,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(width * 0.05, 8.0, width * 0.05, 8.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: height * 0.02,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InstaText(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    text: bloc.state.userdata.username),
+                InstaButton(
+                    borderWidth: 0.5,
+                    onPressed: () {
+                      const InstaSnackbar(text: 'Logging out, Please wait!!!')
+                          .show(context);
+                      bloc.add(LogoutEvent());
+                    },
+                    text: "Logout",
+                    fontSize: 16,
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    buttonColor: Colors.black,
+                    height: height * 0.06,
+                    postButton: true,
+                    width: width * 0.2),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return BlocBuilder<ProfileBloc, ProfileState>(
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listener: (context, state) {
+        if (state is LogoutDoneState) {
+          Navigator.pop(context);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                    create: (context) => AuthBloc(),
+                    child: const LoginPage(),
+                  )));
+        }
+      },
       builder: (context, state) {
         if (state is UserDataFetched ||
             state is UserDataEdited ||
@@ -53,7 +109,16 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showModalBottomSheet(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      backgroundColor: textFieldBackgroundColor,
+                      context: context,
+                      builder: (_) => buildModelBottomSheet(
+                          context, height, width, context.read<ProfileBloc>()),
+                    );
+                  },
                   icon: SizedBox(
                     height: AppBar().preferredSize.height * 0.7,
                     width: width * 0.065,
@@ -88,16 +153,17 @@ class _ProfilePageState extends State<ProfilePage>
                               Column(
                                 children: [
                                   InstaText(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                      text: state.userdata.posts.length
-                                          .toString()),
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    text:
+                                        state.userdata.posts.length.toString(),
+                                  ),
                                   const InstaText(
                                       fontSize: 13,
                                       color: Colors.white,
                                       fontWeight: FontWeight.normal,
-                                      text: "Posts")
+                                      text: "Posts"),
                                 ],
                               ),
                               SizedBox(
@@ -176,6 +242,7 @@ class _ProfilePageState extends State<ProfilePage>
                         height: height * 0.01,
                       ),
                       InstaButton(
+                          borderWidth: 1,
                           width: double.infinity,
                           postButton: false,
                           height: height * 0.05,

@@ -37,3 +37,9 @@ class ProfilePhotoLoading extends ProfileState {
   @override
   List<Object> get props => [userdata];
 }
+
+class LogoutDoneState extends ProfileState {
+  const LogoutDoneState(super.userdata);
+  @override
+  List<Object> get props => [userdata];
+}

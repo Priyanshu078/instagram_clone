@@ -16,6 +16,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<EditUserDetails>((event, emit) => editUserDetails(event, emit));
     on<ChangeProfilePhotoEvent>(
         (event, emit) => changeProfilePhotoEvent(event, emit));
+    on<LogoutEvent>((event, emit) => logout(event, emit));
+  }
+
+  Future<void> logout(LogoutEvent event, Emitter emit) async {
+    var sharedPrefernces = await SharedPreferences.getInstance();
+    await sharedPrefernces.clear();
+    emit(LogoutDoneState(state.userdata));
   }
 
   Future<void> getUserDetails(GetUserDetails event, Emitter emit) async {

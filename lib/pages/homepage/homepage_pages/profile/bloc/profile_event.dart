@@ -24,3 +24,5 @@ class ChangeProfilePhotoEvent extends ProfileEvent {
   @override
   List<Object> get props => [userData];
 }
+
+class LogoutEvent extends ProfileEvent {}

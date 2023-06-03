@@ -249,6 +249,7 @@ class _SignupPageState extends State<SignupPage> {
                     );
                   } else {
                     return InstaButton(
+                      borderWidth: 1,
                       width: double.infinity,
                       postButton: false,
                       height: height * 0.065,
