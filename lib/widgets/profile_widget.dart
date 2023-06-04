@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/constants/colors.dart';
 
@@ -24,7 +25,9 @@ class ProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(url);
+    if (kDebugMode) {
+      print(url);
+    }
     return Container(
       decoration: wantBorder
           ? BoxDecoration(
