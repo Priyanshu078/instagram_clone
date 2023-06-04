@@ -4,9 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instagram_clone/data/homepage_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
-import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 part 'profile_event.dart';
@@ -78,20 +76,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .collection("users")
         .doc(event.userData.id)
         .update({"profilePhotoUrl": imagePath});
-    // UserData userData = UserData(
-    //     event.userData.id,
-    //     event.userData.name,
-    //     event.userData.username,
-    //     event.userData.contact,
-    //     event.userData.password,
-    //     event.userData.gender,
-    //     event.userData.bio,
-    //     event.userData.tagline,
-    //     event.userData.posts,
-    //     event.userData.stories,
-    //     event.userData.followers,
-    //     event.userData.following,
-    //     imagePath);
     UserData userData = event.userData.copyWith(profilePhotoUrl: imagePath);
     emit(ProfilePhotoEdited(userData));
   }

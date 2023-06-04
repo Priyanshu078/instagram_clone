@@ -60,11 +60,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         List docsList = snapshotData.docs;
         if (docsList.isNotEmpty) {
           UserData userData = UserData.fromJson(docsList.first.data());
-          print(userData.gender);
-          print(userData.name);
+          if (kDebugMode) {
+            print(userData.gender);
+            print(userData.name);
+          }
           var sharedPreferences = await SharedPreferences.getInstance();
           await sharedPreferences.setString("userId", userData.id);
-          print("UserId: ${sharedPreferences.getString("userId")}");
+          if (kDebugMode) {
+            print("UserId: ${sharedPreferences.getString("userId")}");
+          }
           emit(LoginDone(state.obscurePassword, state.gender));
         } else {
           emit(UserDataNotAvailable(state.obscurePassword, state.gender));
