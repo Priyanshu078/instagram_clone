@@ -16,3 +16,10 @@ class TabChange extends HomepageEvent {
 }
 
 class GetDetails extends HomepageEvent {}
+
+class RefreshUi extends HomepageEvent {
+  final String imageUrl;
+  RefreshUi(this.imageUrl);
+  @override
+  List<Object?> get props => [imageUrl];
+}

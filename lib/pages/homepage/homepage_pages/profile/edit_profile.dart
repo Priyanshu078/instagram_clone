@@ -49,7 +49,7 @@ class _EditProfileState extends State<EditProfile> {
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is UserDataEdited) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(state.userdata.profilePhotoUrl);
         }
       },
       child: Scaffold(

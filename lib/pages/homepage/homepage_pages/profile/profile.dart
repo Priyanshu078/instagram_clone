@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/edit_profile.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
@@ -294,12 +296,18 @@ class _ProfilePageState extends State<ProfilePage>
                           postButton: false,
                           height: height * 0.05,
                           buttonColor: Colors.black,
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                      value: context.read<ProfileBloc>(),
-                                      child: const EditProfile(),
-                                    )));
+                          onPressed: () async {
+                            var result = await Navigator.of(context)
+                                .push(MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                          value: context.read<ProfileBloc>(),
+                                          child: const EditProfile(),
+                                        )));
+                            if (mounted) {
+                              context
+                                  .read<HomepageBloc>()
+                                  .add(RefreshUi(result));
+                            }
                           },
                           text: "Edit Profile",
                           fontSize: 13,

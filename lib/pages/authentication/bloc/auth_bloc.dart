@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
@@ -26,10 +27,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           data.name.isNotEmpty &&
           data.password.isNotEmpty &&
           data.username.isNotEmpty) {
+        var firebaseStorageRef = FirebaseStorage.instance.ref();
+        String fileName = "profilePhoto.jpg";
+        var profilePhotoUrl =
+            await firebaseStorageRef.child(fileName).getDownloadURL();
+        UserData userData = data.copyWith(profilePhotoUrl: profilePhotoUrl);
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(event.userData.id)
-            .set(event.userData.toJson());
+            .doc(userData.id)
+            .set(userData.toJson());
         emit(SignUpDone(state.obscurePassword, state.gender));
       } else {
         emit(FillAllDetails(state.obscurePassword, state.gender));

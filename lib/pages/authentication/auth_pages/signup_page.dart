@@ -192,9 +192,10 @@ class _SignupPageState extends State<SignupPage> {
                               value: Gender.male,
                               groupValue: state.gender,
                               onChanged: (val) {
+                                // print(val);
                                 context
                                     .read<AuthBloc>()
-                                    .add(ChangeGender(value));
+                                    .add(ChangeGender(val!));
                               });
                         },
                       ),
@@ -217,9 +218,10 @@ class _SignupPageState extends State<SignupPage> {
                               value: Gender.female,
                               groupValue: state.gender,
                               onChanged: (val) {
+                                // print(val);
                                 context
                                     .read<AuthBloc>()
-                                    .add(ChangeGender(value));
+                                    .add(ChangeGender(val!));
                               });
                         },
                       ),

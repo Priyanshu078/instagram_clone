@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/data/homepage_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 part 'profile_event.dart';
@@ -49,7 +51,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> editUserDetails(EditUserDetails event, Emitter emit) async {
     var collectionRef = FirebaseFirestore.instance.collection("users");
-    await collectionRef.doc(event.userData.id).set(event.userData.toJson());
+    await collectionRef.doc(event.userData.id).update({
+      "name": event.userData.name,
+      "username": event.userData.username,
+      "tagline": event.userData.tagline,
+      "bio": event.userData.bio,
+      "profilePhotoUrl": event.userData.profilePhotoUrl,
+    });
     emit(UserDataEdited(event.userData));
   }
 
@@ -63,9 +71,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     const fileName = "profilePhoto.jpg";
     final profilePhotoRef = imagesRef.child(fileName);
     // final path = profilePhotoRef.fullPath;
-    final imagePath = await profilePhotoRef.getDownloadURL();
     File image = File(profileImage!.path);
     await profilePhotoRef.putFile(image);
+    final imagePath = await profilePhotoRef.getDownloadURL();
     await FirebaseFirestore.instance
         .collection("users")
         .doc(event.userData.id)
