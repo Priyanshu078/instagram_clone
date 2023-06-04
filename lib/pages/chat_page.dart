@@ -68,6 +68,7 @@ class _ChatPageState extends State<ChatPage> {
               forPassword: false,
               suffixIcon: null,
               suffixIconCallback: () {},
+              onChange: (value) {},
             )
           ],
         ),

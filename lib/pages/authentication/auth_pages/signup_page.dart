@@ -89,6 +89,7 @@ class _SignupPageState extends State<SignupPage> {
                 fontWeight: FontWeight.normal,
                 hintColor: Colors.white.withOpacity(0.6),
                 obscureText: false,
+                onChange: (value) {},
               ),
               SizedBox(
                 height: height * 0.02,
@@ -109,6 +110,7 @@ class _SignupPageState extends State<SignupPage> {
                 fontWeight: FontWeight.normal,
                 hintColor: Colors.white.withOpacity(0.6),
                 obscureText: false,
+                onChange: (value) {},
               ),
               SizedBox(
                 height: height * 0.02,
@@ -129,6 +131,7 @@ class _SignupPageState extends State<SignupPage> {
                 fontWeight: FontWeight.normal,
                 hintColor: Colors.white.withOpacity(0.6),
                 obscureText: false,
+                onChange: (value) {},
               ),
               SizedBox(
                 height: height * 0.02,
@@ -164,6 +167,7 @@ class _SignupPageState extends State<SignupPage> {
                     suffixIconCallback: () {
                       context.read<AuthBloc>().add(ShowPassword(!state));
                     },
+                    onChange: (value) {},
                   );
                 },
               ),

@@ -32,24 +32,29 @@ class _SearchPageState extends State<SearchPage> {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: InstaTextField(
-                enabled: true,
-                editProfileTextfield: false,
-                forPassword: false,
-                suffixIcon: null,
-                suffixIconCallback: () {},
-                backgroundColor: searchTextFieldColor,
-                borderRadius: 15,
-                icon: Icon(
-                  Icons.search,
-                  color: searchHintText,
-                ),
-                controller: searchController,
-                hintText: "Search",
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                hintColor: searchHintText,
-                obscureText: false),
+              enabled: true,
+              editProfileTextfield: false,
+              forPassword: false,
+              suffixIcon: null,
+              suffixIconCallback: () {},
+              backgroundColor: searchTextFieldColor,
+              borderRadius: 15,
+              icon: Icon(
+                Icons.search,
+                color: searchHintText,
+              ),
+              controller: searchController,
+              hintText: "Search",
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.normal,
+              hintColor: searchHintText,
+              obscureText: false,
+              onChange: (value) {
+                print(value);
+                context.read<SearchBloc>().add(SearchUsers(value));
+              },
+            ),
           ),
         ),
       ),
@@ -88,6 +93,33 @@ class _SearchPageState extends State<SearchPage> {
                   );
                 },
               ),
+            );
+          } else if (state is UsersSearched) {
+            return SizedBox(
+              height: height,
+              width: width,
+              child: ListView.builder(
+                  itemCount: state.usersList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: CachedNetworkImage(
+                        imageUrl: state.usersList[index].profilePhotoUrl,
+                        fit: BoxFit.fill,
+                      ),
+                      title: InstaText(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        text: state.usersList[index].username,
+                      ),
+                      subtitle: InstaText(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.5),
+                        fontWeight: FontWeight.normal,
+                        text: state.usersList[index].name,
+                      ),
+                    );
+                  }),
             );
           } else {
             return const Center(

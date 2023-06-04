@@ -8,3 +8,10 @@ abstract class SearchEvent extends Equatable {
 }
 
 class GetPosts extends SearchEvent {}
+
+class SearchUsers extends SearchEvent {
+  final String text;
+  const SearchUsers(this.text);
+  @override
+  List<Object> get props => [text];
+}

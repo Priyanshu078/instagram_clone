@@ -2,14 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/posts_data.dart';
+import 'package:instagram_clone/data/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc() : super(const SearchInitial(<Post>[])) {
+  SearchBloc() : super(const SearchInitial(<Post>[], <UserData>[])) {
     on<GetPosts>((event, emit) => getPosts(event, emit));
+    on<SearchUsers>((event, emit) => searchUsers(event, emit));
+  }
+
+  Future<void> searchUsers(SearchUsers event, Emitter emit) async {
+    emit(SearchInitial(state.posts, const <UserData>[]));
+    var firebaseCollectionRef = FirebaseFirestore.instance.collection("users");
+    var result = await firebaseCollectionRef
+        .orderBy("username")
+        .startAt([event.text]).get();
+    var docsList = result.docs;
+    List<UserData> usersList = [];
+    for (int i = 0; i < docsList.length; i++) {
+      usersList.add(UserData.fromJson(docsList[i].data()));
+    }
+    emit(UsersSearched(state.posts, usersList));
   }
 
   Future<void> getPosts(GetPosts event, Emitter emit) async {
@@ -27,6 +43,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     }
     posts.shuffle();
-    emit(PostsFetched(posts));
+    emit(PostsFetched(posts, const <UserData>[]));
   }
 }

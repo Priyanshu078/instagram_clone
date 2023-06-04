@@ -92,6 +92,7 @@ class _PostPageState extends State<PostPage> {
                     forPassword: false,
                     suffixIcon: null,
                     suffixIconCallback: () {},
+                    onChange: (value) {},
                   ),
                   SizedBox(
                     height: height * 0.04,
@@ -160,6 +161,7 @@ class _PostPageState extends State<PostPage> {
                     forPassword: false,
                     suffixIcon: null,
                     suffixIconCallback: () {},
+                    onChange: (value) {},
                   ),
                   SizedBox(
                     height: height * 0.04,

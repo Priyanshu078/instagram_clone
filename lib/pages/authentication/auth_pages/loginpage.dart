@@ -98,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.normal,
                   hintColor: Colors.white.withOpacity(0.6),
                   obscureText: false,
+                  onChange: (value) {},
                 ),
                 SizedBox(
                   height: height * 0.02,
@@ -132,6 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontWeight: FontWeight.normal,
                       hintColor: Colors.white.withOpacity(0.6),
                       obscureText: state.obscurePassword,
+                      onChange: (value) {},
                     );
                   },
                 ),

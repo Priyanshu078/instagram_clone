@@ -19,6 +19,7 @@ class InstaTextField extends StatelessWidget {
     this.suffixIcon,
     required this.editProfileTextfield,
     required this.enabled,
+    required this.onChange,
   });
 
   final TextEditingController controller;
@@ -36,10 +37,12 @@ class InstaTextField extends StatelessWidget {
   final Icon? suffixIcon;
   final bool editProfileTextfield;
   final bool enabled;
+  final Function(String value)? onChange;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: onChange,
       enabled: enabled,
       cursorColor: Colors.white,
       style: GoogleFonts.sourceSansPro(
