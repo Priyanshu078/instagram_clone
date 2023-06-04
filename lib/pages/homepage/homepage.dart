@@ -9,6 +9,7 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/search/search.dart
 import 'package:instagram_clone/widgets/profile_widget.dart';
 import '../../constants/colors.dart';
 import 'homepage_pages/profile/profile.dart';
+import 'homepage_pages/search/bloc/search_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -104,7 +105,9 @@ class _HomePageState extends State<HomePage> {
             ],
             onTap: (index) {
               context.read<HomepageBloc>().add(TabChange(index));
-              if (index == 4) {
+              if (index == 1) {
+                context.read<SearchBloc>().add(GetPosts());
+              } else if (index == 4) {
                 context.read<ProfileBloc>().add(GetUserDetails());
               }
             },

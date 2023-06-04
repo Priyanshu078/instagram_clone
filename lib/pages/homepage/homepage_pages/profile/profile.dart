@@ -10,7 +10,6 @@ import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
-
 import '../../../../data/user_data.dart';
 import '../../../authentication/bloc/auth_bloc.dart';
 

@@ -7,6 +7,7 @@ import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/bloc/posts_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
@@ -42,6 +43,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       BlocProvider(
                         create: (context) => PostsBloc(),
+                      ),
+                      BlocProvider(
+                        create: (context) => SearchBloc(),
                       ),
                     ],
                     child: const HomePage(),
