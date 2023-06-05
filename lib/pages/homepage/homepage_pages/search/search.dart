@@ -102,9 +102,16 @@ class _SearchPageState extends State<SearchPage> {
                   itemCount: state.usersList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      leading: CachedNetworkImage(
-                        imageUrl: state.usersList[index].profilePhotoUrl,
-                        fit: BoxFit.fill,
+                      leading: ClipOval(
+                        child: Container(
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          width: width * 0.16,
+                          child: CachedNetworkImage(
+                            imageUrl: state.usersList[index].profilePhotoUrl,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
                       title: InstaText(
                         fontSize: 16,
