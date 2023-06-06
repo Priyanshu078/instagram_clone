@@ -52,7 +52,11 @@ class _SearchPageState extends State<SearchPage> {
               obscureText: false,
               onChange: (value) {
                 print(value);
-                context.read<SearchBloc>().add(SearchUsers(value));
+                if (value.isNotEmpty) {
+                  context.read<SearchBloc>().add(SearchUsers(value));
+                } else {
+                  context.read<SearchBloc>().add(GetPosts());
+                }
               },
             ),
           ),
@@ -106,6 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                         child: Container(
                           decoration:
                               const BoxDecoration(shape: BoxShape.circle),
+                          height: double.maxFinite,
                           width: width * 0.16,
                           child: CachedNetworkImage(
                             imageUrl: state.usersList[index].profilePhotoUrl,

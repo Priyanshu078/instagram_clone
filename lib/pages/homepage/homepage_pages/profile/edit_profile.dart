@@ -63,7 +63,12 @@ class _EditProfileState extends State<EditProfile> {
               child: TextButton(
                 style: TextButton.styleFrom(foregroundColor: Colors.black),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  String imageUrl = context
+                      .read<ProfileBloc>()
+                      .state
+                      .userdata
+                      .profilePhotoUrl;
+                  Navigator.of(context).pop(imageUrl);
                 },
                 child: const InstaText(
                     fontSize: 16,

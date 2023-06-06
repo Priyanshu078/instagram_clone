@@ -29,6 +29,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> getPosts(GetPosts event, Emitter emit) async {
+    emit(const SearchInitial(<Post>[], <UserData>[]));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString('userId');
     var firestoreCollectionRef = FirebaseFirestore.instance.collection("users");
