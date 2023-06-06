@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                   icon: ProfileWidget(
                     url: state.homePageData.url,
                     height: height * 0.035,
-                    width: width * 0.065,
+                    width: height * 0.035,
                     wantBorder: state.index == 4 ? true : false,
                     photoSelected: true,
                     editProfileImage: false,
