@@ -5,7 +5,7 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notifitcation.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/post.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/search/search.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/search_page.dart';
 import 'package:instagram_clone/widgets/profile_widget.dart';
 import '../../constants/colors.dart';
 import 'homepage_pages/profile/profile.dart';
@@ -31,89 +31,101 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: BlocBuilder<HomepageBloc, HomepageState>(
-        builder: (context, state) {
-          if (state is HomePageLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 1,
-                color: Colors.white,
-              ),
-            );
-          } else {
-            return pages[state.index];
-          }
-        },
-      ),
-      bottomNavigationBar:
-          BlocBuilder<HomepageBloc, HomepageState>(builder: (context, state) {
-        if (state is HomePageLoadingState) {
-          return Container();
+    return WillPopScope(
+      onWillPop: () async {
+        var searchState = context.read<SearchBloc>().state;
+        if (searchState is ProfileState) {
+          return false;
         } else {
-          return BottomNavigationBar(
-            elevation: 0,
-            currentIndex: state.index,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: textFieldBackgroundColor,
-            items: [
-              BottomNavigationBarItem(
-                  icon: SizedBox(
-                    // height: height * 0.05,
-                    width: width * 0.065,
-                    child: state.index == 0
-                        ? Image.asset('assets/images/home_filled.png')
-                        : Image.asset('assets/images/home.png'),
-                  ),
-                  label: "Home"),
-              BottomNavigationBarItem(
-                  icon: SizedBox(
-                      // height: height * 0.05,
-                      width: width * 0.065,
-                      child: state.index == 1
-                          ? Image.asset('assets/images/search_insta_filled.png')
-                          : Image.asset('assets/images/search_insta.png')),
-                  label: "Search"),
-              BottomNavigationBarItem(
-                  icon: SizedBox(
-                      // height: height * 0.05,
-                      width: width * 0.065,
-                      child: Image.asset('assets/images/post.png')),
-                  label: "Post"),
-              BottomNavigationBarItem(
-                  icon: SizedBox(
-                      // height: height * 0.05,
-                      width: width * 0.065,
-                      child: state.index == 3
-                          ? Image.asset('assets/images/notification_filled.png')
-                          : Image.asset('assets/images/notification.png')),
-                  label: "Notification"),
-              BottomNavigationBarItem(
-                  icon: ProfileWidget(
-                    url: state.homePageData.url,
-                    height: height * 0.035,
-                    width: height * 0.035,
-                    wantBorder: state.index == 4 ? true : false,
-                    photoSelected: true,
-                    editProfileImage: false,
-                    loading: false,
-                  ),
-                  label: "Profile"),
-            ],
-            onTap: (index) {
-              context.read<HomepageBloc>().add(TabChange(index));
-              if (index == 1) {
-                context.read<SearchBloc>().add(GetPosts());
-              } else if (index == 4) {
-                context.read<ProfileBloc>().add(GetUserDetails());
-              }
-            },
-          );
+          return true;
         }
-      }),
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: BlocBuilder<HomepageBloc, HomepageState>(
+          builder: (context, state) {
+            if (state is HomePageLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                  color: Colors.white,
+                ),
+              );
+            } else {
+              return pages[state.index];
+            }
+          },
+        ),
+        bottomNavigationBar:
+            BlocBuilder<HomepageBloc, HomepageState>(builder: (context, state) {
+          if (state is HomePageLoadingState) {
+            return Container();
+          } else {
+            return BottomNavigationBar(
+              elevation: 0,
+              currentIndex: state.index,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: textFieldBackgroundColor,
+              items: [
+                BottomNavigationBarItem(
+                    icon: SizedBox(
+                      // height: height * 0.05,
+                      width: width * 0.065,
+                      child: state.index == 0
+                          ? Image.asset('assets/images/home_filled.png')
+                          : Image.asset('assets/images/home.png'),
+                    ),
+                    label: "Home"),
+                BottomNavigationBarItem(
+                    icon: SizedBox(
+                        // height: height * 0.05,
+                        width: width * 0.065,
+                        child: state.index == 1
+                            ? Image.asset(
+                                'assets/images/search_insta_filled.png')
+                            : Image.asset('assets/images/search_insta.png')),
+                    label: "Search"),
+                BottomNavigationBarItem(
+                    icon: SizedBox(
+                        // height: height * 0.05,
+                        width: width * 0.065,
+                        child: Image.asset('assets/images/post.png')),
+                    label: "Post"),
+                BottomNavigationBarItem(
+                    icon: SizedBox(
+                        // height: height * 0.05,
+                        width: width * 0.065,
+                        child: state.index == 3
+                            ? Image.asset(
+                                'assets/images/notification_filled.png')
+                            : Image.asset('assets/images/notification.png')),
+                    label: "Notification"),
+                BottomNavigationBarItem(
+                    icon: ProfileWidget(
+                      url: state.homePageData.url,
+                      height: height * 0.035,
+                      width: height * 0.035,
+                      wantBorder: state.index == 4 ? true : false,
+                      photoSelected: true,
+                      editProfileImage: false,
+                      loading: false,
+                    ),
+                    label: "Profile"),
+              ],
+              onTap: (index) {
+                context.read<HomepageBloc>().add(TabChange(index));
+                if (index == 1) {
+                  context.read<SearchBloc>().add(GetPosts());
+                } else if (index == 4) {
+                  context.read<ProfileBloc>().add(GetUserDetails());
+                }
+              },
+            );
+          }
+        }),
+      ),
     );
   }
 }

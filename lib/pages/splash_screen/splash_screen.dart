@@ -35,7 +35,11 @@ class SplashScreen extends StatelessWidget {
                     create: (context) => PostsBloc(),
                   ),
                   BlocProvider(
-                    create: (context) => SearchBloc(),
+                    create: (context) => SearchBloc(
+                      PageController(
+                        initialPage: 0,
+                      ),
+                    ),
                   ),
                 ],
                 child: const HomePage(),

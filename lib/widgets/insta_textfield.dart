@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class InstaTextField extends StatelessWidget {
   const InstaTextField({
     super.key,
-    required this.controller,
+    this.controller,
     required this.hintText,
     required this.fontSize,
     required this.color,
@@ -22,7 +22,7 @@ class InstaTextField extends StatelessWidget {
     required this.onChange,
   });
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final double fontSize;
   final Color color;
