@@ -17,8 +17,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             const <Post>[], const <UserData>[], UserData.temp())) {
     on<GetPosts>((event, emit) => getPosts(event, emit));
     on<SearchUsers>((event, emit) => searchUsers(event, emit));
-    on<ProfileEvent>((event, emit) =>
+    on<UserProfileEvent>((event, emit) =>
         emit(UserProfileState(state.posts, state.usersList, event.userData)));
+    on<UserProfileBackEvent>((event, emit) =>
+        emit(UsersSearched(state.posts, state.usersList, state.userData)));
   }
 
   Future<void> searchUsers(SearchUsers event, Emitter emit) async {

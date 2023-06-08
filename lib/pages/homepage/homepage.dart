@@ -34,7 +34,11 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: () async {
         var searchState = context.read<SearchBloc>().state;
-        if (searchState is ProfileState) {
+        if (searchState is UserProfileState) {
+          var bloc = context.read<SearchBloc>();
+          await bloc.pageController.animateToPage(0,
+              duration: const Duration(milliseconds: 200), curve: Curves.ease);
+          bloc.add(UserProfileBackEvent());
           return false;
         } else {
           return true;

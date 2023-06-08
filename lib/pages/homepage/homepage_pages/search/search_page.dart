@@ -110,7 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                         return ListTile(
                           onTap: () async {
                             var bloc = context.read<SearchBloc>();
-                            bloc.add(ProfileEvent(state.usersList[index]));
+                            bloc.add(UserProfileEvent(state.usersList[index]));
                             await bloc.pageController.animateToPage(1,
                                 duration: const Duration(milliseconds: 200),
                                 curve: Curves.ease);

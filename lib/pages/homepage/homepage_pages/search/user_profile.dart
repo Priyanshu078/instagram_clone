@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 
 class UserProfilePage extends StatelessWidget {
@@ -13,6 +15,7 @@ class UserProfilePage extends StatelessWidget {
         backgroundColor: Colors.black,
         leading: IconButton(
           onPressed: () async {
+            context.read<SearchBloc>().add(UserProfileBackEvent());
             await pageController.animateToPage(
               0,
               duration: const Duration(milliseconds: 200),

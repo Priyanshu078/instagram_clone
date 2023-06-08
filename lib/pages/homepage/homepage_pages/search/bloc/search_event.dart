@@ -16,9 +16,11 @@ class SearchUsers extends SearchEvent {
   List<Object> get props => [text];
 }
 
-class ProfileEvent extends SearchEvent {
+class UserProfileEvent extends SearchEvent {
   final UserData userData;
-  const ProfileEvent(this.userData);
+  const UserProfileEvent(this.userData);
   @override
   List<Object> get props => [userData];
 }
+
+class UserProfileBackEvent extends SearchEvent {}
