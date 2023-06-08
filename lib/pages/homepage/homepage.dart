@@ -33,12 +33,29 @@ class _HomePageState extends State<HomePage> {
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: () async {
-        var searchState = context.read<SearchBloc>().state;
-        if (searchState is UserProfileState) {
-          var bloc = context.read<SearchBloc>();
-          await bloc.pageController.animateToPage(0,
-              duration: const Duration(milliseconds: 200), curve: Curves.ease);
-          bloc.add(UserProfileBackEvent());
+        var searchBlocState = context.read<SearchBloc>().state;
+        var homePageBlocState = context.read<HomepageBloc>().state;
+        if (homePageBlocState.index == 0) {
+          return true;
+        } else if (homePageBlocState.index == 1) {
+          if (searchBlocState is UserProfileState) {
+            var bloc = context.read<SearchBloc>();
+            await bloc.pageController.animateToPage(0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease);
+            bloc.add(UserProfileBackEvent());
+          } else if (searchBlocState is PostsFetched) {
+            context.read<HomepageBloc>().add(TabChange(0));
+          }
+          return false;
+        } else if (homePageBlocState.index == 2) {
+          context.read<HomepageBloc>().add(TabChange(0));
+          return false;
+        } else if (homePageBlocState.index == 3) {
+          context.read<HomepageBloc>().add(TabChange(0));
+          return false;
+        } else if (homePageBlocState.index == 4) {
+          context.read<HomepageBloc>().add(TabChange(0));
           return false;
         } else {
           return true;
