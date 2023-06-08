@@ -20,6 +20,7 @@ class InstaTextField extends StatelessWidget {
     required this.editProfileTextfield,
     required this.enabled,
     required this.onChange,
+    this.focusNode,
   });
 
   final TextEditingController? controller;
@@ -38,10 +39,12 @@ class InstaTextField extends StatelessWidget {
   final bool editProfileTextfield;
   final bool enabled;
   final Function(String value)? onChange;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      focusNode: focusNode,
       onChanged: onChange,
       enabled: enabled,
       cursorColor: Colors.white,

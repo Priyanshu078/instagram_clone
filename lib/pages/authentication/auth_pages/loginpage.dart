@@ -49,6 +49,8 @@ class _LoginPageState extends State<LoginPage> {
                           PageController(
                             initialPage: 0,
                           ),
+                          FocusNode(),
+                          TextEditingController(),
                         ),
                       ),
                     ],

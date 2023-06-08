@@ -39,6 +39,8 @@ class SplashScreen extends StatelessWidget {
                       PageController(
                         initialPage: 0,
                       ),
+                      FocusNode(),
+                      TextEditingController(),
                     ),
                   ),
                 ],

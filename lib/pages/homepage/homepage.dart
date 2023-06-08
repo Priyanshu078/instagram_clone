@@ -44,6 +44,10 @@ class _HomePageState extends State<HomePage> {
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.ease);
             bloc.add(UserProfileBackEvent());
+          } else if (searchBlocState is UsersSearched) {
+            context.read<SearchBloc>().searchController.text = "";
+            context.read<SearchBloc>().focusNode.unfocus();
+            context.read<SearchBloc>().add(GetPosts());
           } else if (searchBlocState is PostsFetched) {
             context.read<HomepageBloc>().add(TabChange(0));
           }

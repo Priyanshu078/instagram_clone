@@ -11,8 +11,10 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final PageController pageController;
+  final FocusNode focusNode;
+  final TextEditingController searchController;
 
-  SearchBloc(this.pageController)
+  SearchBloc(this.pageController, this.focusNode, this.searchController)
       : super(SearchInitial(
             const <Post>[], const <UserData>[], UserData.temp())) {
     on<GetPosts>((event, emit) => getPosts(event, emit));

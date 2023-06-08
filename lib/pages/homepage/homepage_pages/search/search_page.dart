@@ -34,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                 child: InstaTextField(
+                  focusNode: context.read<SearchBloc>().focusNode,
                   enabled: true,
                   editProfileTextfield: false,
                   forPassword: false,
@@ -45,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
                     Icons.search,
                     color: searchHintText,
                   ),
-                  controller: null,
+                  controller: context.read<SearchBloc>().searchController,
                   hintText: "Search",
                   fontSize: 16,
                   color: Colors.white,
