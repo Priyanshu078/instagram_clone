@@ -70,7 +70,6 @@ class _PostPageState extends State<PostPage> {
                   Expanded(
                     child: Image.file(
                       File(state.imagePath),
-                      fit: BoxFit.fill,
                     ),
                   ),
                   SizedBox(

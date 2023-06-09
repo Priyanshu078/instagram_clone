@@ -110,6 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                       itemBuilder: (context, index) {
                         return ListTile(
                           onTap: () async {
+                            FocusManager.instance.primaryFocus?.unfocus();
                             var bloc = context.read<SearchBloc>();
                             bloc.add(UserProfileEvent(state.usersList[index]));
                             await bloc.pageController.animateToPage(1,
