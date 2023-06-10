@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                 curve: Curves.ease);
             bloc.add(UserProfileBackEvent());
           } else if (searchBlocState is UsersSearched) {
-            context.read<SearchBloc>().searchController.text = "";
+            context.read<SearchBloc>().searchController.clear();
             context.read<SearchBloc>().focusNode.unfocus();
             context.read<SearchBloc>().add(GetPosts());
           } else if (searchBlocState is PostsFetched) {
@@ -139,10 +139,19 @@ class _HomePageState extends State<HomePage> {
                     ),
                     label: "Profile"),
               ],
-              onTap: (index) {
+              onTap: (index) async {
                 context.read<HomepageBloc>().add(TabChange(index));
                 if (index == 1) {
-                  context.read<SearchBloc>().add(GetPosts());
+                  var bloc = context.read<SearchBloc>();
+                  bloc.add(GetPosts());
+                  bloc.searchController.clear();
+                  if (bloc.pageController.page == 1) {
+                    await bloc.pageController.animateToPage(
+                      0,
+                      duration: const Duration(microseconds: 200),
+                      curve: Curves.ease,
+                    );
+                  }
                 } else if (index == 4) {
                   context.read<ProfileBloc>().add(GetUserDetails());
                 }

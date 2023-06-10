@@ -17,9 +17,11 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
         emit(HomepageInitial(state.index, HomePageData(event.imageUrl))));
   }
 
+  late final SharedPreferences sharedPreferences;
+
   Future<void> getDetails(GetDetails event, Emitter emit) async {
-    var sharedpreferences = await SharedPreferences.getInstance();
-    var userId = sharedpreferences.getString("userId");
+    sharedPreferences = await SharedPreferences.getInstance();
+    var userId = sharedPreferences.getString("userId");
     var storageRef = FirebaseStorage.instance.ref();
     const fileName = "profilePhoto.jpg";
     try {
