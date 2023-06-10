@@ -130,7 +130,8 @@ class _ProfilePageState extends State<ProfilePage>
         if (state is UserDataFetched ||
             state is UserDataEdited ||
             state is ProfilePhotoEdited ||
-            state is ProfilePrivateState) {
+            state is ProfilePrivateState ||
+            state is TabChangedState) {
           return Scaffold(
             backgroundColor: textFieldBackgroundColor,
             appBar: AppBar(
@@ -381,6 +382,9 @@ class _ProfilePageState extends State<ProfilePage>
                   height: height * 0.05,
                   width: double.infinity,
                   child: TabBar(
+                      onTap: (value) {
+                        context.read<ProfileBloc>().add(TabChangeEvent(value));
+                      },
                       indicatorWeight: 1,
                       indicatorColor: Colors.white,
                       controller: tabController,
@@ -388,44 +392,111 @@ class _ProfilePageState extends State<ProfilePage>
                         Tab(
                           icon: SizedBox(
                               height: height * 0.03,
-                              child:
-                                  Image.asset('assets/images/grid_icon.png')),
+                              child: state.tabIndex == 0
+                                  ? Image.asset(
+                                      'assets/images/selected_grid_icon.png')
+                                  : Image.asset(
+                                      'assets/images/unselected_grid_icon.png')),
                         ),
                         Tab(
                           icon: SizedBox(
                               height: height * 0.03,
-                              child: Image.asset('assets/images/tag_icon.png')),
+                              child: state.tabIndex == 1
+                                  ? Image.asset(
+                                      'assets/images/selected_tag_icon.png')
+                                  : Image.asset('assets/images/tag_icon.png')),
                         )
                       ]),
                 ),
                 Expanded(
-                  child: TabBarView(controller: tabController, children: [
-                    GridView.builder(
-                      itemCount: state.userdata.posts.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 4.0,
-                              mainAxisSpacing: 4.0),
-                      itemBuilder: ((context, index) {
-                        return CachedNetworkImage(
-                          imageUrl: state.userdata.posts[index].imageUrl,
-                          fit: BoxFit.fill,
-                          placeholder: (context, val) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 1,
-                                color: Colors.white,
+                  child: TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: tabController,
+                    children: [
+                      state.userdata.posts.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: height * 0.11,
+                                    width: height * 0.11,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: Colors.white, width: 2)),
+                                    child: Center(
+                                      child: Image.asset(
+                                        "assets/images/insta_camera.png",
+                                        scale: 2.5,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+                                  const InstaText(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      text: "No Posts Yet")
+                                ],
                               ),
-                            );
-                          },
-                        );
-                      }),
-                    ),
-                    const Center(
-                      child: Icon(Icons.abc),
-                    )
-                  ]),
+                            )
+                          : GridView.builder(
+                              itemCount: state.userdata.posts.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 4.0,
+                                      mainAxisSpacing: 4.0),
+                              itemBuilder: ((context, index) {
+                                return CachedNetworkImage(
+                                  imageUrl:
+                                      state.userdata.posts[index].imageUrl,
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, val) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 1,
+                                        color: Colors.white,
+                                      ),
+                                    );
+                                  },
+                                );
+                              }),
+                            ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: height * 0.11,
+                              width: height * 0.11,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Colors.white, width: 2)),
+                              child: Center(
+                                child: Image.asset(
+                                  "assets/images/selected_tag_icon.png",
+                                  scale: 2.5,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.01,
+                            ),
+                            const InstaText(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                text: "No Posts Yet")
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

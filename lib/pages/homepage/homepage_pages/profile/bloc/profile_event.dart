@@ -34,3 +34,11 @@ class ProfilePrivateEvent extends ProfileEvent {
   @override
   List<Object> get props => [userData];
 }
+
+class TabChangeEvent extends ProfileEvent {
+  final int tabIndex;
+  const TabChangeEvent(this.tabIndex);
+
+  @override
+  List<Object> get props => [tabIndex];
+}
