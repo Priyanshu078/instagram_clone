@@ -24,3 +24,10 @@ class UserProfileEvent extends SearchEvent {
 }
 
 class UserProfileBackEvent extends SearchEvent {}
+
+class TabChangeEvent extends SearchEvent {
+  final int tabIndex;
+  const TabChangeEvent(this.tabIndex);
+  @override
+  List<Object> get props => [tabIndex];
+}

@@ -382,8 +382,10 @@ class _ProfilePageState extends State<ProfilePage>
                   height: height * 0.05,
                   width: double.infinity,
                   child: TabBar(
-                      onTap: (value) {
-                        context.read<ProfileBloc>().add(TabChangeEvent(value));
+                      onTap: (tabIndex) {
+                        context
+                            .read<ProfileBloc>()
+                            .add(TabChangeEvent(tabIndex));
                       },
                       indicatorWeight: 1,
                       indicatorColor: Colors.white,
@@ -391,20 +393,22 @@ class _ProfilePageState extends State<ProfilePage>
                       tabs: [
                         Tab(
                           icon: SizedBox(
-                              height: height * 0.03,
-                              child: state.tabIndex == 0
-                                  ? Image.asset(
-                                      'assets/images/selected_grid_icon.png')
-                                  : Image.asset(
-                                      'assets/images/unselected_grid_icon.png')),
+                            height: height * 0.03,
+                            child: state.tabIndex == 0
+                                ? Image.asset(
+                                    'assets/images/selected_grid_icon.png')
+                                : Image.asset(
+                                    'assets/images/unselected_grid_icon.png'),
+                          ),
                         ),
                         Tab(
                           icon: SizedBox(
-                              height: height * 0.03,
-                              child: state.tabIndex == 1
-                                  ? Image.asset(
-                                      'assets/images/selected_tag_icon.png')
-                                  : Image.asset('assets/images/tag_icon.png')),
+                            height: height * 0.03,
+                            child: state.tabIndex == 1
+                                ? Image.asset(
+                                    'assets/images/selected_tag_icon.png')
+                                : Image.asset('assets/images/tag_icon.png'),
+                          ),
                         )
                       ]),
                 ),
@@ -495,7 +499,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 text: "No Posts Yet")
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
