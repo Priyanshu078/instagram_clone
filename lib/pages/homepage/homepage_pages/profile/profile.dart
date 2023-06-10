@@ -422,9 +422,10 @@ class _ProfilePageState extends State<ProfilePage>
                                     height: height * 0.11,
                                     width: height * 0.11,
                                     decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: Colors.white, width: 2)),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: Colors.white, width: 2),
+                                    ),
                                     child: Center(
                                       child: Image.asset(
                                         "assets/images/insta_camera.png",

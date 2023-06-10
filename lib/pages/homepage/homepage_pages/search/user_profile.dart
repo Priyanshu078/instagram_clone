@@ -247,63 +247,49 @@ class _UserProfilePageState extends State<UserProfilePage>
                     : Expanded(
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: height * 0.01,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 12.0, right: 12.0),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      ProfilePhoto(
-                                        height: height * 0.09,
-                                        width: height * 0.1,
-                                        wantBorder: true,
-                                        storyAdder: true,
-                                        imageUrl: "",
-                                      ),
-                                      const InstaText(
-                                          fontSize: 12,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.normal,
-                                          text: "New")
-                                    ],
+                            state.userData.stories.isEmpty
+                                ? Container()
+                                : SizedBox(
+                                    height: height * 0.01,
                                   ),
-                                  SizedBox(
-                                    height: height * 0.12,
-                                    width: width * 0.7,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: state.userData.stories.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10.5),
-                                          child: Column(
-                                            children: [
-                                              ProfilePhoto(
-                                                height: height * 0.09,
-                                                width: height * 0.1,
-                                                wantBorder: true,
-                                                storyAdder: false,
-                                                imageUrl: "",
-                                              ),
-                                              InstaText(
-                                                  fontSize: 12,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.normal,
-                                                  text: "Party ${index + 1}")
-                                            ],
-                                          ),
-                                        );
-                                      },
+                            state.userData.stories.isEmpty
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 12.0),
+                                    child: SizedBox(
+                                      height: height * 0.12,
+                                      width: width * 0.7,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount:
+                                            state.userData.stories.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10.5),
+                                            child: Column(
+                                              children: [
+                                                ProfilePhoto(
+                                                  height: height * 0.09,
+                                                  width: height * 0.1,
+                                                  wantBorder: true,
+                                                  storyAdder: false,
+                                                  imageUrl: "",
+                                                ),
+                                                InstaText(
+                                                    fontSize: 12,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    text: "Party ${index + 1}")
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
                             SizedBox(
                               height: height * 0.01,
                             ),
@@ -323,7 +309,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                       icon: SizedBox(
                                           height: height * 0.03,
                                           child: Image.asset(
-                                              'assets/images/grid_icon.png')),
+                                              'assets/images/selected_grid_icon.png')),
                                     ),
                                     Tab(
                                       icon: SizedBox(
