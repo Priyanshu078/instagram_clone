@@ -106,44 +106,44 @@ class _SearchPageState extends State<SearchPage> {
                   height: height,
                   width: width,
                   child: ListView.builder(
-                      itemCount: state.usersList.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          onTap: () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            var bloc = context.read<SearchBloc>();
-                            bloc.add(UserProfileEvent(state.usersList[index]));
-                            await bloc.pageController.animateToPage(1,
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.ease);
-                          },
-                          leading: ClipOval(
-                            child: Container(
-                              decoration:
-                                  const BoxDecoration(shape: BoxShape.circle),
-                              height: double.maxFinite,
-                              width: width * 0.16,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    state.usersList[index].profilePhotoUrl,
-                                fit: BoxFit.fill,
-                              ),
+                    itemCount: state.usersList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () async {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          var bloc = context.read<SearchBloc>();
+                          await bloc.pageController.animateToPage(1,
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.ease);
+                          bloc.add(UserProfileEvent(state.usersList[index]));
+                        },
+                        leading: ClipOval(
+                          child: Container(
+                            decoration:
+                                const BoxDecoration(shape: BoxShape.circle),
+                            height: double.maxFinite,
+                            width: width * 0.16,
+                            child: CachedNetworkImage(
+                              imageUrl: state.usersList[index].profilePhotoUrl,
+                              fit: BoxFit.fill,
                             ),
                           ),
-                          title: InstaText(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            text: state.usersList[index].username,
-                          ),
-                          subtitle: InstaText(
-                            fontSize: 16,
-                            color: Colors.white.withOpacity(0.5),
-                            fontWeight: FontWeight.normal,
-                            text: state.usersList[index].name,
-                          ),
-                        );
-                      }),
+                        ),
+                        title: InstaText(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          text: state.usersList[index].username,
+                        ),
+                        subtitle: InstaText(
+                          fontSize: 16,
+                          color: Colors.white.withOpacity(0.5),
+                          fontWeight: FontWeight.normal,
+                          text: state.usersList[index].name,
+                        ),
+                      );
+                    },
+                  ),
                 );
               } else {
                 return const Center(
