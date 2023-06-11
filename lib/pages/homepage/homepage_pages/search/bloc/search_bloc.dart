@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 part 'search_event.dart';
 part 'search_state.dart';
 

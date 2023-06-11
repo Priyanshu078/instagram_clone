@@ -42,3 +42,11 @@ class TabChangeEvent extends ProfileEvent {
   @override
   List<Object> get props => [tabIndex];
 }
+
+class PostsIndexChangeEvent extends ProfileEvent {
+  final int postIndex;
+  const PostsIndexChangeEvent(this.postIndex);
+
+  @override
+  List<Object> get props => [postIndex];
+}

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/data/user_data.dart';
@@ -12,16 +13,21 @@ part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc() : super(ProfileLoading(UserData.temp(), 0)) {
+  ProfileBloc(this.pageController)
+      : super(ProfileLoading(UserData.temp(), 0, 0)) {
     on<GetUserDetails>((event, emit) => getUserDetails(event, emit));
     on<EditUserDetails>((event, emit) => editUserDetails(event, emit));
     on<ChangeProfilePhotoEvent>(
         (event, emit) => changeProfilePhotoEvent(event, emit));
     on<LogoutEvent>((event, emit) => logout(event, emit));
     on<ProfilePrivateEvent>((event, emit) => changeProfileStatus(event, emit));
-    on<TabChangeEvent>(
-        (event, emit) => emit(TabChangedState(state.userdata, event.tabIndex)));
+    on<TabChangeEvent>((event, emit) => emit(
+        TabChangedState(state.userdata, event.tabIndex, state.postsIndex)));
+    on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedState(
+        state.userdata, state.tabIndex, event.postIndex.toDouble())));
   }
+
+  final PageController pageController;
 
   Future<void> changeProfileStatus(
       ProfilePrivateEvent event, Emitter emit) async {
@@ -29,13 +35,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await firestoreCollectionRef
         .doc(event.userData.id)
         .update({"private": event.userData.private});
-    emit(ProfilePrivateState(event.userData, state.tabIndex));
+    emit(ProfilePrivateState(event.userData, state.tabIndex, state.postsIndex));
   }
 
   Future<void> logout(LogoutEvent event, Emitter emit) async {
     var sharedPrefernces = await SharedPreferences.getInstance();
     await sharedPrefernces.clear();
-    emit(LogoutDoneState(state.userdata, state.tabIndex));
+    emit(LogoutDoneState(state.userdata, state.tabIndex, state.postsIndex));
   }
 
   Future<void> getUserDetails(GetUserDetails event, Emitter emit) async {
@@ -49,7 +55,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if (kDebugMode) {
       print(userData);
     }
-    emit(UserDataFetched(userData, state.tabIndex));
+    emit(UserDataFetched(userData, state.tabIndex, state.postsIndex));
   }
 
   Future<void> editUserDetails(EditUserDetails event, Emitter emit) async {
@@ -61,12 +67,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       "bio": event.userData.bio,
       "profilePhotoUrl": event.userData.profilePhotoUrl,
     });
-    emit(UserDataEdited(event.userData, state.tabIndex));
+    emit(UserDataEdited(event.userData, state.tabIndex, state.postsIndex));
   }
 
   Future<void> changeProfilePhotoEvent(
       ChangeProfilePhotoEvent event, Emitter emit) async {
-    emit(ProfilePhotoLoading(event.userData.copyWith(), state.tabIndex));
+    emit(ProfilePhotoLoading(
+        event.userData.copyWith(), state.tabIndex, state.postsIndex));
     var profileImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     var storageRef = FirebaseStorage.instance.ref();
@@ -82,6 +89,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .doc(event.userData.id)
         .update({"profilePhotoUrl": imagePath});
     UserData userData = event.userData.copyWith(profilePhotoUrl: imagePath);
-    emit(ProfilePhotoEdited(userData, state.tabIndex));
+    emit(ProfilePhotoEdited(userData, state.tabIndex, state.postsIndex));
   }
 }

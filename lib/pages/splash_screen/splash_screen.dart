@@ -29,7 +29,9 @@ class SplashScreen extends StatelessWidget {
                     create: (context) => HomepageBloc()..add(GetDetails()),
                   ),
                   BlocProvider(
-                    create: (context) => ProfileBloc(),
+                    create: (context) => ProfileBloc(PageController(
+                      initialPage: 0,
+                    )),
                   ),
                   BlocProvider(
                     create: (context) => PostsBloc(),
