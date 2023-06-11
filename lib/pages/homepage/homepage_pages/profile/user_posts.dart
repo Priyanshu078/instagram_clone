@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
-import 'package:instagram_clone/widgets/profile_photo.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class UserPosts extends StatelessWidget {
