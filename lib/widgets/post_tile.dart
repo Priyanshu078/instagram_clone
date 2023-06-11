@@ -19,7 +19,7 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height - 2 * (AppBar().preferredSize.height),
+      height: height - 2.5 * (AppBar().preferredSize.height),
       width: width,
       child: Column(
         children: [

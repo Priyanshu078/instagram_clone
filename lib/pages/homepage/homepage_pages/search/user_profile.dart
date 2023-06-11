@@ -176,18 +176,21 @@ class _UserProfilePageState extends State<UserProfilePage>
                       SizedBox(
                         height: height * 0.01,
                       ),
-                      InstaButton(
-                        borderWidth: 1,
-                        width: double.infinity,
-                        postButton: false,
-                        height: height * 0.05,
-                        buttonColor: instablue,
-                        onPressed: () async {},
-                        text: "Follow",
-                        fontSize: 13,
-                        textColor: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      state.userData.id !=
+                              homePageBloc.sharedPreferences.getString("userId")
+                          ? InstaButton(
+                              borderWidth: 1,
+                              width: double.infinity,
+                              postButton: false,
+                              height: height * 0.05,
+                              buttonColor: instablue,
+                              onPressed: () async {},
+                              text: "Follow",
+                              fontSize: 13,
+                              textColor: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            )
+                          : Container(),
                     ],
                   ),
                 ),
