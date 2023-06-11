@@ -3,7 +3,7 @@ part of 'profile_bloc.dart';
 abstract class ProfileState extends Equatable {
   final UserData userdata;
   final int tabIndex;
-  final double postsIndex;
+  final int postsIndex;
   const ProfileState(this.userdata, this.tabIndex, this.postsIndex);
 
   @override

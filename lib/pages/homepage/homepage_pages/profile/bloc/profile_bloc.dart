@@ -24,7 +24,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<TabChangeEvent>((event, emit) => emit(
         TabChangedState(state.userdata, event.tabIndex, state.postsIndex)));
     on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedState(
-        state.userdata, state.tabIndex, event.postIndex.toDouble())));
+        state.userdata, state.tabIndex, event.postIndex)));
   }
 
   final PageController pageController;

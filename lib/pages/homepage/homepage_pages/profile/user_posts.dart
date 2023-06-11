@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+import 'package:instagram_clone/widgets/post_tile.dart';
+import 'package:instagram_clone/widgets/profile_photo.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class UserPosts extends StatelessWidget {
   const UserPosts({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -28,34 +33,25 @@ class UserPosts extends StatelessWidget {
           ),
         ),
         title: const InstaText(
-            fontSize: 16,
+            fontSize: 20,
             color: Colors.white,
             fontWeight: FontWeight.w700,
             text: "Posts"),
       ),
       body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
-          return ListView.builder(
-              shrinkWrap: true,
-              controller: ScrollController(
-                initialScrollOffset: 5,
-                keepScrollOffset: true,
-              ),
-              itemCount: state.userdata.posts.length,
-              itemBuilder: (context, index) {
-                return CachedNetworkImage(
-                  imageUrl: state.userdata.posts[index].imageUrl,
-                  fit: BoxFit.fill,
-                  placeholder: (context, val) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 1,
-                        color: Colors.white,
-                      ),
-                    );
-                  },
-                );
-              });
+          return ScrollablePositionedList.builder(
+            initialScrollIndex: state.postsIndex,
+            itemCount: state.userdata.posts.length,
+            itemBuilder: (context, index) {
+              return PostTile(
+                width: width,
+                height: height,
+                state: state,
+                index: index,
+              );
+            },
+          );
         },
       ),
     );
