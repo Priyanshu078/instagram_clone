@@ -7,7 +7,10 @@ import 'package:instagram_clone/widgets/post_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class UserPosts extends StatelessWidget {
-  const UserPosts({super.key, required this.inProfile});
+  const UserPosts({
+    super.key,
+    required this.inProfile,
+  });
   final bool inProfile;
 
   @override
@@ -22,14 +25,14 @@ class UserPosts extends StatelessWidget {
           onPressed: () async {
             if (inProfile) {
               var bloc = context.read<ProfileBloc>();
-              await bloc.pageController.animateToPage(0,
-                  duration: const Duration(
-                    milliseconds: 200,
-                  ),
-                  curve: Curves.ease);
+              bloc.pageController.jumpToPage(0);
             } else {
               var bloc = context.read<SearchBloc>();
-              bloc.pageController.jumpToPage(0);
+              if (bloc.state.usersPosts) {
+                bloc.pageController.jumpToPage(1);
+              } else {
+                bloc.pageController.jumpToPage(0);
+              }
             }
           },
           icon: const Icon(

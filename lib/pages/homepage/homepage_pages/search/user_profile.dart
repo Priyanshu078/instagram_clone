@@ -39,11 +39,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           leading: IconButton(
             onPressed: () async {
               context.read<SearchBloc>().add(UserProfileBackEvent());
-              await widget.pageController.animateToPage(
-                0,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              );
+              widget.pageController.jumpToPage(0);
             },
             icon: const Icon(
               Icons.arrow_back_ios,
@@ -391,12 +387,12 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                 bloc.add(PostsIndexChangeEvent(
                                                     index, true));
                                                 await bloc.pageController
-                                                    .animateToPage(3,
-                                                        duration:
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    200),
-                                                        curve: Curves.ease);
+                                                    .animateToPage(
+                                                  2,
+                                                  duration: const Duration(
+                                                      milliseconds: 200),
+                                                  curve: Curves.ease,
+                                                );
                                               },
                                               child: CachedNetworkImage(
                                                 imageUrl: state.userData

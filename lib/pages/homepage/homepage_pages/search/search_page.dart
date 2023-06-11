@@ -125,10 +125,10 @@ class _SearchPageState extends State<SearchPage> {
                         onTap: () async {
                           FocusManager.instance.primaryFocus?.unfocus();
                           var bloc = context.read<SearchBloc>();
+                          bloc.add(UserProfileEvent(state.usersList[index]));
                           await bloc.pageController.animateToPage(1,
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.ease);
-                          bloc.add(UserProfileEvent(state.usersList[index]));
                         },
                         leading: ClipOval(
                           child: Container(

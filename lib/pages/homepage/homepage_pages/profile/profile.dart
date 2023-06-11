@@ -469,10 +469,11 @@ class _ProfilePageState extends State<ProfilePage>
                                         var bloc = context.read<ProfileBloc>();
                                         bloc.add(PostsIndexChangeEvent(index));
                                         await bloc.pageController.animateToPage(
-                                            1,
-                                            duration: const Duration(
-                                                milliseconds: 200),
-                                            curve: Curves.ease);
+                                          1,
+                                          duration:
+                                              const Duration(milliseconds: 200),
+                                          curve: Curves.ease,
+                                        );
                                       },
                                       child: CachedNetworkImage(
                                         imageUrl: state

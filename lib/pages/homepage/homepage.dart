@@ -35,20 +35,25 @@ class _HomePageState extends State<HomePage> {
       onWillPop: () async {
         var searchBlocState = context.read<SearchBloc>().state;
         var homePageBlocState = context.read<HomepageBloc>().state;
+        var profileBloc = context.read<ProfileBloc>();
         if (homePageBlocState.index == 0) {
           return true;
         } else if (homePageBlocState.index == 1) {
-          if (searchBlocState is UserProfileState) {
-            var bloc = context.read<SearchBloc>();
-            await bloc.pageController.animateToPage(0,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease);
+          var bloc = context.read<SearchBloc>();
+          if (bloc.pageController.page == 1 ||
+              searchBlocState is UserProfileState) {
+            bloc.pageController.jumpToPage(0);
             bloc.add(UserProfileBackEvent());
           } else if (searchBlocState is UsersSearched) {
             context.read<SearchBloc>().searchController.clear();
             context.read<SearchBloc>().focusNode.unfocus();
             context.read<SearchBloc>().add(GetPosts());
-          } else if (searchBlocState is PostsFetched) {
+          } else if (bloc.pageController.page == 2 && bloc.state.usersPosts) {
+            bloc.pageController.jumpToPage(1);
+          } else if (bloc.pageController.page == 2 && !bloc.state.usersPosts) {
+            bloc.pageController.jumpToPage(0);
+          } else if (bloc.pageController.page == 0 ||
+              searchBlocState is PostsFetched) {
             context.read<HomepageBloc>().add(TabChange(0));
           }
           return false;
@@ -59,7 +64,11 @@ class _HomePageState extends State<HomePage> {
           context.read<HomepageBloc>().add(TabChange(0));
           return false;
         } else if (homePageBlocState.index == 4) {
-          context.read<HomepageBloc>().add(TabChange(0));
+          if (profileBloc.pageController.page == 1) {
+            profileBloc.pageController.jumpToPage(0);
+          } else {
+            context.read<HomepageBloc>().add(TabChange(0));
+          }
           return false;
         } else {
           return true;
