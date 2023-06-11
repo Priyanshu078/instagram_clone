@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
 
+import '../pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
+import '../pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
+
 class PostTile extends StatelessWidget {
   const PostTile(
       {super.key,
       required this.width,
       required this.height,
-      required this.state,
+      required this.profileState,
+      required this.searchState,
       required this.index});
 
   final double width;
   final double height;
-  final dynamic state;
+  final ProfileState? profileState;
+  final SearchState? searchState;
   final int index;
 
   @override
@@ -39,7 +44,11 @@ class PostTile extends StatelessWidget {
                         width: height * 0.065,
                         wantBorder: false,
                         storyAdder: false,
-                        imageUrl: state.userdata.profilePhotoUrl,
+                        imageUrl: searchState == null
+                            ? profileState!.userData.profilePhotoUrl
+                            : searchState!.usersPosts
+                                ? searchState!.userData.profilePhotoUrl
+                                : searchState!.posts[index].imageUrl,
                       ),
                     ),
                     SizedBox(
@@ -51,7 +60,11 @@ class PostTile extends StatelessWidget {
                         fontSize: 14,
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
-                        text: state.userdata.username,
+                        text: searchState == null
+                            ? profileState!.userData.username
+                            : searchState!.usersPosts
+                                ? searchState!.userData.username
+                                : searchState!.posts[index].username,
                       ),
                     )
                   ],
@@ -62,7 +75,11 @@ class PostTile extends StatelessWidget {
           ),
           Expanded(
             child: CachedNetworkImage(
-              imageUrl: state.userdata.posts[index].imageUrl,
+              imageUrl: searchState == null
+                  ? profileState!.userData.posts[index].imageUrl
+                  : searchState!.usersPosts
+                      ? searchState!.userData.posts[index].imageUrl
+                      : searchState!.posts[index].imageUrl,
               fit: BoxFit.fill,
               placeholder: (context, val) {
                 return const Center(
@@ -122,7 +139,11 @@ class PostTile extends StatelessWidget {
                 fontSize: 14,
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                text: "${state.userdata.posts[index].likes} likes",
+                text: searchState == null
+                    ? "${profileState!.userData.posts[index].likes} likes"
+                    : searchState!.usersPosts
+                        ? "${searchState!.userData.posts[index].likes} likes"
+                        : "${searchState!.posts[index].likes} likes",
               ),
             ),
           ),
@@ -139,7 +160,11 @@ class PostTile extends StatelessWidget {
                     fontSize: 14,
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
-                    text: state.userdata.username,
+                    text: searchState == null
+                        ? profileState!.userData.username
+                        : searchState!.usersPosts
+                            ? searchState!.userData.username
+                            : searchState!.posts[index].username,
                   ),
                   SizedBox(
                     width: width * 0.02,
@@ -148,7 +173,11 @@ class PostTile extends StatelessWidget {
                     fontSize: 14,
                     color: Colors.white,
                     fontWeight: FontWeight.normal,
-                    text: state.userdata.posts[index].caption,
+                    text: searchState == null
+                        ? profileState!.userData.posts[index].caption
+                        : searchState!.usersPosts
+                            ? searchState!.userData.posts[index].caption
+                            : searchState!.posts[index].caption,
                   ),
                 ],
               ),
@@ -157,5 +186,6 @@ class PostTile extends StatelessWidget {
         ],
       ),
     );
+    ;
   }
 }

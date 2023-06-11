@@ -384,19 +384,34 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                   crossAxisSpacing: 4.0,
                                                   mainAxisSpacing: 4.0),
                                           itemBuilder: ((context, index) {
-                                            return CachedNetworkImage(
-                                              imageUrl: state.userData
-                                                  .posts[index].imageUrl,
-                                              fit: BoxFit.fill,
-                                              placeholder: (context, val) {
-                                                return const Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    strokeWidth: 1,
-                                                    color: Colors.white,
-                                                  ),
-                                                );
+                                            return InkWell(
+                                              onTap: () async {
+                                                var bloc =
+                                                    context.read<SearchBloc>();
+                                                bloc.add(PostsIndexChangeEvent(
+                                                    index, true));
+                                                await bloc.pageController
+                                                    .animateToPage(3,
+                                                        duration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    200),
+                                                        curve: Curves.ease);
                                               },
+                                              child: CachedNetworkImage(
+                                                imageUrl: state.userData
+                                                    .posts[index].imageUrl,
+                                                fit: BoxFit.fill,
+                                                placeholder: (context, val) {
+                                                  return const Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 1,
+                                                      color: Colors.white,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                             );
                                           }),
                                         ),

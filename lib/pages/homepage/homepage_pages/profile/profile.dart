@@ -6,7 +6,7 @@ import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/edit_profile.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/profile/user_posts.dart';
+import 'package:instagram_clone/widgets/user_posts.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
@@ -54,10 +54,10 @@ class _ProfilePageState extends State<ProfilePage>
                 BlocBuilder<ProfileBloc, ProfileState>(
                   builder: (context, state) {
                     return Switch(
-                      value: state.userdata.private,
+                      value: state.userData.private,
                       onChanged: (val) {
                         UserData userData =
-                            bloc.state.userdata.copyWith(private: val);
+                            bloc.state.userData.copyWith(private: val);
                         bloc.add(ProfilePrivateEvent(userData));
                       },
                       activeColor: Colors.white,
@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage>
                     fontSize: 18,
                     color: Colors.white,
                     fontWeight: FontWeight.normal,
-                    text: bloc.state.userdata.username),
+                    text: bloc.state.userData.username),
                 InstaButton(
                     borderWidth: 0.5,
                     onPressed: () {
@@ -120,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage>
                         child: const LoginPage(),
                       )));
             } else if (state is ProfilePrivateState) {
-              if (state.userdata.private) {
+              if (state.userData.private) {
                 Navigator.of(context).pop();
                 const InstaSnackbar(text: "Your profile is now Private!!!")
                     .show(context);
@@ -152,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage>
                           fontSize: 20,
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
-                          text: state.userdata.username),
+                          text: state.userData.username),
                     ),
                   ),
                   actions: [
@@ -197,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 width: height * 0.13,
                                 wantBorder: true,
                                 storyAdder: false,
-                                imageUrl: state.userdata.profilePhotoUrl,
+                                imageUrl: state.userData.profilePhotoUrl,
                               ),
                               SizedBox(
                                 width: width * 0.1,
@@ -210,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage>
                                         fontSize: 16,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
-                                        text: state.userdata.posts.length
+                                        text: state.userData.posts.length
                                             .toString(),
                                       ),
                                       const InstaText(
@@ -229,7 +229,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           fontSize: 16,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
-                                          text: state.userdata.followers
+                                          text: state.userData.followers
                                               .toString()),
                                       const InstaText(
                                           fontSize: 13,
@@ -247,7 +247,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           fontSize: 16,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
-                                          text: state.userdata.following
+                                          text: state.userData.following
                                               .toString()),
                                       const InstaText(
                                           fontSize: 13,
@@ -272,7 +272,7 @@ class _ProfilePageState extends State<ProfilePage>
                                     fontSize: 12,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
-                                    text: state.userdata.name),
+                                    text: state.userData.name),
                                 SizedBox(
                                   height: height * 0.003,
                                 ),
@@ -280,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage>
                                     fontSize: 12,
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal,
-                                    text: state.userdata.bio),
+                                    text: state.userData.bio),
                                 SizedBox(
                                   height: height * 0.003,
                                 ),
@@ -288,7 +288,7 @@ class _ProfilePageState extends State<ProfilePage>
                                     fontSize: 12,
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal,
-                                    text: state.userdata.tagline),
+                                    text: state.userData.tagline),
                               ],
                             ),
                           ),
@@ -345,7 +345,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 width: width * 0.7,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: state.userdata.stories.length,
+                                  itemCount: state.userData.stories.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding:
@@ -425,7 +425,7 @@ class _ProfilePageState extends State<ProfilePage>
                         physics: const NeverScrollableScrollPhysics(),
                         controller: tabController,
                         children: [
-                          state.userdata.posts.isEmpty
+                          state.userData.posts.isEmpty
                               ? Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -457,7 +457,7 @@ class _ProfilePageState extends State<ProfilePage>
                                   ),
                                 )
                               : GridView.builder(
-                                  itemCount: state.userdata.posts.length,
+                                  itemCount: state.userData.posts.length,
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 3,
@@ -476,7 +476,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       },
                                       child: CachedNetworkImage(
                                         imageUrl: state
-                                            .userdata.posts[index].imageUrl,
+                                            .userData.posts[index].imageUrl,
                                         fit: BoxFit.fill,
                                         placeholder: (context, val) {
                                           return const Center(
@@ -537,7 +537,9 @@ class _ProfilePageState extends State<ProfilePage>
         ),
         BlocProvider.value(
           value: context.read<ProfileBloc>(),
-          child: const UserPosts(),
+          child: const UserPosts(
+            inProfile: true,
+          ),
         ),
       ],
     );

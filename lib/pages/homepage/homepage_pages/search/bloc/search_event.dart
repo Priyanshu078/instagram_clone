@@ -31,3 +31,12 @@ class TabChangeEvent extends SearchEvent {
   @override
   List<Object> get props => [tabIndex];
 }
+
+class PostsIndexChangeEvent extends SearchEvent {
+  final int postIndex;
+  final bool usersPosts;
+  const PostsIndexChangeEvent(this.postIndex, this.usersPosts);
+
+  @override
+  List<Object> get props => [postIndex, usersPosts];
+}

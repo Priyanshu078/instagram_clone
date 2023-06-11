@@ -27,17 +27,17 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
     nameController.text =
-        BlocProvider.of<ProfileBloc>(context).state.userdata.name;
+        BlocProvider.of<ProfileBloc>(context).state.userData.name;
     usernameController.text =
-        BlocProvider.of<ProfileBloc>(context).state.userdata.username;
+        BlocProvider.of<ProfileBloc>(context).state.userData.username;
     bioController.text =
-        BlocProvider.of<ProfileBloc>(context).state.userdata.bio;
+        BlocProvider.of<ProfileBloc>(context).state.userData.bio;
     taglineController.text =
-        BlocProvider.of<ProfileBloc>(context).state.userdata.tagline;
+        BlocProvider.of<ProfileBloc>(context).state.userData.tagline;
     contactController.text =
-        BlocProvider.of<ProfileBloc>(context).state.userdata.contact;
+        BlocProvider.of<ProfileBloc>(context).state.userData.contact;
     genderController.text =
-        BlocProvider.of<ProfileBloc>(context).state.userdata.gender == 1
+        BlocProvider.of<ProfileBloc>(context).state.userData.gender == 1
             ? "Male"
             : "Female";
   }
@@ -49,7 +49,7 @@ class _EditProfileState extends State<EditProfile> {
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is UserDataEdited) {
-          Navigator.of(context).pop(state.userdata.profilePhotoUrl);
+          Navigator.of(context).pop(state.userData.profilePhotoUrl);
         }
       },
       child: Scaffold(
@@ -66,7 +66,7 @@ class _EditProfileState extends State<EditProfile> {
                   String imageUrl = context
                       .read<ProfileBloc>()
                       .state
-                      .userdata
+                      .userData
                       .profilePhotoUrl;
                   Navigator.of(context).pop(imageUrl);
                 },
@@ -92,20 +92,20 @@ class _EditProfileState extends State<EditProfile> {
                 onPressed: () {
                   var bloc = context.read<ProfileBloc>();
                   UserData userData = UserData(
-                    bloc.state.userdata.id,
+                    bloc.state.userData.id,
                     nameController.text,
                     usernameController.text,
-                    bloc.state.userdata.contact,
-                    bloc.state.userdata.password,
-                    bloc.state.userdata.gender,
+                    bloc.state.userData.contact,
+                    bloc.state.userData.password,
+                    bloc.state.userData.gender,
                     bioController.text,
                     taglineController.text,
-                    bloc.state.userdata.posts,
-                    bloc.state.userdata.stories,
-                    bloc.state.userdata.followers,
-                    bloc.state.userdata.following,
-                    bloc.state.userdata.profilePhotoUrl,
-                    bloc.state.userdata.private,
+                    bloc.state.userData.posts,
+                    bloc.state.userData.stories,
+                    bloc.state.userData.followers,
+                    bloc.state.userData.following,
+                    bloc.state.userData.profilePhotoUrl,
+                    bloc.state.userData.private,
                   );
                   const InstaSnackbar(text: "Saving, Please wait !!!")
                       .show(context);
@@ -132,7 +132,7 @@ class _EditProfileState extends State<EditProfile> {
                     return Align(
                       alignment: Alignment.center,
                       child: ProfileWidget(
-                        url: state.userdata.profilePhotoUrl,
+                        url: state.userData.profilePhotoUrl,
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
@@ -145,7 +145,7 @@ class _EditProfileState extends State<EditProfile> {
                     return Align(
                       alignment: Alignment.center,
                       child: ProfileWidget(
-                        url: state.userdata.profilePhotoUrl,
+                        url: state.userData.profilePhotoUrl,
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
@@ -158,12 +158,12 @@ class _EditProfileState extends State<EditProfile> {
                     return Align(
                       alignment: Alignment.center,
                       child: ProfileWidget(
-                        url: state.userdata.profilePhotoUrl,
+                        url: state.userData.profilePhotoUrl,
                         height: height * 0.15,
                         width: height * 0.15,
                         wantBorder: true,
                         photoSelected:
-                            state.userdata.profilePhotoUrl.isNotEmpty,
+                            state.userData.profilePhotoUrl.isNotEmpty,
                         editProfileImage: true,
                         loading: false,
                       ),
@@ -175,7 +175,7 @@ class _EditProfileState extends State<EditProfile> {
                 style: TextButton.styleFrom(foregroundColor: Colors.black),
                 onPressed: () {
                   var bloc = context.read<ProfileBloc>();
-                  bloc.add(ChangeProfilePhotoEvent(bloc.state.userdata));
+                  bloc.add(ChangeProfilePhotoEvent(bloc.state.userData));
                 },
                 child: InstaText(
                     fontSize: 13,

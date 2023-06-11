@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/widgets/user_posts.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/user_profile.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
@@ -73,7 +74,8 @@ class _SearchPageState extends State<SearchPage> {
                     strokeWidth: 1,
                   ),
                 );
-              } else if (state is PostsFetched) {
+              } else if (state is PostsFetched ||
+                  state is PostIndexChangedState) {
                 return SizedBox(
                   width: width,
                   height: height,
@@ -86,17 +88,28 @@ class _SearchPageState extends State<SearchPage> {
                       crossAxisSpacing: 4,
                     ),
                     itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: state.posts[index].imageUrl,
-                        fit: BoxFit.fill,
-                        placeholder: (context, val) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 1,
-                              color: Colors.white,
-                            ),
+                      return InkWell(
+                        onTap: () async {
+                          var bloc = context.read<SearchBloc>();
+                          bloc.add(PostsIndexChangeEvent(index, false));
+                          await bloc.pageController.animateToPage(
+                            2,
+                            duration: const Duration(milliseconds: 100),
+                            curve: Curves.ease,
                           );
                         },
+                        child: CachedNetworkImage(
+                          imageUrl: state.posts[index].imageUrl,
+                          fit: BoxFit.fill,
+                          placeholder: (context, val) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1,
+                                color: Colors.white,
+                              ),
+                            );
+                          },
+                        ),
                       );
                     },
                   ),
@@ -162,6 +175,10 @@ class _SearchPageState extends State<SearchPage> {
           child: UserProfilePage(
             pageController: context.read<SearchBloc>().pageController,
           ),
+        ),
+        BlocProvider.value(
+          value: context.read<SearchBloc>(),
+          child: const UserPosts(inProfile: false),
         )
       ],
     );

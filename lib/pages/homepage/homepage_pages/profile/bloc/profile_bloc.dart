@@ -22,9 +22,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<LogoutEvent>((event, emit) => logout(event, emit));
     on<ProfilePrivateEvent>((event, emit) => changeProfileStatus(event, emit));
     on<TabChangeEvent>((event, emit) => emit(
-        TabChangedState(state.userdata, event.tabIndex, state.postsIndex)));
+        TabChangedState(state.userData, event.tabIndex, state.postsIndex)));
     on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedState(
-        state.userdata, state.tabIndex, event.postIndex)));
+        state.userData, state.tabIndex, event.postIndex)));
   }
 
   final PageController pageController;
@@ -41,7 +41,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> logout(LogoutEvent event, Emitter emit) async {
     var sharedPrefernces = await SharedPreferences.getInstance();
     await sharedPrefernces.clear();
-    emit(LogoutDoneState(state.userdata, state.tabIndex, state.postsIndex));
+    emit(LogoutDoneState(state.userData, state.tabIndex, state.postsIndex));
   }
 
   Future<void> getUserDetails(GetUserDetails event, Emitter emit) async {
