@@ -48,7 +48,7 @@ class PostTile extends StatelessWidget {
                             ? profileState!.userData.profilePhotoUrl
                             : searchState!.usersPosts
                                 ? searchState!.userData.profilePhotoUrl
-                                : searchState!.posts[index].imageUrl,
+                                : searchState!.posts[index].userProfilePhotoUrl,
                       ),
                     ),
                     SizedBox(

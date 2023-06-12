@@ -48,13 +48,13 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       await imageLocationRef.putFile(image);
       var imageUrl = await imageLocationRef.getDownloadURL();
       Post post = Post(
-        username: username,
-        imageUrl: imageUrl,
-        likes: 0,
-        comments: [],
-        caption: caption,
-        userId: userId,
-      );
+          username: username,
+          imageUrl: imageUrl,
+          likes: 0,
+          comments: [],
+          caption: caption,
+          userId: userId,
+          userProfilePhotoUrl: event.userProfilePhotoUrl);
       List<Post> posts = userData.posts;
       List newPosts = posts.map((post) => post.toJson()).toList();
       newPosts.add(post.toJson());

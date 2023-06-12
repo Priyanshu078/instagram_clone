@@ -13,8 +13,9 @@ class CancelEvent extends PostsEvent {}
 
 class PostImage extends PostsEvent {
   final String caption;
-  const PostImage(this.caption);
+  final String userProfilePhotoUrl;
+  const PostImage(this.caption, this.userProfilePhotoUrl);
 
   @override
-  List<Object> get props => [caption];
+  List<Object> get props => [caption, userProfilePhotoUrl];
 }

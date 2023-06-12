@@ -1,4 +1,5 @@
 class Post {
+  String userProfilePhotoUrl;
   String username;
   String imageUrl;
   int likes;
@@ -13,6 +14,7 @@ class Post {
     required this.comments,
     required this.caption,
     required this.userId,
+    required this.userProfilePhotoUrl,
   });
 
   Post copyWith({
@@ -22,6 +24,7 @@ class Post {
     List<String>? comments,
     String? caption,
     String? userId,
+    String? userProfilePhotoUrl,
   }) {
     return Post(
       username: username ?? this.username,
@@ -30,6 +33,7 @@ class Post {
       comments: comments ?? this.comments,
       caption: caption ?? this.caption,
       userId: userId ?? this.userId,
+      userProfilePhotoUrl: userProfilePhotoUrl ?? this.userProfilePhotoUrl,
     );
   }
 
@@ -41,6 +45,7 @@ class Post {
       comments: json["comments"],
       caption: json["caption"],
       userId: json['userId'],
+      userProfilePhotoUrl: json['userProfilePhotoUrl'],
     );
   }
 
@@ -52,6 +57,7 @@ class Post {
       "comments": comments,
       "caption": caption,
       "userId": userId,
+      "userProfilePhotoUrl": userProfilePhotoUrl,
     };
   }
 }

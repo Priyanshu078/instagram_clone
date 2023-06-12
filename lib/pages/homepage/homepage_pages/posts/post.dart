@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import '../../../../widgets/instatext.dart';
@@ -120,7 +121,14 @@ class _PostPageState extends State<PostPage> {
                           width: width * 0.4,
                           onPressed: () {
                             String caption = captionController.text;
-                            context.read<PostsBloc>().add(PostImage(caption));
+                            String userProfilePhotoUrl = context
+                                .read<HomepageBloc>()
+                                .state
+                                .homePageData
+                                .url;
+                            context
+                                .read<PostsBloc>()
+                                .add(PostImage(caption, userProfilePhotoUrl));
                           },
                           text: "Post",
                           fontSize: 14,

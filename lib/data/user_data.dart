@@ -85,13 +85,13 @@ class UserData {
       List<Post>.from(
         json['posts'].map(
           (post) => Post(
-            username: post['username'],
-            imageUrl: post['imageUrl'],
-            likes: post['likes'],
-            comments: post['comments'],
-            caption: post['caption'],
-            userId: post['userId'],
-          ),
+              username: post['username'],
+              imageUrl: post['imageUrl'],
+              likes: post['likes'],
+              comments: post['comments'],
+              caption: post['caption'],
+              userId: post['userId'],
+              userProfilePhotoUrl: post['userProfilePhotoUrl']),
         ),
       ),
       json['stories'],
