@@ -40,11 +40,14 @@ class UserPosts extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        title: const InstaText(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            text: "Posts"),
+        title: InstaText(
+          fontSize: 20,
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          text: (inProfile || context.read<SearchBloc>().state.usersPosts)
+              ? "Posts"
+              : "Explore",
+        ),
       ),
       body: inProfile
           ? BlocBuilder<ProfileBloc, ProfileState>(
