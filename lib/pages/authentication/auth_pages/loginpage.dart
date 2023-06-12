@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       BlocProvider(
-                        create: (context) => FeedBloc(),
+                        create: (context) => FeedBloc()..add(GetFeed()),
                       )
                     ],
                     child: const HomePage(),

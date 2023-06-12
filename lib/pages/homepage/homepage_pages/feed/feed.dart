@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/chat_page.dart';
-import 'package:instagram_clone/widgets/instatext.dart';
-
+import 'package:instagram_clone/widgets/post_tile.dart';
 import 'bloc/feed_bloc.dart';
 
 class FeedPage extends StatelessWidget {
@@ -12,6 +11,7 @@ class FeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -38,13 +38,19 @@ class FeedPage extends StatelessWidget {
       ),
       body: BlocBuilder<FeedBloc, FeedState>(
         builder: (context, state) {
-          if (state is FeedInitial) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 1,
-              ),
-            );
+          if (state is PostsFetched) {
+            return ListView.builder(
+                itemCount: state.posts.length,
+                itemBuilder: (context, index) {
+                  return PostTile(
+                    width: width,
+                    height: height,
+                    profileState: null,
+                    searchState: null,
+                    index: index,
+                    feedState: state,
+                  );
+                });
           } else {
             return const Center(
               child: CircularProgressIndicator(

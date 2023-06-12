@@ -11,6 +11,7 @@ import '../authentication/auth_pages/loginpage.dart';
 import '../authentication/bloc/auth_bloc.dart';
 import 'splash_cubit/splash_cubit.dart';
 import 'splash_cubit/splash_state.dart';
+import '';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -47,7 +48,7 @@ class SplashScreen extends StatelessWidget {
                     ),
                   ),
                   BlocProvider(
-                    create: (context) => FeedBloc(),
+                    create: (context) => FeedBloc()..add(GetFeed()),
                   )
                 ],
                 child: const HomePage(),

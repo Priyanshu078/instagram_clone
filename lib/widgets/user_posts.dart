@@ -62,6 +62,7 @@ class UserPosts extends StatelessWidget {
                       profileState: state,
                       searchState: null,
                       index: index,
+                      feedState: null,
                     );
                   },
                 );
@@ -81,6 +82,7 @@ class UserPosts extends StatelessWidget {
                       profileState: null,
                       searchState: state,
                       index: index,
+                      feedState: null,
                     );
                   },
                 );

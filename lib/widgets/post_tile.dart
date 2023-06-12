@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
 
@@ -13,12 +14,14 @@ class PostTile extends StatelessWidget {
       required this.height,
       required this.profileState,
       required this.searchState,
-      required this.index});
+      required this.index,
+      required this.feedState});
 
   final double width;
   final double height;
   final ProfileState? profileState;
   final SearchState? searchState;
+  final FeedState? feedState;
   final int index;
 
   @override
@@ -46,9 +49,12 @@ class PostTile extends StatelessWidget {
                         storyAdder: false,
                         imageUrl: searchState == null
                             ? profileState!.userData.profilePhotoUrl
-                            : searchState!.usersPosts
-                                ? searchState!.userData.profilePhotoUrl
-                                : searchState!.posts[index].userProfilePhotoUrl,
+                            : feedState == null
+                                ? searchState!.usersPosts
+                                    ? searchState!.userData.profilePhotoUrl
+                                    : searchState!
+                                        .posts[index].userProfilePhotoUrl
+                                : feedState!.posts[index].userProfilePhotoUrl,
                       ),
                     ),
                     SizedBox(
@@ -62,9 +68,11 @@ class PostTile extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         text: searchState == null
                             ? profileState!.userData.username
-                            : searchState!.usersPosts
-                                ? searchState!.userData.username
-                                : searchState!.posts[index].username,
+                            : feedState == null
+                                ? searchState!.usersPosts
+                                    ? searchState!.userData.username
+                                    : searchState!.posts[index].username
+                                : feedState!.posts[index].username,
                       ),
                     )
                   ],
@@ -77,9 +85,11 @@ class PostTile extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: searchState == null
                   ? profileState!.userData.posts[index].imageUrl
-                  : searchState!.usersPosts
-                      ? searchState!.userData.posts[index].imageUrl
-                      : searchState!.posts[index].imageUrl,
+                  : feedState == null
+                      ? searchState!.usersPosts
+                          ? searchState!.userData.posts[index].imageUrl
+                          : searchState!.posts[index].imageUrl
+                      : feedState!.posts[index].imageUrl,
               fit: BoxFit.fill,
               placeholder: (context, val) {
                 return const Center(
@@ -141,9 +151,11 @@ class PostTile extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 text: searchState == null
                     ? "${profileState!.userData.posts[index].likes} likes"
-                    : searchState!.usersPosts
-                        ? "${searchState!.userData.posts[index].likes} likes"
-                        : "${searchState!.posts[index].likes} likes",
+                    : feedState == null
+                        ? searchState!.usersPosts
+                            ? "${searchState!.userData.posts[index].likes} likes"
+                            : "${searchState!.posts[index].likes} likes"
+                        : "${feedState!.posts[index].likes} likes",
               ),
             ),
           ),
@@ -162,9 +174,11 @@ class PostTile extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     text: searchState == null
                         ? profileState!.userData.username
-                        : searchState!.usersPosts
-                            ? searchState!.userData.username
-                            : searchState!.posts[index].username,
+                        : feedState == null
+                            ? searchState!.usersPosts
+                                ? searchState!.userData.username
+                                : searchState!.posts[index].username
+                            : feedState!.posts[index].username,
                   ),
                   SizedBox(
                     width: width * 0.02,
@@ -175,9 +189,11 @@ class PostTile extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                     text: searchState == null
                         ? profileState!.userData.posts[index].caption
-                        : searchState!.usersPosts
-                            ? searchState!.userData.posts[index].caption
-                            : searchState!.posts[index].caption,
+                        : feedState == null
+                            ? searchState!.usersPosts
+                                ? searchState!.userData.posts[index].caption
+                                : searchState!.posts[index].caption
+                            : feedState!.posts[index].caption,
                   ),
                 ],
               ),
