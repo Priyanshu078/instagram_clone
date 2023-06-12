@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/bloc/posts_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
@@ -45,6 +46,9 @@ class SplashScreen extends StatelessWidget {
                       TextEditingController(),
                     ),
                   ),
+                  BlocProvider(
+                    create: (context) => FeedBloc(),
+                  )
                 ],
                 child: const HomePage(),
               )

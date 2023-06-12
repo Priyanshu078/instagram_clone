@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/chat_page.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+
+import 'bloc/feed_bloc.dart';
 
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
@@ -34,12 +36,24 @@ class FeedPage extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: InstaText(
-            fontSize: 14,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-            text: "Feed"),
+      body: BlocBuilder<FeedBloc, FeedState>(
+        builder: (context, state) {
+          if (state is FeedInitial) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 1,
+              ),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 1,
+              ),
+            );
+          }
+        },
       ),
     );
   }
