@@ -43,19 +43,18 @@ class PostTile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: ProfilePhoto(
-                        height: height * 0.06,
-                        width: height * 0.065,
-                        wantBorder: false,
-                        storyAdder: false,
-                        imageUrl: searchState == null
-                            ? profileState!.userData.profilePhotoUrl
-                            : feedState == null
-                                ? searchState!.usersPosts
-                                    ? searchState!.userData.profilePhotoUrl
-                                    : searchState!
-                                        .posts[index].userProfilePhotoUrl
-                                : feedState!.posts[index].userProfilePhotoUrl,
-                      ),
+                          height: height * 0.06,
+                          width: height * 0.065,
+                          wantBorder: false,
+                          storyAdder: false,
+                          imageUrl: searchState == null
+                              ? profileState == null
+                                  ? feedState!.posts[index].userProfilePhotoUrl
+                                  : profileState!.userData.profilePhotoUrl
+                              : searchState!.usersPosts
+                                  ? searchState!.userData.profilePhotoUrl
+                                  : searchState!
+                                      .posts[index].userProfilePhotoUrl),
                     ),
                     SizedBox(
                       width: width * 0.02,
@@ -67,12 +66,12 @@ class PostTile extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
                         text: searchState == null
-                            ? profileState!.userData.username
-                            : feedState == null
-                                ? searchState!.usersPosts
-                                    ? searchState!.userData.username
-                                    : searchState!.posts[index].username
-                                : feedState!.posts[index].username,
+                            ? profileState == null
+                                ? feedState!.posts[index].username
+                                : profileState!.userData.username
+                            : searchState!.usersPosts
+                                ? searchState!.userData.username
+                                : searchState!.posts[index].username,
                       ),
                     )
                   ],
@@ -84,12 +83,12 @@ class PostTile extends StatelessWidget {
           Expanded(
             child: CachedNetworkImage(
               imageUrl: searchState == null
-                  ? profileState!.userData.posts[index].imageUrl
-                  : feedState == null
-                      ? searchState!.usersPosts
-                          ? searchState!.userData.posts[index].imageUrl
-                          : searchState!.posts[index].imageUrl
-                      : feedState!.posts[index].imageUrl,
+                  ? profileState == null
+                      ? feedState!.posts[index].imageUrl
+                      : profileState!.userData.posts[index].imageUrl
+                  : searchState!.usersPosts
+                      ? searchState!.userData.posts[index].imageUrl
+                      : searchState!.posts[index].imageUrl,
               fit: BoxFit.fill,
               placeholder: (context, val) {
                 return const Center(
@@ -150,12 +149,12 @@ class PostTile extends StatelessWidget {
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
                 text: searchState == null
-                    ? "${profileState!.userData.posts[index].likes} likes"
-                    : feedState == null
-                        ? searchState!.usersPosts
-                            ? "${searchState!.userData.posts[index].likes} likes"
-                            : "${searchState!.posts[index].likes} likes"
-                        : "${feedState!.posts[index].likes} likes",
+                    ? profileState == null
+                        ? "${feedState!.posts[index].likes} likes"
+                        : "${profileState!.userData.posts[index].likes} likes"
+                    : searchState!.usersPosts
+                        ? "${searchState!.userData.posts[index].likes} likes"
+                        : "${searchState!.posts[index].likes} likes",
               ),
             ),
           ),
@@ -173,12 +172,12 @@ class PostTile extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                     text: searchState == null
-                        ? profileState!.userData.username
-                        : feedState == null
-                            ? searchState!.usersPosts
-                                ? searchState!.userData.username
-                                : searchState!.posts[index].username
-                            : feedState!.posts[index].username,
+                        ? profileState == null
+                            ? feedState!.posts[index].username
+                            : profileState!.userData.username
+                        : searchState!.usersPosts
+                            ? searchState!.userData.username
+                            : searchState!.posts[index].username,
                   ),
                   SizedBox(
                     width: width * 0.02,
@@ -188,12 +187,12 @@ class PostTile extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.normal,
                     text: searchState == null
-                        ? profileState!.userData.posts[index].caption
-                        : feedState == null
-                            ? searchState!.usersPosts
-                                ? searchState!.userData.posts[index].caption
-                                : searchState!.posts[index].caption
-                            : feedState!.posts[index].caption,
+                        ? profileState == null
+                            ? feedState!.posts[index].caption
+                            : profileState!.userData.posts[index].caption
+                        : searchState!.usersPosts
+                            ? searchState!.userData.posts[index].caption
+                            : searchState!.posts[index].caption,
                   ),
                 ],
               ),
