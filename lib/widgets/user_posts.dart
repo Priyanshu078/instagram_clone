@@ -6,12 +6,24 @@ import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../constants/colors.dart';
+
 class UserPosts extends StatelessWidget {
   const UserPosts({
     super.key,
     required this.inProfile,
   });
   final bool inProfile;
+
+  Widget buildBottomSheet(BuildContext context, double height, double width) {
+    return SizedBox(
+      height: height * 0.3,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(width * 0.05, 8.0, width * 0.05, 8.0),
+        child: Column(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +75,21 @@ class UserPosts extends StatelessWidget {
                       searchState: null,
                       index: index,
                       feedState: null,
+                      optionPressed: () {
+                        showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            backgroundColor: textFieldBackgroundColor,
+                            context: context,
+                            builder: (_) => BlocProvider.value(
+                                  value: context.read<ProfileBloc>(),
+                                  child: buildBottomSheet(
+                                    context,
+                                    height,
+                                    width,
+                                  ),
+                                ));
+                      },
                     );
                   },
                 );
@@ -83,6 +110,21 @@ class UserPosts extends StatelessWidget {
                       searchState: state,
                       index: index,
                       feedState: null,
+                      optionPressed: () {
+                        showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            backgroundColor: textFieldBackgroundColor,
+                            context: context,
+                            builder: (_) => BlocProvider.value(
+                                  value: context.read<SearchBloc>(),
+                                  child: buildBottomSheet(
+                                    context,
+                                    height,
+                                    width,
+                                  ),
+                                ));
+                      },
                     );
                   },
                 );

@@ -149,10 +149,11 @@ class _ProfilePageState extends State<ProfilePage>
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: InstaText(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          text: state.userData.username),
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        text: state.userData.username,
+                      ),
                     ),
                   ),
                   actions: [

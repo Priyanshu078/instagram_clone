@@ -8,6 +8,16 @@ import 'bloc/feed_bloc.dart';
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});
 
+  Widget buildBottomSheet(BuildContext context, double height, double width) {
+    return SizedBox(
+      height: height * 0.3,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(width * 0.05, 8.0, width * 0.05, 8.0),
+        child: Column(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -49,6 +59,21 @@ class FeedPage extends StatelessWidget {
                     searchState: null,
                     index: index,
                     feedState: state,
+                    optionPressed: () {
+                      showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          backgroundColor: textFieldBackgroundColor,
+                          context: context,
+                          builder: (_) => BlocProvider.value(
+                                value: context.read<FeedBloc>(),
+                                child: buildBottomSheet(
+                                  context,
+                                  height,
+                                  width,
+                                ),
+                              ));
+                    },
                   );
                 });
           } else {

@@ -8,14 +8,16 @@ import '../pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import '../pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
 
 class PostTile extends StatelessWidget {
-  const PostTile(
-      {super.key,
-      required this.width,
-      required this.height,
-      required this.profileState,
-      required this.searchState,
-      required this.index,
-      required this.feedState});
+  const PostTile({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.profileState,
+    required this.searchState,
+    required this.index,
+    required this.feedState,
+    required this.optionPressed,
+  });
 
   final double width;
   final double height;
@@ -23,6 +25,7 @@ class PostTile extends StatelessWidget {
   final SearchState? searchState;
   final FeedState? feedState;
   final int index;
+  final VoidCallback optionPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +79,13 @@ class PostTile extends StatelessWidget {
                     )
                   ],
                 ),
-                const SizedBox(),
+                IconButton(
+                  onPressed: optionPressed,
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),
