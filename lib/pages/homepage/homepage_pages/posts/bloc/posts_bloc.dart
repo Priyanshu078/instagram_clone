@@ -50,7 +50,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       Post post = Post(
           username: username,
           imageUrl: imageUrl,
-          likes: 0,
+          likes: [],
           comments: [],
           caption: caption,
           userId: userId,

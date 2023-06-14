@@ -159,11 +159,11 @@ class PostTile extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 text: searchState == null
                     ? profileState == null
-                        ? "${feedState!.posts[index].likes} likes"
-                        : "${profileState!.userData.posts[index].likes} likes"
+                        ? "${feedState!.posts[index].likes.length} likes"
+                        : "${profileState!.userData.posts[index].likes.length} likes"
                     : searchState!.usersPosts
-                        ? "${searchState!.userData.posts[index].likes} likes"
-                        : "${searchState!.posts[index].likes} likes",
+                        ? "${searchState!.userData.posts[index].likes.length} likes"
+                        : "${searchState!.posts[index].likes.length} likes",
               ),
             ),
           ),

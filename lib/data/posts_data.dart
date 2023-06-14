@@ -2,7 +2,7 @@ class Post {
   String userProfilePhotoUrl;
   String username;
   String imageUrl;
-  int likes;
+  List likes;
   List comments;
   String caption;
   String userId;
@@ -20,7 +20,7 @@ class Post {
   Post copyWith({
     String? username,
     String? imageUrl,
-    int? likes,
+    List? likes,
     List<String>? comments,
     String? caption,
     String? userId,
