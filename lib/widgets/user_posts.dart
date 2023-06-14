@@ -15,12 +15,85 @@ class UserPosts extends StatelessWidget {
   });
   final bool inProfile;
 
-  Widget buildBottomSheet(BuildContext context, double height, double width) {
+  Widget buildBottomSheet(BuildContext context, double height, double width,
+      bool inProfile, bool userPosts) {
     return SizedBox(
       height: height * 0.3,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(width * 0.05, 8.0, width * 0.05, 8.0),
-        child: Column(),
+        padding: const EdgeInsets.only(
+          top: 16.0,
+          bottom: 16.0,
+        ),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Container(
+                    height: height * 0.09,
+                    width: height * 0.09,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/insta_bookmark.png',
+                        scale: 3.5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4.0,
+                  ),
+                  const InstaText(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    text: "Save",
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Divider(
+              color: Colors.white.withOpacity(0.3),
+            ),
+            (inProfile || userPosts)
+                ? ListTile(
+                    leading: Icon(
+                      Icons.delete,
+                      color: instaRed,
+                    ),
+                    title: InstaText(
+                      fontSize: 17,
+                      color: instaRed,
+                      fontWeight: FontWeight.normal,
+                      text: "Delete",
+                    ),
+                    onTap: () {},
+                  )
+                : ListTile(
+                    leading: const Icon(
+                      Icons.person_remove,
+                      color: Colors.white,
+                    ),
+                    title: const InstaText(
+                      fontSize: 17,
+                      color: Colors.white,
+                      fontWeight: FontWeight.normal,
+                      text: "Unfollow",
+                    ),
+                    onTap: () {},
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -84,10 +157,7 @@ class UserPosts extends StatelessWidget {
                             builder: (_) => BlocProvider.value(
                                   value: context.read<ProfileBloc>(),
                                   child: buildBottomSheet(
-                                    context,
-                                    height,
-                                    width,
-                                  ),
+                                      context, height, width, inProfile, false),
                                 ));
                       },
                     );
@@ -118,11 +188,8 @@ class UserPosts extends StatelessWidget {
                             context: context,
                             builder: (_) => BlocProvider.value(
                                   value: context.read<SearchBloc>(),
-                                  child: buildBottomSheet(
-                                    context,
-                                    height,
-                                    width,
-                                  ),
+                                  child: buildBottomSheet(context, height,
+                                      width, inProfile, state.usersPosts),
                                 ));
                       },
                     );

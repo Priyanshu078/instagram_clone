@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/chat_page.dart';
+import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
 import 'bloc/feed_bloc.dart';
 
@@ -12,8 +13,66 @@ class FeedPage extends StatelessWidget {
     return SizedBox(
       height: height * 0.3,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(width * 0.05, 8.0, width * 0.05, 8.0),
-        child: Column(),
+        padding: const EdgeInsets.only(
+          top: 16.0,
+          bottom: 16.0,
+        ),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Container(
+                    height: height * 0.09,
+                    width: height * 0.09,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/insta_bookmark.png',
+                        scale: 3.5,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4.0,
+                  ),
+                  const InstaText(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    text: "Save",
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Divider(
+              color: Colors.white.withOpacity(0.3),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.person_remove,
+                color: Colors.white,
+              ),
+              title: const InstaText(
+                fontSize: 17,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                text: "Unfollow",
+              ),
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
     );
   }
