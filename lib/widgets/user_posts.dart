@@ -67,8 +67,9 @@ class UserPosts extends StatelessWidget {
             ),
             (inProfile || userPosts)
                 ? ListTile(
+                    minLeadingWidth: 0,
                     leading: Icon(
-                      Icons.delete,
+                      Icons.delete_outline,
                       color: instaRed,
                     ),
                     title: InstaText(
@@ -80,6 +81,7 @@ class UserPosts extends StatelessWidget {
                     onTap: () {},
                   )
                 : ListTile(
+                    minLeadingWidth: 0,
                     leading: const Icon(
                       Icons.person_remove,
                       color: Colors.white,

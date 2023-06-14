@@ -59,6 +59,7 @@ class FeedPage extends StatelessWidget {
               color: Colors.white.withOpacity(0.3),
             ),
             ListTile(
+              minLeadingWidth: 0,
               leading: const Icon(
                 Icons.person_remove,
                 color: Colors.white,
