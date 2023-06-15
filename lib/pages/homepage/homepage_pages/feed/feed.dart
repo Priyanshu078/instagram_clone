@@ -134,6 +134,10 @@ class FeedPage extends StatelessWidget {
                                 ),
                               ));
                     },
+                    likePressed: () {},
+                    commentPressed: () {},
+                    bookmarkPressed: () {},
+                    sharePressed: () {},
                   );
                 });
           } else {

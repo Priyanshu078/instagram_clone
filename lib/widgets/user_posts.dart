@@ -162,6 +162,10 @@ class UserPosts extends StatelessWidget {
                                       context, height, width, inProfile, false),
                                 ));
                       },
+                      likePressed: () {},
+                      commentPressed: () {},
+                      bookmarkPressed: () {},
+                      sharePressed: () {},
                     );
                   },
                 );
@@ -194,6 +198,10 @@ class UserPosts extends StatelessWidget {
                                       width, inProfile, state.usersPosts),
                                 ));
                       },
+                      likePressed: () {},
+                      commentPressed: () {},
+                      bookmarkPressed: () {},
+                      sharePressed: () {},
                     );
                   },
                 );

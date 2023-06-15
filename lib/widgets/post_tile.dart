@@ -17,6 +17,10 @@ class PostTile extends StatelessWidget {
     required this.index,
     required this.feedState,
     required this.optionPressed,
+    required this.likePressed,
+    required this.commentPressed,
+    required this.bookmarkPressed,
+    required this.sharePressed,
   });
 
   final double width;
@@ -26,6 +30,10 @@ class PostTile extends StatelessWidget {
   final FeedState? feedState;
   final int index;
   final VoidCallback optionPressed;
+  final VoidCallback likePressed;
+  final VoidCallback commentPressed;
+  final VoidCallback bookmarkPressed;
+  final VoidCallback sharePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -123,24 +131,24 @@ class PostTile extends StatelessWidget {
                         icon: Image.asset(
                           "assets/images/notification.png",
                         ),
-                        onPressed: () {},
+                        onPressed: likePressed,
                       ),
                       IconButton(
                         icon: Image.asset(
                           "assets/images/insta_comment.png",
                         ),
-                        onPressed: () {},
+                        onPressed: commentPressed,
                       ),
                       IconButton(
                         icon: Image.asset(
                           "assets/images/messanger.png",
                         ),
-                        onPressed: () {},
+                        onPressed: sharePressed,
                       ),
                     ],
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: bookmarkPressed,
                     icon: Image.asset(
                       "assets/images/insta_bookmark.png",
                     ),
