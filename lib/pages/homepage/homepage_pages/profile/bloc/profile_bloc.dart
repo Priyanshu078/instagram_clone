@@ -6,7 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 part 'profile_event.dart';
@@ -25,9 +27,31 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         TabChangedState(state.userData, event.tabIndex, state.postsIndex)));
     on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedState(
         state.userData, state.tabIndex, event.postIndex)));
+    on<LikePostEvent>((event, emit) => likePost(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> likePost(LikePostEvent event, Emitter emit) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    final collectionRef = firebaseFirestore.collection("users");
+    var documentData = collectionRef.doc(userId);
+    List<Post> posts = List.from(state.userData.posts);
+    List likes = posts[event.index].likes;
+    if (likes.contains(userId)) {
+      likes.remove(userId);
+    } else {
+      likes.add(userId);
+    }
+    posts[event.index] =
+        state.userData.posts[event.index].copyWith(likes: likes);
+    UserData userData = state.userData.copyWith(posts: posts);
+    emit(PostLikedState(userData, state.tabIndex, state.postsIndex));
+    await documentData.update({"likes": likes});
+  }
 
   Future<void> changeProfileStatus(
       ProfilePrivateEvent event, Emitter emit) async {

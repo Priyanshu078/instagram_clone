@@ -66,3 +66,10 @@ class PostIndexChangedState extends ProfileState {
   @override
   List<Object> get props => [userData, tabIndex, postsIndex];
 }
+
+class PostLikedState extends ProfileState {
+  const PostLikedState(super.userData, super.tabIndex, super.postsIndex);
+
+  @override
+  List<Object> get props => [userData, tabIndex, postsIndex];
+}

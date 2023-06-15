@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
@@ -37,6 +39,7 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var homePageBloc = context.read<HomepageBloc>();
     return SizedBox(
       height: height - 2.5 * (AppBar().preferredSize.height),
       width: width,
@@ -128,9 +131,39 @@ class PostTile extends StatelessWidget {
                   Row(
                     children: [
                       IconButton(
-                        icon: Image.asset(
-                          "assets/images/notification.png",
-                        ),
+                        icon: searchState != null
+                            ? searchState!.userData.posts[index].likes.contains(
+                                    homePageBloc.sharedPreferences
+                                        .getString("userId"))
+                                ? Image.asset(
+                                    "assets/images/notification_red.png",
+                                  )
+                                : Image.asset(
+                                    "assets/images/notification.png",
+                                  )
+                            : profileState != null
+                                ? profileState!.userData.posts[index].likes
+                                        .contains(homePageBloc.sharedPreferences
+                                            .getString("userId"))
+                                    ? Image.asset(
+                                        "assets/images/notification_red.png",
+                                      )
+                                    : Image.asset(
+                                        "assets/images/notification.png",
+                                      )
+                                : feedState != null
+                                    ? feedState!.posts[index].likes.contains(
+                                            homePageBloc.sharedPreferences
+                                                .getString("userId"))
+                                        ? Image.asset(
+                                            "assets/images/notification_red.png",
+                                          )
+                                        : Image.asset(
+                                            "assets/images/notification.png",
+                                          )
+                                    : Image.asset(
+                                        "assets/images/notification.png",
+                                      ),
                         onPressed: likePressed,
                       ),
                       IconButton(

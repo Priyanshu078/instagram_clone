@@ -162,7 +162,9 @@ class UserPosts extends StatelessWidget {
                                       context, height, width, inProfile, false),
                                 ));
                       },
-                      likePressed: () {},
+                      likePressed: () {
+                        context.read<ProfileBloc>().add(LikePostEvent(index));
+                      },
                       commentPressed: () {},
                       bookmarkPressed: () {},
                       sharePressed: () {},

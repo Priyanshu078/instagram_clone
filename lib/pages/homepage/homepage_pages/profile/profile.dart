@@ -137,7 +137,8 @@ class _ProfilePageState extends State<ProfilePage>
                 state is ProfilePhotoEdited ||
                 state is ProfilePrivateState ||
                 state is TabChangedState ||
-                state is PostIndexChangedState) {
+                state is PostIndexChangedState ||
+                state is PostLikedState) {
               return Scaffold(
                 backgroundColor: textFieldBackgroundColor,
                 appBar: AppBar(

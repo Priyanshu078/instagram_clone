@@ -50,3 +50,11 @@ class PostsIndexChangeEvent extends ProfileEvent {
   @override
   List<Object> get props => [postIndex];
 }
+
+class LikePostEvent extends ProfileEvent {
+  final int index;
+  const LikePostEvent(this.index);
+
+  @override
+  List<Object> get props => [index];
+}
