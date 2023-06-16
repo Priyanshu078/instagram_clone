@@ -50,7 +50,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         state.userData.posts[event.index].copyWith(likes: likes);
     UserData userData = state.userData.copyWith(posts: posts);
     emit(PostLikedState(userData, state.tabIndex, state.postsIndex));
-    await documentData.update({"likes": likes});
+    var value = await documentData.get();
+    var data = value.data()!;
+    data["posts"][event.index]["likes"] = likes;
+    await documentData.update(data);
   }
 
   Future<void> changeProfileStatus(
