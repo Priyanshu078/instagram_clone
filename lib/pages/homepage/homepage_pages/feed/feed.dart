@@ -134,7 +134,9 @@ class FeedPage extends StatelessWidget {
                                 ),
                               ));
                     },
-                    likePressed: () {},
+                    likePressed: () {
+                      context.read<FeedBloc>().add(PostLikeEvent());
+                    },
                     commentPressed: () {},
                     bookmarkPressed: () {},
                     sharePressed: () {},

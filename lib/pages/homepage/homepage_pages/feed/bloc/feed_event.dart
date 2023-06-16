@@ -8,3 +8,5 @@ abstract class FeedEvent extends Equatable {
 }
 
 class GetFeed extends FeedEvent {}
+
+class PostLikeEvent extends FeedEvent {}

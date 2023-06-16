@@ -9,7 +9,10 @@ part 'feed_state.dart';
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
   FeedBloc() : super(const FeedInitial(<Post>[])) {
     on<GetFeed>((event, emit) => getPosts(event, emit));
+    on<PostLikeEvent>((event, emit) => likePost(event, emit));
   }
+
+  Future<void> likePost(PostLikeEvent event, Emitter emit) async {}
 
   Future<void> getPosts(GetFeed event, Emitter emit) async {
     emit(const FeedInitial(<Post>[]));

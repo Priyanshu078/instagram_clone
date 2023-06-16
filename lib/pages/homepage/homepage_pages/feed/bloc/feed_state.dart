@@ -20,3 +20,10 @@ class PostsFetched extends FeedState {
   @override
   List<Object> get props => [posts];
 }
+
+class PostLikedState extends FeedState {
+  const PostLikedState(super.posts);
+
+  @override
+  List<Object> get props => [posts];
+}
