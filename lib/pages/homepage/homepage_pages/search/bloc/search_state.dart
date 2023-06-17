@@ -68,3 +68,12 @@ class PostIndexChangedState extends SearchState {
   List<Object> get props =>
       [posts, usersList, userData, tabIndex, postsIndex, usersPosts];
 }
+
+class LikePostState extends SearchState {
+  const LikePostState(super.posts, super.usersList, super.userData,
+      super.tabIndex, super.postsIndex, super.usersPosts);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts];
+}

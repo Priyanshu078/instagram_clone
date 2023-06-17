@@ -108,7 +108,7 @@ class FeedPage extends StatelessWidget {
       ),
       body: BlocBuilder<FeedBloc, FeedState>(
         builder: (context, state) {
-          if (state is PostsFetched || state is PostLikedState) {
+          if (state is FeedFetched || state is PostLikedState) {
             return ListView.builder(
                 itemCount: state.posts.length,
                 itemBuilder: (context, index) {

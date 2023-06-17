@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notifitcation.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/post.dart';
@@ -55,19 +56,23 @@ class _HomePageState extends State<HomePage> {
           } else if (bloc.pageController.page == 0 ||
               searchBlocState is PostsFetched) {
             context.read<HomepageBloc>().add(TabChange(0));
+            context.read<FeedBloc>().add(const GetFeed(false));
           }
           return false;
         } else if (homePageBlocState.index == 2) {
           context.read<HomepageBloc>().add(TabChange(0));
+          context.read<FeedBloc>().add(const GetFeed(false));
           return false;
         } else if (homePageBlocState.index == 3) {
           context.read<HomepageBloc>().add(TabChange(0));
+          context.read<FeedBloc>().add(const GetFeed(false));
           return false;
         } else if (homePageBlocState.index == 4) {
           if (profileBloc.pageController.page == 1) {
             profileBloc.pageController.jumpToPage(0);
           } else {
             context.read<HomepageBloc>().add(TabChange(0));
+            context.read<FeedBloc>().add(const GetFeed(false));
           }
           return false;
         } else {
@@ -150,7 +155,9 @@ class _HomePageState extends State<HomePage> {
               ],
               onTap: (index) async {
                 context.read<HomepageBloc>().add(TabChange(index));
-                if (index == 1) {
+                if (index == 0) {
+                  context.read<FeedBloc>().add(const GetFeed(false));
+                } else if (index == 1) {
                   var bloc = context.read<SearchBloc>();
                   bloc.add(GetPosts());
                   bloc.searchController.clear();

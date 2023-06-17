@@ -40,3 +40,15 @@ class PostsIndexChangeEvent extends SearchEvent {
   @override
   List<Object> get props => [postIndex, usersPosts];
 }
+
+class SearchLikePostEvent extends SearchEvent {
+  final int postIndex;
+  final bool userPosts;
+  final String userId;
+  final String postId;
+  const SearchLikePostEvent(
+      this.postIndex, this.userPosts, this.userId, this.postId);
+
+  @override
+  List<Object> get props => [postIndex, userPosts, userId, postId];
+}

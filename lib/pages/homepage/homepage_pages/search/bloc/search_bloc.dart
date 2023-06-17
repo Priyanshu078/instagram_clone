@@ -46,6 +46,58 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         state.tabIndex,
         event.postIndex,
         event.usersPosts)));
+    on<SearchLikePostEvent>((event, emit) => likePost(event, emit));
+  }
+
+  Future<void> likePost(SearchLikePostEvent event, Emitter emit) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    String? myUserId = sharedPreferences.getString("userId");
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    final collectionRef = firebaseFirestore.collection("users");
+    if (event.userPosts) {
+      List<Post> posts = List.from(state.userData.posts);
+      List likes = posts[event.postIndex].likes;
+      if (likes.contains(myUserId)) {
+        likes.remove(myUserId);
+      } else {
+        likes.add(myUserId);
+      }
+      posts[event.postIndex] = posts[event.postIndex].copyWith(likes: likes);
+      UserData userData = state.userData.copyWith(posts: posts);
+      emit(LikePostState(state.posts, state.usersList, userData, state.tabIndex,
+          state.postsIndex, state.usersPosts));
+      var docRef = collectionRef.doc(event.userId);
+      var docData = await docRef.get();
+      Map<String, dynamic> userDocData = docData.data()!;
+      userDocData["posts"][event.postIndex]["likes"] = likes;
+      await docRef.update(userDocData);
+    } else {
+      List<Post> posts = List.from(state.posts);
+      List likes = posts[event.postIndex].likes;
+      if (likes.contains(myUserId)) {
+        likes.remove(myUserId);
+      } else {
+        likes.add(myUserId);
+      }
+      posts[event.postIndex] = posts[event.postIndex].copyWith(likes: likes);
+      emit(LikePostState(posts, state.usersList, state.userData, state.tabIndex,
+          state.postsIndex, state.usersPosts));
+      var docsSnapshot =
+          await collectionRef.where("id", isNotEqualTo: myUserId).get();
+      var alldocs = docsSnapshot.docs;
+      for (int i = 0; i < alldocs.length; i++) {
+        Map<String, dynamic> documentData = alldocs[i].data();
+        if (documentData["id"] == event.userId) {
+          for (int j = 0; j < documentData["posts"].length; j++) {
+            if (documentData["posts"][j]["id"] == event.postId) {
+              documentData["posts"][j]["likes"] = likes;
+              await collectionRef.doc(event.userId).set(documentData);
+            }
+          }
+        }
+      }
+    }
   }
 
   Future<void> searchUsers(SearchUsers event, Emitter emit) async {

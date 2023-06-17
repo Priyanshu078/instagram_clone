@@ -57,7 +57,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         posts.add(Post.fromJson(postsList[j]));
       }
     }
-    posts.shuffle();
-    emit(PostsFetched(posts));
+    if (event.atStart) {
+      posts.shuffle();
+    }
+    emit(FeedFetched(posts));
   }
 }

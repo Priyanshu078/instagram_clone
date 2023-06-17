@@ -7,7 +7,13 @@ abstract class FeedEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetFeed extends FeedEvent {}
+class GetFeed extends FeedEvent {
+  final bool atStart;
+  const GetFeed(this.atStart);
+
+  @override
+  List<Object> get props => [atStart];
+}
 
 class PostLikeEvent extends FeedEvent {
   final String postId;

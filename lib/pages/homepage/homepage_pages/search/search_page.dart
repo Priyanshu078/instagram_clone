@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/widgets/user_posts.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/user_profile.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
@@ -75,7 +76,8 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 );
               } else if (state is PostsFetched ||
-                  state is PostIndexChangedState) {
+                  state is PostIndexChangedState ||
+                  state is LikePostState) {
                 return SizedBox(
                   width: width,
                   height: height,

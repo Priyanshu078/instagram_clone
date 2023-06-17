@@ -14,8 +14,8 @@ class FeedInitial extends FeedState {
   List<Object> get props => [posts];
 }
 
-class PostsFetched extends FeedState {
-  const PostsFetched(super.posts);
+class FeedFetched extends FeedState {
+  const FeedFetched(super.posts);
 
   @override
   List<Object> get props => [posts];

@@ -178,7 +178,6 @@ class UserPosts extends StatelessWidget {
             )
           : BlocBuilder<SearchBloc, SearchState>(
               builder: (context, state) {
-                // return Container();
                 return ScrollablePositionedList.builder(
                   initialScrollIndex: state.postsIndex,
                   itemCount: state.usersPosts
@@ -204,11 +203,31 @@ class UserPosts extends StatelessWidget {
                                       width, inProfile, state.usersPosts),
                                 ));
                       },
-                      likePressed: () {},
+                      likePressed: () {
+                        context.read<SearchBloc>().add(SearchLikePostEvent(
+                            index,
+                            state.usersPosts,
+                            state.usersPosts
+                                ? state.userData.id
+                                : state.posts[index].userId,
+                            state.usersPosts
+                                ? state.userData.posts[index].id
+                                : state.posts[index].id));
+                      },
                       commentPressed: () {},
                       bookmarkPressed: () {},
                       sharePressed: () {},
-                      onDoubleTap: () {},
+                      onDoubleTap: () {
+                        context.read<SearchBloc>().add(SearchLikePostEvent(
+                            index,
+                            state.usersPosts,
+                            state.usersPosts
+                                ? state.userData.id
+                                : state.posts[index].userId,
+                            state.usersPosts
+                                ? state.userData.posts[index].id
+                                : state.posts[index].id));
+                      },
                     );
                   },
                 );
