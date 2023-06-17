@@ -178,6 +178,7 @@ class UserPosts extends StatelessWidget {
             )
           : BlocBuilder<SearchBloc, SearchState>(
               builder: (context, state) {
+                // return Container();
                 return ScrollablePositionedList.builder(
                   initialScrollIndex: state.postsIndex,
                   itemCount: state.usersPosts

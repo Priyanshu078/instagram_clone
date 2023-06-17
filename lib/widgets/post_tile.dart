@@ -137,15 +137,25 @@ class PostTile extends StatelessWidget {
                     children: [
                       IconButton(
                         icon: searchState != null
-                            ? searchState!.userData.posts[index].likes.contains(
-                                    homePageBloc.sharedPreferences
-                                        .getString("userId"))
-                                ? Image.asset(
-                                    "assets/images/notification_red.png",
-                                  )
-                                : Image.asset(
-                                    "assets/images/notification.png",
-                                  )
+                            ? searchState!.usersPosts
+                                ? searchState!.userData.posts[index].likes
+                                        .contains(homePageBloc.sharedPreferences
+                                            .getString("userId"))
+                                    ? Image.asset(
+                                        "assets/images/notification_red.png",
+                                      )
+                                    : Image.asset(
+                                        "assets/images/notification.png",
+                                      )
+                                : searchState!.posts[index].likes.contains(
+                                        homePageBloc.sharedPreferences
+                                            .getString("userId"))
+                                    ? Image.asset(
+                                        "assets/images/notification_red.png",
+                                      )
+                                    : Image.asset(
+                                        "assets/images/notification.png",
+                                      )
                             : profileState != null
                                 ? profileState!.userData.posts[index].likes
                                         .contains(homePageBloc.sharedPreferences

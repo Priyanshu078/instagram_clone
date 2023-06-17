@@ -9,4 +9,12 @@ abstract class FeedEvent extends Equatable {
 
 class GetFeed extends FeedEvent {}
 
-class PostLikeEvent extends FeedEvent {}
+class PostLikeEvent extends FeedEvent {
+  final String postId;
+  final int index;
+  final String userId;
+  const PostLikeEvent(this.postId, this.index, this.userId);
+
+  @override
+  List<Object> get props => [postId, index, userId];
+}

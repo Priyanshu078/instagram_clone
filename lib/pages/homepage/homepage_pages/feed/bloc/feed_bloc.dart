@@ -12,7 +12,35 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
   }
 
-  Future<void> likePost(PostLikeEvent event, Emitter emit) async {}
+  Future<void> likePost(PostLikeEvent event, Emitter emit) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    var firestore = FirebaseFirestore.instance;
+    var collectionRef = firestore.collection("users");
+    var docsSnapshot =
+        await collectionRef.where("id", isNotEqualTo: userId).get();
+    var alldocs = docsSnapshot.docs;
+    List<Post> posts = List.from(state.posts);
+    List likes = posts[event.index].likes;
+    if (likes.contains(userId)) {
+      likes.remove(userId);
+    } else {
+      likes.add(userId);
+    }
+    posts[event.index] = posts[event.index].copyWith(likes: likes);
+    emit(PostLikedState(posts));
+    for (int i = 0; i < alldocs.length; i++) {
+      Map<String, dynamic> documentData = alldocs[i].data();
+      if (documentData["id"] == event.userId) {
+        for (int j = 0; j < documentData["posts"].length; j++) {
+          if (documentData["posts"][j]["id"] == event.postId) {
+            documentData["posts"][j]["likes"] = likes;
+            await collectionRef.doc(event.userId).set(documentData);
+          }
+        }
+      }
+    }
+  }
 
   Future<void> getPosts(GetFeed event, Emitter emit) async {
     emit(const FeedInitial(<Post>[]));

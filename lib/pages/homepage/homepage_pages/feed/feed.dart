@@ -108,7 +108,7 @@ class FeedPage extends StatelessWidget {
       ),
       body: BlocBuilder<FeedBloc, FeedState>(
         builder: (context, state) {
-          if (state is PostsFetched) {
+          if (state is PostsFetched || state is PostLikedState) {
             return ListView.builder(
                 itemCount: state.posts.length,
                 itemBuilder: (context, index) {
@@ -135,9 +135,17 @@ class FeedPage extends StatelessWidget {
                               ));
                     },
                     likePressed: () {
-                      context.read<FeedBloc>().add(PostLikeEvent());
+                      context.read<FeedBloc>().add(PostLikeEvent(
+                          state.posts[index].id,
+                          index,
+                          state.posts[index].userId));
                     },
-                    onDoubleTap: () {},
+                    onDoubleTap: () {
+                      context.read<FeedBloc>().add(PostLikeEvent(
+                          state.posts[index].id,
+                          index,
+                          state.posts[index].userId));
+                    },
                     commentPressed: () {},
                     bookmarkPressed: () {},
                     sharePressed: () {},
