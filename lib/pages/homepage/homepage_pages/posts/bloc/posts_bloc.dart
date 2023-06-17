@@ -47,7 +47,9 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       File image = File(state.imagePath);
       await imageLocationRef.putFile(image);
       var imageUrl = await imageLocationRef.getDownloadURL();
+      String postId = const Uuid().v4();
       Post post = Post(
+          id: postId,
           username: username,
           imageUrl: imageUrl,
           likes: [],

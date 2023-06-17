@@ -23,6 +23,7 @@ class PostTile extends StatelessWidget {
     required this.commentPressed,
     required this.bookmarkPressed,
     required this.sharePressed,
+    required this.onDoubleTap,
   });
 
   final double width;
@@ -36,6 +37,7 @@ class PostTile extends StatelessWidget {
   final VoidCallback commentPressed;
   final VoidCallback bookmarkPressed;
   final VoidCallback sharePressed;
+  final VoidCallback onDoubleTap;
 
   @override
   Widget build(BuildContext context) {
@@ -101,23 +103,26 @@ class PostTile extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: CachedNetworkImage(
-              imageUrl: searchState == null
-                  ? profileState == null
-                      ? feedState!.posts[index].imageUrl
-                      : profileState!.userData.posts[index].imageUrl
-                  : searchState!.usersPosts
-                      ? searchState!.userData.posts[index].imageUrl
-                      : searchState!.posts[index].imageUrl,
-              fit: BoxFit.fill,
-              placeholder: (context, val) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1,
-                    color: Colors.white,
-                  ),
-                );
-              },
+            child: GestureDetector(
+              onDoubleTap: onDoubleTap,
+              child: CachedNetworkImage(
+                imageUrl: searchState == null
+                    ? profileState == null
+                        ? feedState!.posts[index].imageUrl
+                        : profileState!.userData.posts[index].imageUrl
+                    : searchState!.usersPosts
+                        ? searchState!.userData.posts[index].imageUrl
+                        : searchState!.posts[index].imageUrl,
+                fit: BoxFit.fill,
+                placeholder: (context, val) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                      color: Colors.white,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           Padding(

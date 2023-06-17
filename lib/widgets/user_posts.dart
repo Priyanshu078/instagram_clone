@@ -165,6 +165,9 @@ class UserPosts extends StatelessWidget {
                       likePressed: () {
                         context.read<ProfileBloc>().add(LikePostEvent(index));
                       },
+                      onDoubleTap: () {
+                        context.read<ProfileBloc>().add(LikePostEvent(index));
+                      },
                       commentPressed: () {},
                       bookmarkPressed: () {},
                       sharePressed: () {},
@@ -204,6 +207,7 @@ class UserPosts extends StatelessWidget {
                       commentPressed: () {},
                       bookmarkPressed: () {},
                       sharePressed: () {},
+                      onDoubleTap: () {},
                     );
                   },
                 );

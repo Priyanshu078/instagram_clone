@@ -85,6 +85,7 @@ class UserData {
       List<Post>.from(
         json['posts'].map(
           (post) => Post(
+              id: post['id'],
               username: post['username'],
               imageUrl: post['imageUrl'],
               likes: post['likes'],

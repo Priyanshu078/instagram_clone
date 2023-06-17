@@ -1,4 +1,5 @@
 class Post {
+  String id;
   String userProfilePhotoUrl;
   String username;
   String imageUrl;
@@ -8,6 +9,7 @@ class Post {
   String userId;
 
   Post({
+    required this.id,
     required this.username,
     required this.imageUrl,
     required this.likes,
@@ -18,6 +20,7 @@ class Post {
   });
 
   Post copyWith({
+    String? id,
     String? username,
     String? imageUrl,
     List? likes,
@@ -27,6 +30,7 @@ class Post {
     String? userProfilePhotoUrl,
   }) {
     return Post(
+      id: id ?? this.id,
       username: username ?? this.username,
       imageUrl: imageUrl ?? this.imageUrl,
       likes: likes ?? this.likes,
@@ -39,6 +43,7 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
+      id: json['id'],
       username: json["username"],
       imageUrl: json["imageUrl"],
       likes: json["likes"],
@@ -51,6 +56,7 @@ class Post {
 
   Map<String, dynamic> toJson() {
     return {
+      "id": id,
       "username": username,
       "imageUrl": imageUrl,
       "likes": likes,

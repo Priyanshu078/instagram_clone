@@ -137,6 +137,7 @@ class FeedPage extends StatelessWidget {
                     likePressed: () {
                       context.read<FeedBloc>().add(PostLikeEvent());
                     },
+                    onDoubleTap: () {},
                     commentPressed: () {},
                     bookmarkPressed: () {},
                     sharePressed: () {},
