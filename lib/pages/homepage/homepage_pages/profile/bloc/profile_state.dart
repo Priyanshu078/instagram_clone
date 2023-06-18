@@ -73,3 +73,19 @@ class PostLikedState extends ProfileState {
   @override
   List<Object> get props => [userData, tabIndex, postsIndex];
 }
+
+class CommentAddedProfileState extends ProfileState {
+  const CommentAddedProfileState(
+      super.userData, super.tabIndex, super.postsIndex);
+
+  @override
+  List<Object> get props => [userData, tabIndex, postsIndex];
+}
+
+class DeletedCommentProfileState extends ProfileState {
+  const DeletedCommentProfileState(
+      super.userData, super.tabIndex, super.postsIndex);
+
+  @override
+  List<Object> get props => [userData, tabIndex, postsIndex];
+}

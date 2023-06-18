@@ -58,3 +58,21 @@ class LikePostEvent extends ProfileEvent {
   @override
   List<Object> get props => [index];
 }
+
+class AddProfileComment extends ProfileEvent {
+  final List<Comments> comments;
+  final int postIndex;
+  final String comment;
+  const AddProfileComment(this.comments, this.postIndex, this.comment);
+
+  @override
+  List<Object> get props => [comments, postIndex, comment];
+}
+
+class DeleteProfileComment extends ProfileEvent {
+  final int postIndex;
+  final int commentIndex;
+  const DeleteProfileComment(this.postIndex, this.commentIndex);
+  @override
+  List<Object> get props => [postIndex, commentIndex];
+}

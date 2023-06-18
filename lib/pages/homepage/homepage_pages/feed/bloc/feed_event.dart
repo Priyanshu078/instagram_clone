@@ -25,11 +25,11 @@ class PostLikeEvent extends FeedEvent {
   List<Object> get props => [postId, index, userId];
 }
 
-class AddComment extends FeedEvent {
+class AddFeedComment extends FeedEvent {
   final List<Comments> comments;
   final int postIndex;
   final String comment;
-  const AddComment(this.comments, this.postIndex, this.comment);
+  const AddFeedComment(this.comments, this.postIndex, this.comment);
 
   @override
   List<Object> get props => [comments, postIndex, comment];

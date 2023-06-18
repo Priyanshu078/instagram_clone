@@ -121,7 +121,7 @@ class UserData {
       "bio": bio,
       "tagline": tagline,
       "stories": stories,
-      "posts": posts,
+      "posts": posts.map((e) => e.toJson()),
       "followers": followers,
       "following": following,
       "profilePhotoUrl": profilePhotoUrl,

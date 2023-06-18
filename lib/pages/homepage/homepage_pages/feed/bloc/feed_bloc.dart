@@ -12,7 +12,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   FeedBloc() : super(const FeedInitial(<Post>[])) {
     on<GetFeed>((event, emit) => getPosts(event, emit));
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
-    on<AddComment>((event, emit) => addComment(event, emit));
+    on<AddFeedComment>((event, emit) => addComment(event, emit));
     on<DeleteFeedComment>((event, emit) => deleteComment(event, emit));
   }
 
@@ -41,7 +41,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     emit(CommentDeletedState(posts));
   }
 
-  Future<void> addComment(AddComment event, Emitter emit) async {
+  Future<void> addComment(AddFeedComment event, Emitter emit) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;

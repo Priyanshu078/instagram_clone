@@ -17,14 +17,14 @@ class CommentPage extends StatefulWidget {
     required this.feedState,
     required this.profileState,
     required this.postIndex,
-    this.sharedPreferences,
+    required this.sharedPreferences,
   });
 
   final SearchState? searchState;
   final FeedState? feedState;
   final ProfileState? profileState;
   final int postIndex;
-  final SharedPreferences? sharedPreferences;
+  final SharedPreferences sharedPreferences;
 
   @override
   State<CommentPage> createState() => _CommentPageState();
@@ -98,7 +98,7 @@ class _CommentPageState extends State<CommentPage> {
                           comments: comments,
                           tileHeight: height * 0.08,
                           height: height,
-                          sharedPreferences: widget.sharedPreferences!,
+                          sharedPreferences: widget.sharedPreferences,
                           search: true,
                           feed: false,
                           profile: false,
@@ -127,7 +127,7 @@ class _CommentPageState extends State<CommentPage> {
                               comments: comments,
                               tileHeight: height * 0.08,
                               height: height,
-                              sharedPreferences: widget.sharedPreferences!,
+                              sharedPreferences: widget.sharedPreferences,
                               profile: true,
                               feed: false,
                               search: false,
@@ -152,7 +152,7 @@ class _CommentPageState extends State<CommentPage> {
                                     state.posts[widget.postIndex].comments);
                                 return CommentList(
                                   postIndex: widget.postIndex,
-                                  sharedPreferences: widget.sharedPreferences!,
+                                  sharedPreferences: widget.sharedPreferences,
                                   width: width,
                                   comments: comments,
                                   tileHeight: height * 0.08,
@@ -169,7 +169,7 @@ class _CommentPageState extends State<CommentPage> {
                               comments: const [],
                               tileHeight: height * 0.08,
                               height: height,
-                              sharedPreferences: widget.sharedPreferences!,
+                              sharedPreferences: widget.sharedPreferences,
                               feed: true,
                               profile: false,
                               search: false,
@@ -201,11 +201,18 @@ class _CommentPageState extends State<CommentPage> {
                   onTap: () {
                     if (widget.searchState != null) {
                     } else if (widget.profileState != null) {
+                      var bloc = context.read<ProfileBloc>();
+                      List<Comments> comments =
+                          bloc.state.userData.posts[widget.postIndex].comments;
+                      bloc.add(AddProfileComment(
+                          comments, widget.postIndex, controller.text));
+                      controller.clear();
+                      FocusManager.instance.primaryFocus!.unfocus();
                     } else if (widget.feedState != null) {
                       var bloc = context.read<FeedBloc>();
                       List<Comments> comments =
                           bloc.state.posts[widget.postIndex].comments;
-                      bloc.add(AddComment(
+                      bloc.add(AddFeedComment(
                           comments, widget.postIndex, controller.text));
                       controller.clear();
                       FocusManager.instance.primaryFocus!.unfocus();

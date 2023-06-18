@@ -6,11 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+
+import 'package:uuid/uuid.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
 
@@ -28,9 +31,48 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedState(
         state.userData, state.tabIndex, event.postIndex)));
     on<LikePostEvent>((event, emit) => likePost(event, emit));
+    on<AddProfileComment>((event, emit) => addComment(event, emit));
+    on<DeleteProfileComment>((event, emit) => deleteComment(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> addComment(AddProfileComment event, Emitter emit) async {
+    List<Comments> existingcomments = List.from(event.comments);
+    String userId = state.userData.id;
+    String profilePhotoUrl = state.userData.profilePhotoUrl;
+    String username = state.userData.username;
+    String id = const Uuid().v4();
+    Comments newComment =
+        Comments(event.comment, profilePhotoUrl, username, userId, id);
+    existingcomments.add(newComment);
+    List<Post> posts = List.from(state.userData.posts);
+    posts[event.postIndex] = state.userData.posts[event.postIndex]
+        .copyWith(comments: existingcomments);
+    UserData userData = state.userData.copyWith(posts: posts);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(userData.toJson());
+    emit(CommentAddedProfileState(userData, state.tabIndex, state.postsIndex));
+  }
+
+  Future<void> deleteComment(DeleteProfileComment event, Emitter emit) async {
+    List<Comments> exisitingComments =
+        List.from(state.userData.posts[event.postIndex].comments);
+    exisitingComments.removeAt(event.commentIndex);
+    List<Post> posts = state.userData.posts;
+    posts[event.postIndex] = state.userData.posts[event.postIndex]
+        .copyWith(comments: exisitingComments);
+    UserData userData = state.userData.copyWith(posts: posts);
+    String userId = state.userData.id;
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(userData.toJson());
+    emit(
+        DeletedCommentProfileState(userData, state.tabIndex, state.postsIndex));
+  }
 
   Future<void> likePost(LikePostEvent event, Emitter emit) async {
     final SharedPreferences sharedPreferences =

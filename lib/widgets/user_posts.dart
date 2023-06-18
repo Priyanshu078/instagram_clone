@@ -6,6 +6,7 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/colors.dart';
 
@@ -169,11 +170,14 @@ class UserPosts extends StatelessWidget {
                       onDoubleTap: () {
                         context.read<ProfileBloc>().add(LikePostEvent(index));
                       },
-                      commentPressed: () {
+                      commentPressed: () async {
+                        var sharedPreferences =
+                            await SharedPreferences.getInstance();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
                                   value: context.read<ProfileBloc>(),
                                   child: CommentPage(
+                                    sharedPreferences: sharedPreferences,
                                     postIndex: index,
                                     profileState: state,
                                     searchState: null,
@@ -226,11 +230,14 @@ class UserPosts extends StatelessWidget {
                                 ? state.userData.posts[index].id
                                 : state.posts[index].id));
                       },
-                      commentPressed: () {
+                      commentPressed: () async {
+                        var sharedPreferences =
+                            await SharedPreferences.getInstance();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
                                   value: context.read<SearchBloc>(),
                                   child: CommentPage(
+                                    sharedPreferences: sharedPreferences,
                                     postIndex: index,
                                     searchState: state,
                                     profileState: null,

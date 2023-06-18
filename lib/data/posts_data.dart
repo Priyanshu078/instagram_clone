@@ -68,7 +68,7 @@ class Post {
       "username": username,
       "imageUrl": imageUrl,
       "likes": likes,
-      "comments": comments,
+      "comments": comments.map((e) => e.toJson()),
       "caption": caption,
       "userId": userId,
       "userProfilePhotoUrl": userProfilePhotoUrl,
