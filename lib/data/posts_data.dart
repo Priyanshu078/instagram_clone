@@ -1,10 +1,12 @@
+import 'package:instagram_clone/data/comment_data.dart';
+
 class Post {
   String id;
   String userProfilePhotoUrl;
   String username;
   String imageUrl;
   List likes;
-  List comments;
+  List<Comments> comments;
   String caption;
   String userId;
 
@@ -24,7 +26,7 @@ class Post {
     String? username,
     String? imageUrl,
     List? likes,
-    List<String>? comments,
+    List<Comments>? comments,
     String? caption,
     String? userId,
     String? userProfilePhotoUrl,
@@ -47,7 +49,8 @@ class Post {
       username: json["username"],
       imageUrl: json["imageUrl"],
       likes: json["likes"],
-      comments: json["comments"],
+      comments: List.from(json["comments"].map((comment) => Comments(
+          json["comment"], json['profilePhotoUrl'], json['username']))),
       caption: json["caption"],
       userId: json['userId'],
       userProfilePhotoUrl: json['userProfilePhotoUrl'],

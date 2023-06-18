@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/chat_page.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
 import 'bloc/feed_bloc.dart';
@@ -146,7 +147,18 @@ class FeedPage extends StatelessWidget {
                           index,
                           state.posts[index].userId));
                     },
-                    commentPressed: () {},
+                    commentPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                                value: context.read<FeedBloc>(),
+                                child: CommentPage(
+                                  feedState: state,
+                                  profileState: null,
+                                  searchState: null,
+                                  postIndex: index,
+                                ),
+                              )));
+                    },
                     bookmarkPressed: () {},
                     sharePressed: () {},
                   );

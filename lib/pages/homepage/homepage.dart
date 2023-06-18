@@ -154,9 +154,12 @@ class _HomePageState extends State<HomePage> {
                     label: "Profile"),
               ],
               onTap: (index) async {
-                context.read<HomepageBloc>().add(TabChange(index));
+                var homePageBloc = context.read<HomepageBloc>();
+                homePageBloc.add(TabChange(index));
                 if (index == 0) {
-                  context.read<FeedBloc>().add(const GetFeed(false));
+                  if (homePageBloc.state.index != 0) {
+                    context.read<FeedBloc>().add(const GetFeed(false));
+                  }
                 } else if (index == 1) {
                   var bloc = context.read<SearchBloc>();
                   bloc.add(GetPosts());

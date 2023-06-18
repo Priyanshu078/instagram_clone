@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -168,7 +169,18 @@ class UserPosts extends StatelessWidget {
                       onDoubleTap: () {
                         context.read<ProfileBloc>().add(LikePostEvent(index));
                       },
-                      commentPressed: () {},
+                      commentPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                                  value: context.read<ProfileBloc>(),
+                                  child: CommentPage(
+                                    postIndex: index,
+                                    profileState: state,
+                                    searchState: null,
+                                    feedState: null,
+                                  ),
+                                )));
+                      },
                       bookmarkPressed: () {},
                       sharePressed: () {},
                     );
@@ -214,7 +226,18 @@ class UserPosts extends StatelessWidget {
                                 ? state.userData.posts[index].id
                                 : state.posts[index].id));
                       },
-                      commentPressed: () {},
+                      commentPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                                  value: context.read<SearchBloc>(),
+                                  child: CommentPage(
+                                    postIndex: index,
+                                    searchState: state,
+                                    profileState: null,
+                                    feedState: null,
+                                  ),
+                                )));
+                      },
                       bookmarkPressed: () {},
                       sharePressed: () {},
                       onDoubleTap: () {
