@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 part 'feed_event.dart';
 part 'feed_state.dart';
 
@@ -12,6 +13,32 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<GetFeed>((event, emit) => getPosts(event, emit));
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
     on<AddComment>((event, emit) => addComment(event, emit));
+    on<DeleteFeedComment>((event, emit) => deleteComment(event, emit));
+  }
+
+  Future<void> deleteComment(DeleteFeedComment event, Emitter emit) async {
+    List<Post> posts = List.from(state.posts);
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    String userId = posts[event.postIndex].userId;
+    var collectionRef = firebaseFirestore.collection("users");
+    var docRef = collectionRef.doc(userId);
+    var documentSnapshot = await docRef.get();
+    var documentData = documentSnapshot.data()!;
+    for (int i = 0; i < documentData["posts"].length; i++) {
+      if (documentData["posts"][i]['id'] == state.posts[event.postIndex].id) {
+        List comments = documentData["posts"][i]['comments'];
+        for (int j = 0; j < comments.length; j++) {
+          if (comments[j]['id'] ==
+              state.posts[event.postIndex].comments[event.commentIndex].id) {
+            comments.removeAt(j);
+            documentData["posts"][i]['comments'] = comments;
+          }
+        }
+      }
+    }
+    posts[event.postIndex].comments.removeAt(event.commentIndex);
+    await docRef.update(documentData);
+    emit(CommentDeletedState(posts));
   }
 
   Future<void> addComment(AddComment event, Emitter emit) async {
@@ -23,8 +50,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String? profilePhotoUrl = sharedPreferences.getString('profilePhotoUrl');
     String? username = sharedPreferences.getString('username');
     String? myUserId = sharedPreferences.getString("userId");
+    String id = const Uuid().v4();
     Comments newComment =
-        Comments(event.comment, profilePhotoUrl, username, myUserId);
+        Comments(event.comment, profilePhotoUrl, username, myUserId, id);
     List<Comments> exisitingComments = event.comments;
     exisitingComments.add(newComment);
     posts[event.postIndex].comments = exisitingComments;

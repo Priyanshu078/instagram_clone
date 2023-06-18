@@ -33,3 +33,9 @@ class CommentAddedState extends FeedState {
   @override
   List<Object> get props => [posts];
 }
+
+class CommentDeletedState extends FeedState {
+  const CommentDeletedState(super.posts);
+  @override
+  List<Object> get props => [posts];
+}

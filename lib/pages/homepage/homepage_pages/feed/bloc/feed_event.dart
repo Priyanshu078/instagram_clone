@@ -34,3 +34,11 @@ class AddComment extends FeedEvent {
   @override
   List<Object> get props => [comments, postIndex, comment];
 }
+
+class DeleteFeedComment extends FeedEvent {
+  final int postIndex;
+  final int commentIndex;
+  const DeleteFeedComment(this.postIndex, this.commentIndex);
+  @override
+  List<Object> get props => [postIndex, commentIndex];
+}

@@ -8,6 +8,7 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search
 import 'package:instagram_clone/widgets/comment_list.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CommentPage extends StatefulWidget {
   const CommentPage({
@@ -16,12 +17,14 @@ class CommentPage extends StatefulWidget {
     required this.feedState,
     required this.profileState,
     required this.postIndex,
+    this.sharedPreferences,
   });
 
   final SearchState? searchState;
   final FeedState? feedState;
   final ProfileState? profileState;
   final int postIndex;
+  final SharedPreferences? sharedPreferences;
 
   @override
   State<CommentPage> createState() => _CommentPageState();
@@ -29,6 +32,7 @@ class CommentPage extends StatefulWidget {
 
 class _CommentPageState extends State<CommentPage> {
   final TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -70,6 +74,7 @@ class _CommentPageState extends State<CommentPage> {
                                   .userProfilePhotoUrl,
                               state.userData.posts[widget.postIndex].username,
                               state.userData.posts[widget.postIndex].userId,
+                              state.userData.posts[widget.postIndex].id,
                             ),
                           );
                           comments.addAll(
@@ -81,16 +86,22 @@ class _CommentPageState extends State<CommentPage> {
                               state.posts[widget.postIndex].userProfilePhotoUrl,
                               state.posts[widget.postIndex].username,
                               state.posts[widget.postIndex].userId,
+                              state.posts[widget.postIndex].id,
                             ),
                           );
                           comments
                               .addAll(state.posts[widget.postIndex].comments);
                         }
                         return CommentList(
+                          postIndex: widget.postIndex,
                           width: width,
                           comments: comments,
                           tileHeight: height * 0.08,
                           height: height,
+                          sharedPreferences: widget.sharedPreferences!,
+                          search: true,
+                          feed: false,
+                          profile: false,
                         );
                       },
                     )
@@ -105,15 +116,21 @@ class _CommentPageState extends State<CommentPage> {
                                     .userProfilePhotoUrl,
                                 state.userData.posts[widget.postIndex].username,
                                 state.userData.posts[widget.postIndex].userId,
+                                state.userData.posts[widget.postIndex].id,
                               ),
                             );
                             comments.addAll(state
                                 .userData.posts[widget.postIndex].comments);
                             return CommentList(
+                              postIndex: widget.postIndex,
                               width: width,
                               comments: comments,
                               tileHeight: height * 0.08,
                               height: height,
+                              sharedPreferences: widget.sharedPreferences!,
+                              profile: true,
+                              feed: false,
+                              search: false,
                             );
                           },
                         )
@@ -128,23 +145,34 @@ class _CommentPageState extends State<CommentPage> {
                                         .userProfilePhotoUrl,
                                     state.posts[widget.postIndex].username,
                                     state.posts[widget.postIndex].userId,
+                                    state.posts[widget.postIndex].id,
                                   ),
                                 );
                                 comments.addAll(
                                     state.posts[widget.postIndex].comments);
                                 return CommentList(
+                                  postIndex: widget.postIndex,
+                                  sharedPreferences: widget.sharedPreferences!,
                                   width: width,
                                   comments: comments,
                                   tileHeight: height * 0.08,
                                   height: height,
+                                  feed: true,
+                                  search: false,
+                                  profile: false,
                                 );
                               },
                             )
                           : CommentList(
+                              postIndex: widget.postIndex,
                               width: width,
                               comments: const [],
                               tileHeight: height * 0.08,
                               height: height,
+                              sharedPreferences: widget.sharedPreferences!,
+                              feed: true,
+                              profile: false,
+                              search: false,
                             ),
             ),
             Row(
@@ -201,5 +229,11 @@ class _CommentPageState extends State<CommentPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

@@ -5,6 +5,7 @@ import 'package:instagram_clone/pages/chat_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'bloc/feed_bloc.dart';
 
 class FeedPage extends StatelessWidget {
@@ -111,7 +112,8 @@ class FeedPage extends StatelessWidget {
         builder: (context, state) {
           if (state is FeedFetched ||
               state is PostLikedState ||
-              state is CommentAddedState) {
+              state is CommentAddedState ||
+              state is CommentDeletedState) {
             return ListView.builder(
                 itemCount: state.posts.length,
                 itemBuilder: (context, index) {
@@ -149,11 +151,14 @@ class FeedPage extends StatelessWidget {
                           index,
                           state.posts[index].userId));
                     },
-                    commentPressed: () {
+                    commentPressed: () async {
+                      var sharedPreferences =
+                          await SharedPreferences.getInstance();
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                                 value: context.read<FeedBloc>(),
                                 child: CommentPage(
+                                  sharedPreferences: sharedPreferences,
                                   feedState: state,
                                   profileState: null,
                                   searchState: null,
