@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'feed_event.dart';
@@ -10,6 +11,15 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   FeedBloc() : super(const FeedInitial(<Post>[])) {
     on<GetFeed>((event, emit) => getPosts(event, emit));
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
+    on<AddComment>((event, emit) => addComment(event, emit));
+  }
+
+  Future<void> addComment(AddComment event, Emitter emit) async {
+    List<Post> posts = List.from(state.posts);
+    // Comments comment = Comments(comment, profilePhotoUrl, username);
+    // event.comments.add();
+    posts[event.postIndex].comments = event.comments;
+    emit(CommentAddedState(posts));
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {

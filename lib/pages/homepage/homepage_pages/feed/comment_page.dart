@@ -9,7 +9,7 @@ import 'package:instagram_clone/widgets/comment_list.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 
-class CommentPage extends StatelessWidget {
+class CommentPage extends StatefulWidget {
   const CommentPage({
     super.key,
     required this.searchState,
@@ -23,6 +23,12 @@ class CommentPage extends StatelessWidget {
   final ProfileState? profileState;
   final int postIndex;
 
+  @override
+  State<CommentPage> createState() => _CommentPageState();
+}
+
+class _CommentPageState extends State<CommentPage> {
+  final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -52,30 +58,31 @@ class CommentPage extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: searchState != null
+              child: widget.searchState != null
                   ? BlocBuilder<SearchBloc, SearchState>(
                       builder: (context, state) {
                         List<Comments> comments = [];
                         if (state.usersPosts) {
                           comments.add(
                             Comments(
-                              state.userData.posts[postIndex].caption,
-                              state.userData.posts[postIndex]
+                              state.userData.posts[widget.postIndex].caption,
+                              state.userData.posts[widget.postIndex]
                                   .userProfilePhotoUrl,
-                              state.userData.posts[postIndex].username,
+                              state.userData.posts[widget.postIndex].username,
                             ),
                           );
-                          comments
-                              .addAll(state.userData.posts[postIndex].comments);
+                          comments.addAll(
+                              state.userData.posts[widget.postIndex].comments);
                         } else {
                           comments.add(
                             Comments(
-                              state.posts[postIndex].caption,
-                              state.posts[postIndex].userProfilePhotoUrl,
-                              state.posts[postIndex].username,
+                              state.posts[widget.postIndex].caption,
+                              state.posts[widget.postIndex].userProfilePhotoUrl,
+                              state.posts[widget.postIndex].username,
                             ),
                           );
-                          comments.addAll(state.posts[postIndex].comments);
+                          comments
+                              .addAll(state.posts[widget.postIndex].comments);
                         }
                         return CommentList(
                           width: width,
@@ -85,20 +92,20 @@ class CommentPage extends StatelessWidget {
                         );
                       },
                     )
-                  : profileState != null
+                  : widget.profileState != null
                       ? BlocBuilder<ProfileBloc, ProfileState>(
                           builder: (context, state) {
                             List<Comments> comments = [];
                             comments.add(
                               Comments(
-                                state.userData.posts[postIndex].caption,
-                                state.userData.posts[postIndex]
+                                state.userData.posts[widget.postIndex].caption,
+                                state.userData.posts[widget.postIndex]
                                     .userProfilePhotoUrl,
-                                state.userData.posts[postIndex].username,
+                                state.userData.posts[widget.postIndex].username,
                               ),
                             );
-                            comments.addAll(
-                                state.userData.posts[postIndex].comments);
+                            comments.addAll(state
+                                .userData.posts[widget.postIndex].comments);
                             return CommentList(
                               width: width,
                               comments: comments,
@@ -107,19 +114,20 @@ class CommentPage extends StatelessWidget {
                             );
                           },
                         )
-                      : feedState != null
+                      : widget.feedState != null
                           ? BlocBuilder<FeedBloc, FeedState>(
                               builder: (context, state) {
                                 List<Comments> comments = [];
                                 comments.add(
                                   Comments(
-                                    state.posts[postIndex].caption,
-                                    state.posts[postIndex].userProfilePhotoUrl,
-                                    state.posts[postIndex].username,
+                                    state.posts[widget.postIndex].caption,
+                                    state.posts[widget.postIndex]
+                                        .userProfilePhotoUrl,
+                                    state.posts[widget.postIndex].username,
                                   ),
                                 );
-                                comments
-                                    .addAll(state.posts[postIndex].comments);
+                                comments.addAll(
+                                    state.posts[widget.postIndex].comments);
                                 return CommentList(
                                   width: width,
                                   comments: comments,
@@ -139,6 +147,7 @@ class CommentPage extends StatelessWidget {
               children: [
                 Expanded(
                     child: InstaTextField(
+                        controller: controller,
                         hintText: "comment",
                         fontSize: 16,
                         color: Colors.white,
@@ -157,7 +166,11 @@ class CommentPage extends StatelessWidget {
                         enabled: true,
                         onChange: (value) {})),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (widget.searchState != null) {
+                    } else if (widget.profileState != null) {
+                    } else if (widget.feedState != null) {}
+                  },
                   child: SizedBox(
                     width: width * 0.15,
                     child: Align(

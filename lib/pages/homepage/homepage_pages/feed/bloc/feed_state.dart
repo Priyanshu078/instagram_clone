@@ -27,3 +27,9 @@ class PostLikedState extends FeedState {
   @override
   List<Object> get props => [posts];
 }
+
+class CommentAddedState extends FeedState {
+  const CommentAddedState(super.posts);
+  @override
+  List<Object> get props => [posts];
+}
