@@ -42,10 +42,11 @@ class CommentList extends StatelessWidget {
                         width: width * 0.03,
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           InstaText(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               text: comments[index].username!),

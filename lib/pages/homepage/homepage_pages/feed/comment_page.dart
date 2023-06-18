@@ -69,6 +69,7 @@ class _CommentPageState extends State<CommentPage> {
                               state.userData.posts[widget.postIndex]
                                   .userProfilePhotoUrl,
                               state.userData.posts[widget.postIndex].username,
+                              state.userData.posts[widget.postIndex].userId,
                             ),
                           );
                           comments.addAll(
@@ -79,6 +80,7 @@ class _CommentPageState extends State<CommentPage> {
                               state.posts[widget.postIndex].caption,
                               state.posts[widget.postIndex].userProfilePhotoUrl,
                               state.posts[widget.postIndex].username,
+                              state.posts[widget.postIndex].userId,
                             ),
                           );
                           comments
@@ -102,6 +104,7 @@ class _CommentPageState extends State<CommentPage> {
                                 state.userData.posts[widget.postIndex]
                                     .userProfilePhotoUrl,
                                 state.userData.posts[widget.postIndex].username,
+                                state.userData.posts[widget.postIndex].userId,
                               ),
                             );
                             comments.addAll(state
@@ -124,6 +127,7 @@ class _CommentPageState extends State<CommentPage> {
                                     state.posts[widget.postIndex]
                                         .userProfilePhotoUrl,
                                     state.posts[widget.postIndex].username,
+                                    state.posts[widget.postIndex].userId,
                                   ),
                                 );
                                 comments.addAll(
@@ -169,7 +173,15 @@ class _CommentPageState extends State<CommentPage> {
                   onTap: () {
                     if (widget.searchState != null) {
                     } else if (widget.profileState != null) {
-                    } else if (widget.feedState != null) {}
+                    } else if (widget.feedState != null) {
+                      var bloc = context.read<FeedBloc>();
+                      List<Comments> comments =
+                          bloc.state.posts[widget.postIndex].comments;
+                      bloc.add(AddComment(
+                          comments, widget.postIndex, controller.text));
+                      controller.clear();
+                      FocusManager.instance.primaryFocus!.unfocus();
+                    }
                   },
                   child: SizedBox(
                     width: width * 0.15,

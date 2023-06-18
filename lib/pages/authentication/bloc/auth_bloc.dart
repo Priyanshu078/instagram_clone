@@ -66,6 +66,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
           var sharedPreferences = await SharedPreferences.getInstance();
           await sharedPreferences.setString("userId", userData.id);
+          await sharedPreferences.setString(
+              "profilePhotoUrl", userData.profilePhotoUrl);
+          await sharedPreferences.setString("username", userData.username);
           if (kDebugMode) {
             print("UserId: ${sharedPreferences.getString("userId")}");
           }

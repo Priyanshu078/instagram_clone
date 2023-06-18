@@ -50,7 +50,10 @@ class Post {
       imageUrl: json["imageUrl"],
       likes: json["likes"],
       comments: List.from(json["comments"].map((comment) => Comments(
-          json["comment"], json['profilePhotoUrl'], json['username']))),
+          comment["comment"],
+          comment['profilePhotoUrl'],
+          comment['username'],
+          comment['userId']))),
       caption: json["caption"],
       userId: json['userId'],
       userProfilePhotoUrl: json['userProfilePhotoUrl'],

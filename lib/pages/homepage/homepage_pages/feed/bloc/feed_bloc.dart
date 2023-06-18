@@ -15,10 +15,33 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   Future<void> addComment(AddComment event, Emitter emit) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    var collectionRef = firebaseFirestore.collection("users");
     List<Post> posts = List.from(state.posts);
-    // Comments comment = Comments(comment, profilePhotoUrl, username);
-    // event.comments.add();
-    posts[event.postIndex].comments = event.comments;
+    String? profilePhotoUrl = sharedPreferences.getString('profilePhotoUrl');
+    String? username = sharedPreferences.getString('username');
+    String? myUserId = sharedPreferences.getString("userId");
+    Comments newComment =
+        Comments(event.comment, profilePhotoUrl, username, myUserId);
+    List<Comments> exisitingComments = event.comments;
+    exisitingComments.add(newComment);
+    posts[event.postIndex].comments = exisitingComments;
+    String userId = posts[event.postIndex].userId;
+    var docRef = collectionRef.doc(userId);
+    var documentSnapshot = await docRef.get();
+    var documentData = documentSnapshot.data()!;
+    for (int i = 0; i < documentData["posts"].length; i++) {
+      if (documentData["posts"][i]["id"] == posts[event.postIndex].id) {
+        List comments = [];
+        for (Comments element in exisitingComments) {
+          comments.add(element.toJson());
+        }
+        documentData["posts"][i]['comments'] = comments;
+      }
+    }
+    await docRef.update(documentData);
     emit(CommentAddedState(posts));
   }
 

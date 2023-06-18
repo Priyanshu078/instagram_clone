@@ -1,3 +1,4 @@
+import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 
 class UserData {
@@ -89,7 +90,11 @@ class UserData {
               username: post['username'],
               imageUrl: post['imageUrl'],
               likes: post['likes'],
-              comments: post['comments'],
+              comments: List.from(post["comments"].map((comment) => Comments(
+                  comment["comment"],
+                  comment['profilePhotoUrl'],
+                  comment['username'],
+                  comment["userId"]))),
               caption: post['caption'],
               userId: post['userId'],
               userProfilePhotoUrl: post['userProfilePhotoUrl']),
