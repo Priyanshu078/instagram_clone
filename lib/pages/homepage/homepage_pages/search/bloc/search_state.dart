@@ -77,3 +77,21 @@ class LikePostState extends SearchState {
   List<Object> get props =>
       [posts, usersList, userData, tabIndex, postsIndex, usersPosts];
 }
+
+class AddedCommentSearchState extends SearchState {
+  const AddedCommentSearchState(super.posts, super.usersList, super.userData,
+      super.tabIndex, super.postsIndex, super.usersPosts);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts];
+}
+
+class DeletedCommentSearchState extends SearchState {
+  const DeletedCommentSearchState(super.posts, super.usersList, super.userData,
+      super.tabIndex, super.postsIndex, super.usersPosts);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts];
+}

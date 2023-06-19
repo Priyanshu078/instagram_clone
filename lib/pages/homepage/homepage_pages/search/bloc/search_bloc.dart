@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 part 'search_event.dart';
 part 'search_state.dart';
 
@@ -47,7 +49,58 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         event.postIndex,
         event.usersPosts)));
     on<SearchLikePostEvent>((event, emit) => likePost(event, emit));
+    on<AddSearchComment>((event, emit) => addComment(event, emit));
+    on<DeleteSearchComment>((event, emit) => deleteComment(event, emit));
   }
+
+  Future<void> addComment(AddSearchComment event, Emitter emit) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    List<Comments> existingComments = List.from(event.comments);
+    String comment = event.comment;
+    String? myUserId = sharedPreferences.getString('userId');
+    String? profilePhotoUrl = sharedPreferences.getString('profilePhotoUrl');
+    String? username = sharedPreferences.getString('username');
+    String id = const Uuid().v4();
+    Comments newComment =
+        Comments(comment, profilePhotoUrl, username, myUserId, id);
+    existingComments.add(newComment);
+    if (state.usersPosts) {
+      List<Post> posts = List.from(state.userData.posts);
+      posts[event.postIndex] =
+          posts[event.postIndex].copyWith(comments: existingComments);
+      UserData userData = state.userData.copyWith(posts: posts);
+      String userId = posts[event.postIndex].userId;
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .update(userData.toJson());
+      emit(AddedCommentSearchState(state.posts, state.usersList, userData,
+          state.tabIndex, state.postsIndex, state.usersPosts));
+    } else {
+      List<Post> posts = List.from(state.posts);
+      posts[event.postIndex] =
+          posts[event.postIndex].copyWith(comments: existingComments);
+      String userId = posts[event.postIndex].userId;
+      String postId = posts[event.postIndex].id;
+      var collectionRef = FirebaseFirestore.instance.collection("users");
+      var documentSnapshot = await collectionRef.doc(userId).get();
+      var documentData = documentSnapshot.data()!;
+      for (int i = 0; i < documentData['posts'].length; i++) {
+        if (documentData['posts'][i]['id'] == postId) {
+          documentData['posts'][i]['comments'] =
+              existingComments.map((comment) => comment.toJson());
+        }
+      }
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .update(documentData);
+      emit(AddedCommentSearchState(posts, state.usersList, state.userData,
+          state.tabIndex, state.postsIndex, state.usersPosts));
+    }
+  }
+
+  Future<void> deleteComment(DeleteSearchComment event, Emitter emit) async {}
 
   Future<void> likePost(SearchLikePostEvent event, Emitter emit) async {
     final SharedPreferences sharedPreferences =

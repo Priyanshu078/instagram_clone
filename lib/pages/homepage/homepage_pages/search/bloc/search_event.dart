@@ -52,3 +52,22 @@ class SearchLikePostEvent extends SearchEvent {
   @override
   List<Object> get props => [postIndex, userPosts, userId, postId];
 }
+
+class DeleteSearchComment extends SearchEvent {
+  final int postIndex;
+  final int commentIndex;
+  const DeleteSearchComment(this.postIndex, this.commentIndex);
+
+  @override
+  List<Object> get props => [postIndex, commentIndex];
+}
+
+class AddSearchComment extends SearchEvent {
+  final List<Comments> comments;
+  final int postIndex;
+  final String comment;
+  const AddSearchComment(this.comments, this.postIndex, this.comment);
+
+  @override
+  List<Object> get props => [comments, postIndex, comment];
+}

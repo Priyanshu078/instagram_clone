@@ -266,6 +266,5 @@ class PostTile extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

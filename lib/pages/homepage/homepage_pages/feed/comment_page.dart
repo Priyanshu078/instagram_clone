@@ -200,23 +200,27 @@ class _CommentPageState extends State<CommentPage> {
                 GestureDetector(
                   onTap: () {
                     if (widget.searchState != null) {
+                      var bloc = context.read<SearchBloc>();
+                      List<Comments> comments = bloc.state.usersPosts
+                          ? bloc.state.userData.posts[widget.postIndex].comments
+                          : bloc.state.posts[widget.postIndex].comments;
+                      bloc.add(AddSearchComment(
+                          comments, widget.postIndex, controller.text));
                     } else if (widget.profileState != null) {
                       var bloc = context.read<ProfileBloc>();
                       List<Comments> comments =
                           bloc.state.userData.posts[widget.postIndex].comments;
                       bloc.add(AddProfileComment(
                           comments, widget.postIndex, controller.text));
-                      controller.clear();
-                      FocusManager.instance.primaryFocus!.unfocus();
                     } else if (widget.feedState != null) {
                       var bloc = context.read<FeedBloc>();
                       List<Comments> comments =
                           bloc.state.posts[widget.postIndex].comments;
                       bloc.add(AddFeedComment(
                           comments, widget.postIndex, controller.text));
-                      controller.clear();
-                      FocusManager.instance.primaryFocus!.unfocus();
                     }
+                    controller.clear();
+                    FocusManager.instance.primaryFocus!.unfocus();
                   },
                   child: SizedBox(
                     width: width * 0.15,
