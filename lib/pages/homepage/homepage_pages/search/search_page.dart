@@ -78,7 +78,8 @@ class _SearchPageState extends State<SearchPage> {
               } else if (state is PostsFetched ||
                   state is PostIndexChangedState ||
                   state is LikePostState ||
-                  state is AddedCommentSearchState) {
+                  state is AddedCommentSearchState ||
+                  state is DeletedCommentSearchState) {
                 return SizedBox(
                   width: width,
                   height: height,

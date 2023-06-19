@@ -100,7 +100,48 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  Future<void> deleteComment(DeleteSearchComment event, Emitter emit) async {}
+  Future<void> deleteComment(DeleteSearchComment event, Emitter emit) async {
+    List<Comments> existingComments = state.usersPosts
+        ? List.from(state.userData.posts[event.postIndex].comments)
+        : List.from(state.posts[event.postIndex].comments);
+    if (state.usersPosts) {
+      existingComments.removeAt(event.commentIndex);
+      List<Post> posts = state.userData.posts;
+      posts[event.postIndex] =
+          posts[event.postIndex].copyWith(comments: existingComments);
+      UserData userData = state.userData.copyWith(posts: posts);
+      String userId = posts[event.postIndex].userId;
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .update(userData.toJson());
+      emit(DeletedCommentSearchState(state.posts, state.usersList, userData,
+          state.tabIndex, state.postsIndex, state.usersPosts));
+    } else {
+      List<Post> posts = List.from(state.posts);
+      String userId = posts[event.postIndex].userId;
+      String commentId =
+          posts[event.postIndex].comments[event.commentIndex].id!;
+      var collectionRef = FirebaseFirestore.instance.collection("users");
+      var docSnapshot = await collectionRef.doc(userId).get();
+      var docData = docSnapshot.data()!;
+      for (int i = 0; i < docData['posts'].length; i++) {
+        List comments = docData['posts'][i]['comments'];
+        for (int j = 0; j < comments.length; j++) {
+          if (comments[j]['id'] == commentId) {
+            comments.removeAt(j);
+            docData['posts'][i]['comments'] = comments;
+          }
+        }
+      }
+      await collectionRef.doc(userId).update(docData);
+      existingComments.removeAt(event.commentIndex);
+      posts[event.postIndex] =
+          posts[event.postIndex].copyWith(comments: existingComments);
+      emit(DeletedCommentSearchState(posts, state.usersList, state.userData,
+          state.tabIndex, state.postsIndex, state.usersPosts));
+    }
+  }
 
   Future<void> likePost(SearchLikePostEvent event, Emitter emit) async {
     final SharedPreferences sharedPreferences =
