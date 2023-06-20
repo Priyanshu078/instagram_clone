@@ -166,7 +166,9 @@ class FeedPage extends StatelessWidget {
                                 ),
                               )));
                     },
-                    bookmarkPressed: () {},
+                    bookmarkPressed: () {
+                      context.read<FeedBloc>().add(BookmarkFeed(index));
+                    },
                     sharePressed: () {},
                   );
                 });

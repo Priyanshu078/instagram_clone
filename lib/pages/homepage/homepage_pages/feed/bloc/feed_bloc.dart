@@ -14,6 +14,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
     on<AddFeedComment>((event, emit) => addComment(event, emit));
     on<DeleteFeedComment>((event, emit) => deleteComment(event, emit));
+    on<BookmarkFeed>((event, emit) => addBookmark(event, emit));
+  }
+
+  Future<void> addBookmark(BookmarkFeed event, Emitter emit) async {
+    List<Post> posts = List.from(state.posts);
   }
 
   Future<void> deleteComment(DeleteFeedComment event, Emitter emit) async {

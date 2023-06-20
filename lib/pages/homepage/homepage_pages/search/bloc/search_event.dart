@@ -71,3 +71,10 @@ class AddSearchComment extends SearchEvent {
   @override
   List<Object> get props => [comments, postIndex, comment];
 }
+
+class BookmarkSearch extends SearchEvent {
+  final int postIndex;
+  const BookmarkSearch(this.postIndex);
+  @override
+  List<Object> get props => [postIndex];
+}

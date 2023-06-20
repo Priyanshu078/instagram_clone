@@ -185,7 +185,9 @@ class UserPosts extends StatelessWidget {
                                   ),
                                 )));
                       },
-                      bookmarkPressed: () {},
+                      bookmarkPressed: () {
+                        context.read<ProfileBloc>().add(BookmarkProfile(index));
+                      },
                       sharePressed: () {},
                     );
                   },
@@ -245,7 +247,9 @@ class UserPosts extends StatelessWidget {
                                   ),
                                 )));
                       },
-                      bookmarkPressed: () {},
+                      bookmarkPressed: () {
+                        context.read<SearchBloc>().add(BookmarkSearch(index));
+                      },
                       sharePressed: () {},
                       onDoubleTap: () {
                         context.read<SearchBloc>().add(SearchLikePostEvent(

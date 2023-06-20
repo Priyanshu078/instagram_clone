@@ -76,3 +76,10 @@ class DeleteProfileComment extends ProfileEvent {
   @override
   List<Object> get props => [postIndex, commentIndex];
 }
+
+class BookmarkProfile extends ProfileEvent {
+  final int postIndex;
+  const BookmarkProfile(this.postIndex);
+  @override
+  List<Object> get props => [postIndex];
+}

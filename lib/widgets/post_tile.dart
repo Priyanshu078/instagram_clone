@@ -197,8 +197,9 @@ class PostTile extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: bookmarkPressed,
-                    icon: Image.asset(
-                      "assets/images/insta_bookmark.png",
+                    icon: const Icon(
+                      Icons.bookmark_outline,
+                      color: Colors.white,
                     ),
                   ),
                 ],
