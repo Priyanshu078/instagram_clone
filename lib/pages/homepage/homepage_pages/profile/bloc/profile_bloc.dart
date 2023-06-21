@@ -33,9 +33,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<LikePostEvent>((event, emit) => likePost(event, emit));
     on<AddProfileComment>((event, emit) => addComment(event, emit));
     on<DeleteProfileComment>((event, emit) => deleteComment(event, emit));
+    on<BookmarkProfile>((event, emit) => addBookmark(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> addBookmark(BookmarkProfile event, Emitter emit) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String myUserId = sharedPreferences.getString("userId")!;
+    List bookmarks = List.from(state.userData.bookmarks);
+    String postId = state.userData.posts[event.postIndex].id;
+    if (bookmarks.contains(postId)) {
+      bookmarks.remove(postId);
+    } else {
+      bookmarks.add(postId);
+    }
+    UserData userData = state.userData.copyWith(bookmarks: bookmarks);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(myUserId)
+        .update(userData.toJson());
+    emit(BookmarkedState(userData, state.tabIndex, state.postsIndex));
+  }
 
   Future<void> addComment(AddProfileComment event, Emitter emit) async {
     List<Comments> existingcomments = List.from(event.comments);

@@ -209,10 +209,35 @@ class PostTile extends StatelessWidget {
                                 CupertinoIcons.bookmark,
                                 color: Colors.white,
                               )
-                        : const Icon(
-                            CupertinoIcons.bookmark,
-                            color: Colors.white,
-                          ),
+                        : profileState != null
+                            ? profileState!.userData.bookmarks.contains(
+                                    profileState!.userData.posts[index].id)
+                                ? const Icon(
+                                    CupertinoIcons.bookmark_fill,
+                                    color: Colors.white,
+                                  )
+                                : const Icon(
+                                    CupertinoIcons.bookmark,
+                                    color: Colors.white,
+                                  )
+                            : searchState != null
+                                ? searchState!.myData.bookmarks.contains(
+                                        searchState!.usersPosts
+                                            ? searchState!
+                                                .userData.posts[index].id
+                                            : searchState!.posts[index].id)
+                                    ? const Icon(
+                                        CupertinoIcons.bookmark_fill,
+                                        color: Colors.white,
+                                      )
+                                    : const Icon(
+                                        CupertinoIcons.bookmark,
+                                        color: Colors.white,
+                                      )
+                                : const Icon(
+                                    CupertinoIcons.bookmark,
+                                    color: Colors.white,
+                                  ),
                   ),
                 ],
               ),

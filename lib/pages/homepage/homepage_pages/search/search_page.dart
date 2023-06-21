@@ -79,7 +79,8 @@ class _SearchPageState extends State<SearchPage> {
                   state is PostIndexChangedState ||
                   state is LikePostState ||
                   state is AddedCommentSearchState ||
-                  state is DeletedCommentSearchState) {
+                  state is DeletedCommentSearchState ||
+                  state is BookmarkedSearchState) {
                 return SizedBox(
                   width: width,
                   height: height,

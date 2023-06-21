@@ -89,3 +89,9 @@ class DeletedCommentProfileState extends ProfileState {
   @override
   List<Object> get props => [userData, tabIndex, postsIndex];
 }
+
+class BookmarkedState extends ProfileState {
+  const BookmarkedState(super.userData, super.tabIndex, super.postsIndex);
+  @override
+  List<Object> get props => [userData, tabIndex, postsIndex];
+}
