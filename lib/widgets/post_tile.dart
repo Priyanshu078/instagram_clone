@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
@@ -197,10 +198,21 @@ class PostTile extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: bookmarkPressed,
-                    icon: const Icon(
-                      Icons.bookmark_outline,
-                      color: Colors.white,
-                    ),
+                    icon: feedState != null
+                        ? feedState!.userData.bookmarks
+                                .contains(feedState!.posts[index].id)
+                            ? const Icon(
+                                CupertinoIcons.bookmark_fill,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                CupertinoIcons.bookmark,
+                                color: Colors.white,
+                              )
+                        : const Icon(
+                            CupertinoIcons.bookmark,
+                            color: Colors.white,
+                          ),
                   ),
                 ],
               ),

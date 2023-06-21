@@ -40,3 +40,9 @@ class CommentDeletedState extends FeedState {
   @override
   List<Object> get props => [posts, userData];
 }
+
+class BookmarkedState extends FeedState {
+  const BookmarkedState(super.posts, super.userData);
+  @override
+  List<Object> get props => [posts, userData];
+}

@@ -113,7 +113,8 @@ class FeedPage extends StatelessWidget {
           if (state is FeedFetched ||
               state is PostLikedState ||
               state is CommentAddedState ||
-              state is CommentDeletedState) {
+              state is CommentDeletedState ||
+              state is BookmarkedState) {
             return ListView.builder(
                 itemCount: state.posts.length,
                 itemBuilder: (context, index) {

@@ -19,7 +19,21 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   Future<void> addBookmark(BookmarkFeed event, Emitter emit) async {
-    List<Post> posts = List.from(state.posts);
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? myUserId = sharedPreferences.getString("userId");
+    List bookmarks = List.from(state.userData.bookmarks);
+    String postId = state.posts[event.postIndex].id;
+    if (bookmarks.contains(postId)) {
+      bookmarks.remove(postId);
+    } else {
+      bookmarks.add(postId);
+    }
+    UserData userData = state.userData.copyWith(bookmarks: bookmarks);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(myUserId)
+        .update(userData.toJson());
+    emit(BookmarkedState(state.posts, userData));
   }
 
   Future<void> deleteComment(DeleteFeedComment event, Emitter emit) async {
