@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
+import 'package:instagram_clone/data/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'feed_event.dart';
 part 'feed_state.dart';
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
-  FeedBloc() : super(const FeedInitial(<Post>[])) {
+  FeedBloc() : super(FeedInitial(const <Post>[], UserData.temp())) {
     on<GetFeed>((event, emit) => getPosts(event, emit));
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
     on<AddFeedComment>((event, emit) => addComment(event, emit));
@@ -43,7 +44,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     }
     posts[event.postIndex].comments.removeAt(event.commentIndex);
     await docRef.update(documentData);
-    emit(CommentDeletedState(posts));
+    emit(CommentDeletedState(posts, state.userData));
   }
 
   Future<void> addComment(AddFeedComment event, Emitter emit) async {
@@ -75,7 +76,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
     }
     await docRef.update(documentData);
-    emit(CommentAddedState(posts));
+    emit(CommentAddedState(posts, state.userData));
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {
@@ -94,7 +95,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       likes.add(userId);
     }
     posts[event.index] = posts[event.index].copyWith(likes: likes);
-    emit(PostLikedState(posts));
+    emit(PostLikedState(posts, state.userData));
     for (int i = 0; i < alldocs.length; i++) {
       Map<String, dynamic> documentData = alldocs[i].data();
       if (documentData["id"] == event.userId) {
@@ -109,10 +110,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   Future<void> getPosts(GetFeed event, Emitter emit) async {
-    emit(const FeedInitial(<Post>[]));
+    emit(FeedInitial(const <Post>[], UserData.temp()));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString('userId');
     var firestoreCollectionRef = FirebaseFirestore.instance.collection("users");
+    var docSnapshot = await firestoreCollectionRef.doc(userId).get();
+    UserData userData = UserData.fromJson(docSnapshot.data()!);
     var result =
         await firestoreCollectionRef.where("id", isNotEqualTo: userId).get();
     var docsList = result.docs;
@@ -126,6 +129,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (event.atStart) {
       posts.shuffle();
     }
-    emit(FeedFetched(posts));
+    emit(FeedFetched(posts, userData));
   }
 }
