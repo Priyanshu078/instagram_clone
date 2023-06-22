@@ -19,17 +19,17 @@ part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this.pageController)
-      : super(ProfileLoading(UserData.temp(), 0, 0)) {
+      : super(ProfileLoading(UserData.temp(), 0, 0, false)) {
     on<GetUserDetails>((event, emit) => getUserDetails(event, emit));
     on<EditUserDetails>((event, emit) => editUserDetails(event, emit));
     on<ChangeProfilePhotoEvent>(
         (event, emit) => changeProfilePhotoEvent(event, emit));
     on<LogoutEvent>((event, emit) => logout(event, emit));
     on<ProfilePrivateEvent>((event, emit) => changeProfileStatus(event, emit));
-    on<TabChangeEvent>((event, emit) => emit(
-        TabChangedState(state.userData, event.tabIndex, state.postsIndex)));
+    on<TabChangeEvent>((event, emit) => emit(TabChangedState(
+        state.userData, event.tabIndex, state.postsIndex, state.savedPosts)));
     on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedState(
-        state.userData, state.tabIndex, event.postIndex)));
+        state.userData, state.tabIndex, event.postIndex, state.savedPosts)));
     on<LikePostEvent>((event, emit) => likePost(event, emit));
     on<AddProfileComment>((event, emit) => addComment(event, emit));
     on<DeleteProfileComment>((event, emit) => deleteComment(event, emit));
@@ -53,7 +53,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .collection("users")
         .doc(myUserId)
         .update(userData.toJson());
-    emit(BookmarkedState(userData, state.tabIndex, state.postsIndex));
+    emit(BookmarkedState(
+        userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 
   Future<void> addComment(AddProfileComment event, Emitter emit) async {
@@ -73,7 +74,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .collection("users")
         .doc(userId)
         .update(userData.toJson());
-    emit(CommentAddedProfileState(userData, state.tabIndex, state.postsIndex));
+    emit(CommentAddedProfileState(
+        userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 
   Future<void> deleteComment(DeleteProfileComment event, Emitter emit) async {
@@ -89,8 +91,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .collection("users")
         .doc(userId)
         .update(userData.toJson());
-    emit(
-        DeletedCommentProfileState(userData, state.tabIndex, state.postsIndex));
+    emit(DeletedCommentProfileState(
+        userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 
   Future<void> likePost(LikePostEvent event, Emitter emit) async {
@@ -110,7 +112,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     posts[event.index] =
         state.userData.posts[event.index].copyWith(likes: likes);
     UserData userData = state.userData.copyWith(posts: posts);
-    emit(PostLikedState(userData, state.tabIndex, state.postsIndex));
+    emit(PostLikedState(
+        userData, state.tabIndex, state.postsIndex, state.savedPosts));
     var value = await documentData.get();
     var data = value.data()!;
     data["posts"][event.index]["likes"] = likes;
@@ -123,13 +126,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await firestoreCollectionRef
         .doc(event.userData.id)
         .update({"private": event.userData.private});
-    emit(ProfilePrivateState(event.userData, state.tabIndex, state.postsIndex));
+    emit(ProfilePrivateState(
+        event.userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 
   Future<void> logout(LogoutEvent event, Emitter emit) async {
     var sharedPrefernces = await SharedPreferences.getInstance();
     await sharedPrefernces.clear();
-    emit(LogoutDoneState(state.userData, state.tabIndex, state.postsIndex));
+    emit(LogoutDoneState(
+        state.userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 
   Future<void> getUserDetails(GetUserDetails event, Emitter emit) async {
@@ -143,7 +148,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if (kDebugMode) {
       print(userData);
     }
-    emit(UserDataFetched(userData, state.tabIndex, state.postsIndex));
+    emit(UserDataFetched(
+        userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 
   Future<void> editUserDetails(EditUserDetails event, Emitter emit) async {
@@ -155,13 +161,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       "bio": event.userData.bio,
       "profilePhotoUrl": event.userData.profilePhotoUrl,
     });
-    emit(UserDataEdited(event.userData, state.tabIndex, state.postsIndex));
+    emit(UserDataEdited(
+        event.userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 
   Future<void> changeProfilePhotoEvent(
       ChangeProfilePhotoEvent event, Emitter emit) async {
-    emit(ProfilePhotoLoading(
-        event.userData.copyWith(), state.tabIndex, state.postsIndex));
+    emit(ProfilePhotoLoading(event.userData.copyWith(), state.tabIndex,
+        state.postsIndex, state.savedPosts));
     var profileImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     var storageRef = FirebaseStorage.instance.ref();
@@ -177,6 +184,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .doc(event.userData.id)
         .update({"profilePhotoUrl": imagePath});
     UserData userData = event.userData.copyWith(profilePhotoUrl: imagePath);
-    emit(ProfilePhotoEdited(userData, state.tabIndex, state.postsIndex));
+    emit(ProfilePhotoEdited(
+        userData, state.tabIndex, state.postsIndex, state.savedPosts));
   }
 }

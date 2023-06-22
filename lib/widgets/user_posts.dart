@@ -133,65 +133,80 @@ class UserPosts extends StatelessWidget {
           fontSize: 20,
           color: Colors.white,
           fontWeight: FontWeight.w700,
-          text: (inProfile || context.read<SearchBloc>().state.usersPosts)
-              ? "Posts"
-              : "Explore",
+          text: inProfile && context.read<ProfileBloc>().state.savedPosts
+              ? "Saved"
+              : (inProfile || context.read<SearchBloc>().state.usersPosts)
+                  ? "Posts"
+                  : "Explore",
         ),
       ),
       body: inProfile
           ? BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
-                return ScrollablePositionedList.builder(
-                  initialScrollIndex: state.postsIndex,
-                  itemCount: state.userData.posts.length,
-                  itemBuilder: (context, index) {
-                    return PostTile(
-                      width: width,
-                      height: height,
-                      profileState: state,
-                      searchState: null,
-                      index: index,
-                      feedState: null,
-                      optionPressed: () {
-                        showModalBottomSheet(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            backgroundColor: textFieldBackgroundColor,
-                            context: context,
-                            builder: (_) => BlocProvider.value(
-                                  value: context.read<ProfileBloc>(),
-                                  child: buildBottomSheet(
-                                      context, height, width, inProfile, false),
-                                ));
-                      },
-                      likePressed: () {
-                        context.read<ProfileBloc>().add(LikePostEvent(index));
-                      },
-                      onDoubleTap: () {
-                        context.read<ProfileBloc>().add(LikePostEvent(index));
-                      },
-                      commentPressed: () async {
-                        var sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                                  value: context.read<ProfileBloc>(),
-                                  child: CommentPage(
-                                    sharedPreferences: sharedPreferences,
-                                    postIndex: index,
-                                    profileState: state,
-                                    searchState: null,
-                                    feedState: null,
-                                  ),
-                                )));
-                      },
-                      bookmarkPressed: () {
-                        context.read<ProfileBloc>().add(BookmarkProfile(index));
-                      },
-                      sharePressed: () {},
-                    );
-                  },
-                );
+                if (state is ProfileLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                      color: Colors.white,
+                    ),
+                  );
+                } else {
+                  return ScrollablePositionedList.builder(
+                    initialScrollIndex: state.savedPosts ? 0 : state.postsIndex,
+                    itemCount: state.savedPosts
+                        ? state.savedPosts
+                        : state.userData.posts.length,
+                    itemBuilder: (context, index) {
+                      return PostTile(
+                        width: width,
+                        height: height,
+                        profileState: state,
+                        searchState: null,
+                        index: index,
+                        feedState: null,
+                        optionPressed: () {
+                          showModalBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: textFieldBackgroundColor,
+                              context: context,
+                              builder: (_) => BlocProvider.value(
+                                    value: context.read<ProfileBloc>(),
+                                    child: buildBottomSheet(context, height,
+                                        width, inProfile, false),
+                                  ));
+                        },
+                        likePressed: () {
+                          context.read<ProfileBloc>().add(LikePostEvent(index));
+                        },
+                        onDoubleTap: () {
+                          context.read<ProfileBloc>().add(LikePostEvent(index));
+                        },
+                        commentPressed: () async {
+                          var sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                    value: context.read<ProfileBloc>(),
+                                    child: CommentPage(
+                                      sharedPreferences: sharedPreferences,
+                                      postIndex: index,
+                                      profileState: state,
+                                      searchState: null,
+                                      feedState: null,
+                                    ),
+                                  )));
+                        },
+                        bookmarkPressed: () {
+                          context
+                              .read<ProfileBloc>()
+                              .add(BookmarkProfile(index));
+                        },
+                        sharePressed: () {},
+                      );
+                    },
+                  );
+                }
               },
             )
           : BlocBuilder<SearchBloc, SearchState>(

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
@@ -42,6 +43,20 @@ class _ProfilePageState extends State<ProfilePage>
           children: [
             SizedBox(
               height: height * 0.02,
+            ),
+            ListTile(
+              minLeadingWidth: 0,
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(
+                CupertinoIcons.bookmark,
+                color: Colors.white,
+              ),
+              title: const InstaText(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.normal,
+                  text: "Saved"),
+              onTap: () {},
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

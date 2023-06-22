@@ -83,3 +83,5 @@ class BookmarkProfile extends ProfileEvent {
   @override
   List<Object> get props => [postIndex];
 }
+
+class ShowSavedPosts extends ProfileEvent {}
