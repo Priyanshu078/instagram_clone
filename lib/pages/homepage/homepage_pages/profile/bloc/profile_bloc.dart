@@ -36,15 +36,37 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         state.userData,
         state.tabIndex,
         event.postIndex,
-        state.savedPosts,
+        false,
         state.savedPostsList)));
     on<LikePostEvent>((event, emit) => likePost(event, emit));
     on<AddProfileComment>((event, emit) => addComment(event, emit));
     on<DeleteProfileComment>((event, emit) => deleteComment(event, emit));
     on<BookmarkProfile>((event, emit) => addBookmark(event, emit));
+    on<ShowSavedPosts>((event, emit) => getSavedPosts(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> getSavedPosts(ShowSavedPosts event, Emitter emit) async {
+    emit(ProfileLoading(state.userData, state.tabIndex, state.postsIndex, true,
+        state.savedPostsList));
+    var firestoreCollectionRef = FirebaseFirestore.instance.collection("users");
+    List bookmarkedPostsList = state.userData.bookmarks;
+    List<Post> savedPostsList = [];
+    var snapshot = await firestoreCollectionRef.get();
+    var docsList = snapshot.docs;
+    for (int i = 0; i < docsList.length; i++) {
+      UserData userData = UserData.fromJson(docsList[i].data());
+      List<Post> posts = userData.posts;
+      for (int j = 0; j < posts.length; j++) {
+        if (bookmarkedPostsList.contains(posts[j].id)) {
+          bookmarkedPostsList.add(posts[j]);
+        }
+      }
+    }
+    emit(SavedPostsState(state.userData, state.tabIndex, state.postsIndex, true,
+        savedPostsList));
+  }
 
   Future<void> addBookmark(BookmarkProfile event, Emitter emit) async {
     var sharedPreferences = await SharedPreferences.getInstance();

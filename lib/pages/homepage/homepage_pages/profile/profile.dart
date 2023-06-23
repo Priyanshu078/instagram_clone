@@ -56,7 +56,16 @@ class _ProfilePageState extends State<ProfilePage>
                   color: Colors.white,
                   fontWeight: FontWeight.normal,
                   text: "Saved"),
-              onTap: () {},
+              onTap: () async {
+                var bloc = context.read<ProfileBloc>();
+                Navigator.of(context).pop();
+                bloc.add(ShowSavedPosts());
+                await bloc.pageController.animateToPage(
+                  1,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.ease,
+                );
+              },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +165,8 @@ class _ProfilePageState extends State<ProfilePage>
                 state is PostLikedState ||
                 state is CommentAddedProfileState ||
                 state is DeletedCommentProfileState ||
-                state is BookmarkedState) {
+                state is BookmarkedState ||
+                state is SavedPostsState) {
               return Scaffold(
                 backgroundColor: textFieldBackgroundColor,
                 appBar: AppBar(
