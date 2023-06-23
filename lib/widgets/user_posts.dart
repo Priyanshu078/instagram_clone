@@ -154,7 +154,7 @@ class UserPosts extends StatelessWidget {
                   return ScrollablePositionedList.builder(
                     initialScrollIndex: state.savedPosts ? 0 : state.postsIndex,
                     itemCount: state.savedPosts
-                        ? state.savedPosts
+                        ? state.savedPostsList.length
                         : state.userData.posts.length,
                     itemBuilder: (context, index) {
                       return PostTile(

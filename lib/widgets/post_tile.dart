@@ -67,7 +67,10 @@ class PostTile extends StatelessWidget {
                           imageUrl: searchState == null
                               ? profileState == null
                                   ? feedState!.posts[index].userProfilePhotoUrl
-                                  : profileState!.userData.profilePhotoUrl
+                                  : profileState!.savedPosts
+                                      ? profileState!.savedPostsList[index]
+                                          .userProfilePhotoUrl
+                                      : profileState!.userData.profilePhotoUrl
                               : searchState!.usersPosts
                                   ? searchState!.userData.profilePhotoUrl
                                   : searchState!
@@ -85,7 +88,10 @@ class PostTile extends StatelessWidget {
                         text: searchState == null
                             ? profileState == null
                                 ? feedState!.posts[index].username
-                                : profileState!.userData.username
+                                : profileState!.savedPosts
+                                    ? profileState!
+                                        .savedPostsList[index].username
+                                    : profileState!.userData.username
                             : searchState!.usersPosts
                                 ? searchState!.userData.username
                                 : searchState!.posts[index].username,
@@ -110,7 +116,9 @@ class PostTile extends StatelessWidget {
                 imageUrl: searchState == null
                     ? profileState == null
                         ? feedState!.posts[index].imageUrl
-                        : profileState!.userData.posts[index].imageUrl
+                        : profileState!.savedPosts
+                            ? profileState!.savedPostsList[index].imageUrl
+                            : profileState!.userData.posts[index].imageUrl
                     : searchState!.usersPosts
                         ? searchState!.userData.posts[index].imageUrl
                         : searchState!.posts[index].imageUrl,
@@ -158,19 +166,29 @@ class PostTile extends StatelessWidget {
                                         "assets/images/notification.png",
                                       )
                             : profileState != null
-                                ? profileState!.userData.posts[index].likes
-                                        .contains(homePageBloc.sharedPreferences
-                                            .getString("userId"))
-                                    ? Image.asset(
-                                        "assets/images/notification_red.png",
-                                      )
-                                    : Image.asset(
-                                        "assets/images/notification.png",
-                                      )
-                                : feedState != null
-                                    ? feedState!.posts[index].likes.contains(
-                                            homePageBloc.sharedPreferences
+                                ? profileState!.savedPosts
+                                    ? profileState!.savedPostsList[index].likes
+                                            .contains(homePageBloc
+                                                .sharedPreferences
                                                 .getString("userId"))
+                                        ? Image.asset(
+                                            "assets/images/notification_red.png",
+                                          )
+                                        : Image.asset(
+                                            "assets/images/notification.png",
+                                          )
+                                    : profileState!.userData.posts[index].likes
+                                            .contains(homePageBloc
+                                                .sharedPreferences
+                                                .getString("userId"))
+                                        ? Image.asset(
+                                            "assets/images/notification_red.png",
+                                          )
+                                        : Image.asset(
+                                            "assets/images/notification.png",
+                                          )
+                                : feedState != null
+                                    ? feedState!.posts[index].likes.contains(homePageBloc.sharedPreferences.getString("userId"))
                                         ? Image.asset(
                                             "assets/images/notification_red.png",
                                           )
@@ -210,16 +228,27 @@ class PostTile extends StatelessWidget {
                                 color: Colors.white,
                               )
                         : profileState != null
-                            ? profileState!.userData.bookmarks.contains(
-                                    profileState!.userData.posts[index].id)
-                                ? const Icon(
-                                    CupertinoIcons.bookmark_fill,
-                                    color: Colors.white,
-                                  )
-                                : const Icon(
-                                    CupertinoIcons.bookmark,
-                                    color: Colors.white,
-                                  )
+                            ? profileState!.savedPosts
+                                ? profileState!.userData.bookmarks.contains(
+                                        profileState!.savedPostsList[index].id)
+                                    ? const Icon(
+                                        CupertinoIcons.bookmark_fill,
+                                        color: Colors.white,
+                                      )
+                                    : const Icon(
+                                        CupertinoIcons.bookmark,
+                                        color: Colors.white,
+                                      )
+                                : profileState!.userData.bookmarks.contains(
+                                        profileState!.userData.posts[index].id)
+                                    ? const Icon(
+                                        CupertinoIcons.bookmark_fill,
+                                        color: Colors.white,
+                                      )
+                                    : const Icon(
+                                        CupertinoIcons.bookmark,
+                                        color: Colors.white,
+                                      )
                             : searchState != null
                                 ? searchState!.myData.bookmarks.contains(
                                         searchState!.usersPosts
@@ -254,7 +283,9 @@ class PostTile extends StatelessWidget {
                 text: searchState == null
                     ? profileState == null
                         ? "${feedState!.posts[index].likes.length} likes"
-                        : "${profileState!.userData.posts[index].likes.length} likes"
+                        : profileState!.savedPosts
+                            ? "${profileState!.savedPostsList[index].likes.length} likes"
+                            : "${profileState!.userData.posts[index].likes.length} likes"
                     : searchState!.usersPosts
                         ? "${searchState!.userData.posts[index].likes.length} likes"
                         : "${searchState!.posts[index].likes.length} likes",
@@ -277,7 +308,9 @@ class PostTile extends StatelessWidget {
                     text: searchState == null
                         ? profileState == null
                             ? feedState!.posts[index].username
-                            : profileState!.userData.username
+                            : profileState!.savedPosts
+                                ? profileState!.savedPostsList[index].username
+                                : profileState!.userData.username
                         : searchState!.usersPosts
                             ? searchState!.userData.username
                             : searchState!.posts[index].username,
@@ -292,7 +325,9 @@ class PostTile extends StatelessWidget {
                     text: searchState == null
                         ? profileState == null
                             ? feedState!.posts[index].caption
-                            : profileState!.userData.posts[index].caption
+                            : profileState!.savedPosts
+                                ? profileState!.savedPostsList[index].caption
+                                : profileState!.userData.posts[index].caption
                         : searchState!.usersPosts
                             ? searchState!.userData.posts[index].caption
                             : searchState!.posts[index].caption,
