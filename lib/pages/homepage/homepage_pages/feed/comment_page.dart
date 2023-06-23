@@ -111,16 +111,36 @@ class _CommentPageState extends State<CommentPage> {
                             List<Comments> comments = [];
                             comments.add(
                               Comments(
-                                state.userData.posts[widget.postIndex].caption,
-                                state.userData.posts[widget.postIndex]
-                                    .userProfilePhotoUrl,
-                                state.userData.posts[widget.postIndex].username,
-                                state.userData.posts[widget.postIndex].userId,
-                                state.userData.posts[widget.postIndex].id,
+                                state.savedPosts
+                                    ? state.savedPostsList[widget.postIndex]
+                                        .caption
+                                    : state.userData.posts[widget.postIndex]
+                                        .caption,
+                                state.savedPosts
+                                    ? state.savedPostsList[widget.postIndex]
+                                        .userProfilePhotoUrl
+                                    : state.userData.posts[widget.postIndex]
+                                        .userProfilePhotoUrl,
+                                state.savedPosts
+                                    ? state.savedPostsList[widget.postIndex]
+                                        .username
+                                    : state.userData.posts[widget.postIndex]
+                                        .username,
+                                state.savedPosts
+                                    ? state
+                                        .savedPostsList[widget.postIndex].userId
+                                    : state.userData.posts[widget.postIndex]
+                                        .userId,
+                                state.savedPosts
+                                    ? state.savedPostsList[widget.postIndex].id
+                                    : state.userData.posts[widget.postIndex].id,
                               ),
                             );
-                            comments.addAll(state
-                                .userData.posts[widget.postIndex].comments);
+                            comments.addAll(state.savedPosts
+                                ? state
+                                    .savedPostsList[widget.postIndex].comments
+                                : state
+                                    .userData.posts[widget.postIndex].comments);
                             return CommentList(
                               postIndex: widget.postIndex,
                               width: width,
@@ -208,8 +228,10 @@ class _CommentPageState extends State<CommentPage> {
                           comments, widget.postIndex, controller.text));
                     } else if (widget.profileState != null) {
                       var bloc = context.read<ProfileBloc>();
-                      List<Comments> comments =
-                          bloc.state.userData.posts[widget.postIndex].comments;
+                      List<Comments> comments = bloc.state.savedPosts
+                          ? bloc.state.savedPostsList[widget.postIndex].comments
+                          : bloc
+                              .state.userData.posts[widget.postIndex].comments;
                       bloc.add(AddProfileComment(
                           comments, widget.postIndex, controller.text));
                     } else if (widget.feedState != null) {

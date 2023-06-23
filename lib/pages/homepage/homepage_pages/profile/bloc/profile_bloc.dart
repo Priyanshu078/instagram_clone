@@ -60,10 +60,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       List<Post> posts = userData.posts;
       for (int j = 0; j < posts.length; j++) {
         if (bookmarkedPostsList.contains(posts[j].id)) {
-          bookmarkedPostsList.add(posts[j]);
+          savedPostsList.add(posts[j]);
         }
       }
     }
+    savedPostsList.shuffle();
     emit(SavedPostsState(state.userData, state.tabIndex, state.postsIndex, true,
         savedPostsList));
   }
@@ -72,9 +73,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     var sharedPreferences = await SharedPreferences.getInstance();
     String myUserId = sharedPreferences.getString("userId")!;
     List bookmarks = List.from(state.userData.bookmarks);
-    String postId = state.userData.posts[event.postIndex].id;
+    String postId = state.savedPosts
+        ? state.savedPostsList[event.postIndex].id
+        : state.userData.posts[event.postIndex].id;
+    List<Post> savedPostsList = [];
     if (bookmarks.contains(postId)) {
       bookmarks.remove(postId);
+      if (state.savedPosts) {
+        savedPostsList = state.savedPostsList;
+        savedPostsList.removeAt(event.postIndex);
+      }
     } else {
       bookmarks.add(postId);
     }
@@ -83,8 +91,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .collection("users")
         .doc(myUserId)
         .update(userData.toJson());
-    emit(BookmarkedState(userData, state.tabIndex, state.postsIndex,
-        state.savedPosts, state.savedPostsList));
+    emit(BookmarkedState(
+        userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.savedPosts,
+        state.savedPosts ? savedPostsList : state.savedPostsList));
   }
 
   Future<void> addComment(AddProfileComment event, Emitter emit) async {
@@ -96,16 +108,37 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Comments newComment =
         Comments(event.comment, profilePhotoUrl, username, userId, id);
     existingcomments.add(newComment);
-    List<Post> posts = List.from(state.userData.posts);
-    posts[event.postIndex] = state.userData.posts[event.postIndex]
-        .copyWith(comments: existingcomments);
-    UserData userData = state.userData.copyWith(posts: posts);
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(userId)
-        .update(userData.toJson());
-    emit(CommentAddedProfileState(userData, state.tabIndex, state.postsIndex,
-        state.savedPosts, state.savedPostsList));
+    if (state.savedPosts) {
+      List<Post> posts = List.from(state.savedPostsList);
+      posts[event.postIndex] =
+          posts[event.postIndex].copyWith(comments: existingcomments);
+      String userId = posts[event.postIndex].userId;
+      var firestoreCollectionRef =
+          FirebaseFirestore.instance.collection("users");
+      var docSnapshot = await firestoreCollectionRef.doc(userId).get();
+      UserData userData = UserData.fromJson(docSnapshot.data()!);
+      List<Post> userPosts = userData.posts;
+      for (int i = 0; i < userPosts.length; i++) {
+        if (userPosts[i].id == posts[event.postIndex].id) {
+          userPosts[i] = userPosts[i].copyWith(comments: existingcomments);
+        }
+      }
+      UserData data = userData.copyWith(posts: userPosts);
+      await firestoreCollectionRef.doc(userId).update(data.toJson());
+      emit(CommentAddedProfileState(state.userData, state.tabIndex,
+          state.postsIndex, state.savedPosts, posts));
+    } else {
+      List<Post> posts = List.from(state.userData.posts);
+      posts[event.postIndex] = state.userData.posts[event.postIndex]
+          .copyWith(comments: existingcomments);
+      UserData userData = state.userData.copyWith(posts: posts);
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .update(userData.toJson());
+      emit(CommentAddedProfileState(userData, state.tabIndex, state.postsIndex,
+          state.savedPosts, state.savedPostsList));
+    }
   }
 
   Future<void> deleteComment(DeleteProfileComment event, Emitter emit) async {
