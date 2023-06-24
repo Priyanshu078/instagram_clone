@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
@@ -17,8 +18,15 @@ class UserPosts extends StatelessWidget {
   });
   final bool inProfile;
 
-  Widget buildBottomSheet(BuildContext context, double height, double width,
-      bool inProfile, bool userPosts) {
+  Widget buildBottomSheet(
+      BuildContext context,
+      double height,
+      double width,
+      bool inProfile,
+      bool userPosts,
+      int index,
+      SearchState? searchState,
+      ProfileState? profileState) {
     return SizedBox(
       height: height * 0.3,
       child: Padding(
@@ -29,7 +37,14 @@ class UserPosts extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (profileState != null) {
+                  context.read<ProfileBloc>().add(BookmarkProfile(index));
+                } else {
+                  context.read<SearchBloc>().add(BookmarkSearch(index));
+                }
+                Navigator.of(context).pop();
+              },
               child: Column(
                 children: [
                   Container(
@@ -43,11 +58,33 @@ class UserPosts extends StatelessWidget {
                       ),
                     ),
                     child: Center(
-                      child: Image.asset(
-                        'assets/images/insta_bookmark.png',
-                        scale: 3.5,
-                      ),
-                    ),
+                        child: profileState != null
+                            ? profileState.userData.bookmarks.contains(
+                                    profileState.userData.posts[index].id)
+                                ? const Icon(
+                                    CupertinoIcons.bookmark_fill,
+                                    color: Colors.white,
+                                    size: 30,
+                                  )
+                                : const Icon(
+                                    CupertinoIcons.bookmark,
+                                    color: Colors.white,
+                                    size: 30,
+                                  )
+                            : searchState!.myData.bookmarks.contains(
+                                    searchState.usersPosts
+                                        ? searchState.userData.posts[index].id
+                                        : searchState.posts[index].id)
+                                ? const Icon(
+                                    CupertinoIcons.bookmark_fill,
+                                    color: Colors.white,
+                                    size: 30,
+                                  )
+                                : const Icon(
+                                    CupertinoIcons.bookmark,
+                                    color: Colors.white,
+                                    size: 30,
+                                  )),
                   ),
                   const SizedBox(
                     height: 4.0,
@@ -172,8 +209,15 @@ class UserPosts extends StatelessWidget {
                               context: context,
                               builder: (_) => BlocProvider.value(
                                     value: context.read<ProfileBloc>(),
-                                    child: buildBottomSheet(context, height,
-                                        width, inProfile, false),
+                                    child: buildBottomSheet(
+                                        context,
+                                        height,
+                                        width,
+                                        inProfile,
+                                        false,
+                                        index,
+                                        null,
+                                        state),
                                   ));
                         },
                         likePressed: () {
@@ -232,8 +276,15 @@ class UserPosts extends StatelessWidget {
                             context: context,
                             builder: (_) => BlocProvider.value(
                                   value: context.read<SearchBloc>(),
-                                  child: buildBottomSheet(context, height,
-                                      width, inProfile, state.usersPosts),
+                                  child: buildBottomSheet(
+                                      context,
+                                      height,
+                                      width,
+                                      inProfile,
+                                      state.usersPosts,
+                                      index,
+                                      state,
+                                      null),
                                 ));
                       },
                       likePressed: () {
