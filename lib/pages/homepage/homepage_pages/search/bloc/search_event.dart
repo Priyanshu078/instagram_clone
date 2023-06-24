@@ -78,3 +78,11 @@ class BookmarkSearch extends SearchEvent {
   @override
   List<Object> get props => [postIndex];
 }
+
+class DeleteSearchProfilePost extends SearchEvent {
+  final int index;
+  const DeleteSearchProfilePost(this.index);
+
+  @override
+  List<Object> get props => [index];
+}

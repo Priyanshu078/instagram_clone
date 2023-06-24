@@ -85,3 +85,11 @@ class BookmarkProfile extends ProfileEvent {
 }
 
 class ShowSavedPosts extends ProfileEvent {}
+
+class DeletePost extends ProfileEvent {
+  final int index;
+  const DeletePost(this.index);
+
+  @override
+  List<Object> get props => [index];
+}

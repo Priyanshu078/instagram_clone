@@ -105,3 +105,18 @@ class BookmarkedSearchState extends SearchState {
   List<Object> get props =>
       [posts, usersList, userData, tabIndex, postsIndex, usersPosts, myData];
 }
+
+class DeletedSearchProfilePostState extends SearchState {
+  const DeletedSearchProfilePostState(
+      super.posts,
+      super.usersList,
+      super.userData,
+      super.tabIndex,
+      super.postsIndex,
+      super.usersPosts,
+      super.myData);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts, myData];
+}

@@ -166,7 +166,8 @@ class _ProfilePageState extends State<ProfilePage>
                 state is CommentAddedProfileState ||
                 state is DeletedCommentProfileState ||
                 state is BookmarkedState ||
-                state is SavedPostsState) {
+                state is SavedPostsState ||
+                state is DeletedPostState) {
               return Scaffold(
                 backgroundColor: textFieldBackgroundColor,
                 appBar: AppBar(

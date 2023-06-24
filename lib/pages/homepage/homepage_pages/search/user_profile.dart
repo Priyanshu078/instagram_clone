@@ -27,6 +27,12 @@ class _UserProfilePageState extends State<UserProfilePage>
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var homePageBloc = context.read<HomepageBloc>();
     final height = MediaQuery.of(context).size.height;

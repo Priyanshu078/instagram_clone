@@ -43,9 +43,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<DeleteProfileComment>((event, emit) => deleteComment(event, emit));
     on<BookmarkProfile>((event, emit) => addBookmark(event, emit));
     on<ShowSavedPosts>((event, emit) => getSavedPosts(event, emit));
+    on<DeletePost>((event, emit) => deletePost(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> deletePost(DeletePost event, Emitter emit) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    List<Post> posts = List.from(state.userData.posts);
+    posts.removeAt(event.index);
+    UserData userData = state.userData.copyWith(posts: posts);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(userData.toJson());
+    emit(DeletedPostState(userData, state.tabIndex, state.postsIndex,
+        state.savedPosts, state.savedPostsList));
+  }
 
   Future<void> getSavedPosts(ShowSavedPosts event, Emitter emit) async {
     emit(ProfileLoading(state.userData, state.tabIndex, state.postsIndex, true,

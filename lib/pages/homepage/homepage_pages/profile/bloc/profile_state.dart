@@ -131,3 +131,12 @@ class SavedPostsState extends ProfileState {
   List<Object> get props =>
       [userData, tabIndex, postsIndex, savedPosts, savedPostsList];
 }
+
+class DeletedPostState extends ProfileState {
+  const DeletedPostState(super.userData, super.tabIndex, super.postsIndex,
+      super.savedPosts, super.savedPostsList);
+
+  @override
+  List<Object> get props =>
+      [userData, tabIndex, postsIndex, savedPosts, savedPostsList];
+}

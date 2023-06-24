@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'search_event.dart';
@@ -56,6 +57,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<AddSearchComment>((event, emit) => addComment(event, emit));
     on<DeleteSearchComment>((event, emit) => deleteComment(event, emit));
     on<BookmarkSearch>((event, emit) => addBookmark(event, emit));
+    on<DeleteSearchProfilePost>((event, emit) => deletePost(event, emit));
+  }
+
+  Future<void> deletePost(DeleteSearchProfilePost event, Emitter emit) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    List<Post> posts = List.from(state.userData.posts);
+    posts.removeAt(event.index);
+    UserData userData = state.userData.copyWith(posts: posts);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(userData.toJson());
+    emit(DeletedSearchProfilePostState(state.posts, state.usersList, userData,
+        state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
   }
 
   Future<void> addBookmark(BookmarkSearch event, Emitter emit) async {

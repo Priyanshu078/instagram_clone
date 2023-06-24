@@ -117,7 +117,18 @@ class UserPosts extends StatelessWidget {
                       fontWeight: FontWeight.normal,
                       text: "Delete",
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      if (profileState != null) {
+                        context.read<ProfileBloc>().add(DeletePost(index));
+                      } else {
+                        if (searchState!.usersPosts) {
+                          context
+                              .read<SearchBloc>()
+                              .add(DeleteSearchProfilePost(index));
+                        }
+                      }
+                      Navigator.of(context).pop();
+                    },
                   )
                 : ListTile(
                     minLeadingWidth: 0,
