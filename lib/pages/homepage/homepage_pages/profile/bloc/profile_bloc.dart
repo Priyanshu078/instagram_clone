@@ -183,26 +183,52 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> likePost(LikePostEvent event, Emitter emit) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    String? userId = sharedPreferences.getString("userId");
+    String? myUserId = sharedPreferences.getString("userId");
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     final collectionRef = firebaseFirestore.collection("users");
-    var documentData = collectionRef.doc(userId);
-    List<Post> posts = List.from(state.userData.posts);
-    List likes = posts[event.index].likes;
-    if (likes.contains(userId)) {
-      likes.remove(userId);
+    if (state.savedPosts) {
+      List<Post> savedPostsList = List.from(state.savedPostsList);
+      List likes = savedPostsList[event.index].likes;
+      if (likes.contains(myUserId)) {
+        likes.remove(myUserId);
+      } else {
+        likes.add(myUserId);
+      }
+      savedPostsList[event.index] =
+          savedPostsList[event.index].copyWith(likes: likes);
+      String userId = savedPostsList[event.index].userId;
+      var docSnapshot = await collectionRef.doc(userId).get();
+      var docData = docSnapshot.data()!;
+      UserData userData = UserData.fromJson(docData);
+      List<Post> posts = userData.posts;
+      for (int i = 0; i < posts.length; i++) {
+        if (savedPostsList[event.index].id == posts[i].id) {
+          posts[i].likes = likes;
+        }
+      }
+      UserData updatedUserData = userData.copyWith(posts: posts);
+      await collectionRef.doc(userId).update(updatedUserData.toJson());
+      emit(PostLikedState(state.userData, state.tabIndex, state.postsIndex,
+          state.savedPosts, savedPostsList));
     } else {
-      likes.add(userId);
+      var documentData = collectionRef.doc(myUserId);
+      List<Post> posts = List.from(state.userData.posts);
+      List likes = posts[event.index].likes;
+      if (likes.contains(myUserId)) {
+        likes.remove(myUserId);
+      } else {
+        likes.add(myUserId);
+      }
+      posts[event.index] =
+          state.userData.posts[event.index].copyWith(likes: likes);
+      UserData userData = state.userData.copyWith(posts: posts);
+      var value = await documentData.get();
+      var data = value.data()!;
+      data["posts"][event.index]["likes"] = likes;
+      await documentData.update(data);
+      emit(PostLikedState(userData, state.tabIndex, state.postsIndex,
+          state.savedPosts, state.savedPostsList));
     }
-    posts[event.index] =
-        state.userData.posts[event.index].copyWith(likes: likes);
-    UserData userData = state.userData.copyWith(posts: posts);
-    emit(PostLikedState(userData, state.tabIndex, state.postsIndex,
-        state.savedPosts, state.savedPostsList));
-    var value = await documentData.get();
-    var data = value.data()!;
-    data["posts"][event.index]["likes"] = likes;
-    await documentData.update(data);
   }
 
   Future<void> changeProfileStatus(
