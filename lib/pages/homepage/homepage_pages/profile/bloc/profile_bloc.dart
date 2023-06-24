@@ -142,20 +142,42 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> deleteComment(DeleteProfileComment event, Emitter emit) async {
-    List<Comments> exisitingComments =
-        List.from(state.userData.posts[event.postIndex].comments);
+    List<Comments> exisitingComments = state.savedPosts
+        ? List.from(state.savedPostsList[event.postIndex].comments)
+        : List.from(state.userData.posts[event.postIndex].comments);
     exisitingComments.removeAt(event.commentIndex);
-    List<Post> posts = state.userData.posts;
-    posts[event.postIndex] = state.userData.posts[event.postIndex]
-        .copyWith(comments: exisitingComments);
-    UserData userData = state.userData.copyWith(posts: posts);
-    String userId = state.userData.id;
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(userId)
-        .update(userData.toJson());
-    emit(DeletedCommentProfileState(userData, state.tabIndex, state.postsIndex,
-        state.savedPosts, state.savedPostsList));
+    if (state.savedPosts) {
+      List<Post> savedPostsList = List.from(state.savedPostsList);
+      savedPostsList[event.postIndex] =
+          savedPostsList[event.postIndex].copyWith(comments: exisitingComments);
+      String userId = savedPostsList[event.postIndex].userId;
+      var firestoreCollectionRef =
+          FirebaseFirestore.instance.collection("users");
+      var docSnapshot = await firestoreCollectionRef.doc(userId).get();
+      UserData userData = UserData.fromJson(docSnapshot.data()!);
+      List<Post> posts = userData.posts;
+      for (int i = 0; i < posts.length; i++) {
+        if (posts[i].id == savedPostsList[event.postIndex].id) {
+          posts[i] = posts[i].copyWith(comments: exisitingComments);
+        }
+      }
+      UserData updatedUserData = userData.copyWith(posts: posts);
+      await firestoreCollectionRef.doc(userId).update(updatedUserData.toJson());
+      emit(DeletedCommentProfileState(state.userData, state.tabIndex,
+          state.postsIndex, state.savedPosts, savedPostsList));
+    } else {
+      List<Post> posts = state.userData.posts;
+      posts[event.postIndex] = state.userData.posts[event.postIndex]
+          .copyWith(comments: exisitingComments);
+      UserData userData = state.userData.copyWith(posts: posts);
+      String userId = state.userData.id;
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .update(userData.toJson());
+      emit(DeletedCommentProfileState(userData, state.tabIndex,
+          state.postsIndex, state.savedPosts, state.savedPostsList));
+    }
   }
 
   Future<void> likePost(LikePostEvent event, Emitter emit) async {
