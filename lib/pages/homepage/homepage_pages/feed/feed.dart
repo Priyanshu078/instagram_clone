@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
@@ -11,7 +12,9 @@ import 'bloc/feed_bloc.dart';
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});
 
-  Widget buildBottomSheet(BuildContext context, double height, double width) {
+  Widget buildBottomSheet(
+      BuildContext context, double height, double width, int index) {
+    var feedState = context.read<FeedBloc>().state;
     return SizedBox(
       height: height * 0.3,
       child: Padding(
@@ -22,7 +25,10 @@ class FeedPage extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                context.read<FeedBloc>().add(BookmarkFeed(index));
+                Navigator.of(context).pop();
+              },
               child: Column(
                 children: [
                   Container(
@@ -36,10 +42,18 @@ class FeedPage extends StatelessWidget {
                       ),
                     ),
                     child: Center(
-                      child: Image.asset(
-                        'assets/images/insta_bookmark.png',
-                        scale: 3.5,
-                      ),
+                      child: feedState.userData.bookmarks
+                              .contains(feedState.posts[index].id)
+                          ? const Icon(
+                              CupertinoIcons.bookmark_fill,
+                              color: Colors.white,
+                              size: 30,
+                            )
+                          : const Icon(
+                              CupertinoIcons.bookmark,
+                              color: Colors.white,
+                              size: 30,
+                            ),
                     ),
                   ),
                   const SizedBox(
@@ -137,6 +151,7 @@ class FeedPage extends StatelessWidget {
                                   context,
                                   height,
                                   width,
+                                  index,
                                 ),
                               ));
                     },

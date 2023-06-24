@@ -56,7 +56,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         }
       }
     }
-    posts[event.postIndex].comments.removeAt(event.commentIndex);
+    List<Comments> comments = posts[event.postIndex].comments;
+    comments.removeAt(event.commentIndex);
+    posts[event.postIndex] =
+        posts[event.postIndex].copyWith(comments: comments);
     await docRef.update(documentData);
     emit(CommentDeletedState(posts, state.userData));
   }
