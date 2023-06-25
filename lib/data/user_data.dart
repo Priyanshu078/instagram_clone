@@ -12,8 +12,8 @@ class UserData {
   final String tagline;
   final List<dynamic> stories;
   final List<Post> posts;
-  final int followers;
-  final int following;
+  final List followers;
+  final List following;
   final String profilePhotoUrl;
   final bool private;
   final List bookmarks;
@@ -38,7 +38,7 @@ class UserData {
 
   factory UserData.temp() {
     return UserData("id", "name", "username", "contact", "password", 1, "bio",
-        "tagline", [], [], 0, 0, "", false, []);
+        "tagline", [], [], [], [], "", false, []);
   }
 
   UserData copyWith(
@@ -52,8 +52,8 @@ class UserData {
       String? tagline,
       List<Post>? posts,
       List? stories,
-      int? followers,
-      int? following,
+      List? followers,
+      List? following,
       String? profilePhotoUrl,
       bool? private,
       List? bookmarks}) {

@@ -260,7 +260,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           fontSize: 16,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
-                                          text: state.userData.followers
+                                          text: state.userData.followers.length
                                               .toString()),
                                       const InstaText(
                                           fontSize: 13,
@@ -278,7 +278,7 @@ class _ProfilePageState extends State<ProfilePage>
                                           fontSize: 16,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
-                                          text: state.userData.following
+                                          text: state.userData.following.length
                                               .toString()),
                                       const InstaText(
                                           fontSize: 13,
