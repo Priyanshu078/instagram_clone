@@ -42,7 +42,7 @@ class FeedPage extends StatelessWidget {
                       ),
                     ),
                     child: Center(
-                      child: feedState.userData.bookmarks
+                      child: feedState.myData.bookmarks
                               .contains(feedState.posts[index].id)
                           ? const Icon(
                               CupertinoIcons.bookmark_fill,

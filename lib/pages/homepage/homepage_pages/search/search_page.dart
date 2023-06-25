@@ -178,6 +178,7 @@ class _SearchPageState extends State<SearchPage> {
         BlocProvider.value(
           value: context.read<SearchBloc>(),
           child: UserProfilePage(
+            inSearch: true,
             pageController: context.read<SearchBloc>().pageController,
           ),
         ),

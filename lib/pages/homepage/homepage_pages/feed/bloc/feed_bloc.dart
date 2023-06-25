@@ -10,7 +10,9 @@ part 'feed_event.dart';
 part 'feed_state.dart';
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
-  FeedBloc() : super(FeedInitial(const <Post>[], UserData.temp())) {
+  FeedBloc()
+      : super(
+            FeedInitial(const <Post>[], UserData.temp(), UserData.temp(), 0)) {
     on<GetFeed>((event, emit) => getPosts(event, emit));
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
     on<AddFeedComment>((event, emit) => addComment(event, emit));
@@ -21,19 +23,19 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   Future<void> addBookmark(BookmarkFeed event, Emitter emit) async {
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
-    List bookmarks = List.from(state.userData.bookmarks);
+    List bookmarks = List.from(state.myData.bookmarks);
     String postId = state.posts[event.postIndex].id;
     if (bookmarks.contains(postId)) {
       bookmarks.remove(postId);
     } else {
       bookmarks.add(postId);
     }
-    UserData userData = state.userData.copyWith(bookmarks: bookmarks);
+    UserData myData = state.myData.copyWith(bookmarks: bookmarks);
     await FirebaseFirestore.instance
         .collection("users")
         .doc(myUserId)
-        .update(userData.toJson());
-    emit(BookmarkedState(state.posts, userData));
+        .update(myData.toJson());
+    emit(BookmarkedState(state.posts, myData, state.userData, state.tabIndex));
   }
 
   Future<void> deleteComment(DeleteFeedComment event, Emitter emit) async {
@@ -61,7 +63,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     posts[event.postIndex] =
         posts[event.postIndex].copyWith(comments: comments);
     await docRef.update(documentData);
-    emit(CommentDeletedState(posts, state.userData));
+    emit(CommentDeletedState(
+        posts, state.myData, state.userData, state.tabIndex));
   }
 
   Future<void> addComment(AddFeedComment event, Emitter emit) async {
@@ -93,7 +96,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
     }
     await docRef.update(documentData);
-    emit(CommentAddedState(posts, state.userData));
+    emit(CommentAddedState(
+      posts,
+      state.myData,
+      state.userData,
+      state.tabIndex,
+    ));
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {
@@ -112,7 +120,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       likes.add(userId);
     }
     posts[event.index] = posts[event.index].copyWith(likes: likes);
-    emit(PostLikedState(posts, state.userData));
+    emit(PostLikedState(posts, state.myData, state.userData, state.tabIndex));
     for (int i = 0; i < alldocs.length; i++) {
       Map<String, dynamic> documentData = alldocs[i].data();
       if (documentData["id"] == event.userId) {
@@ -127,12 +135,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   Future<void> getPosts(GetFeed event, Emitter emit) async {
-    emit(FeedInitial(const <Post>[], UserData.temp()));
+    emit(FeedInitial(const <Post>[], UserData.temp(), UserData.temp(), 0));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString('userId');
     var firestoreCollectionRef = FirebaseFirestore.instance.collection("users");
     var docSnapshot = await firestoreCollectionRef.doc(userId).get();
-    UserData userData = UserData.fromJson(docSnapshot.data()!);
+    UserData myData = UserData.fromJson(docSnapshot.data()!);
     var result =
         await firestoreCollectionRef.where("id", isNotEqualTo: userId).get();
     var docsList = result.docs;
@@ -146,6 +154,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (event.atStart) {
       posts.shuffle();
     }
-    emit(FeedFetched(posts, userData));
+    emit(FeedFetched(posts, myData, state.userData, state.tabIndex));
   }
 }
