@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
@@ -15,18 +16,22 @@ class UserPosts extends StatelessWidget {
   const UserPosts({
     super.key,
     required this.inProfile,
+    required this.inFeed,
   });
   final bool inProfile;
+  final bool inFeed;
 
   Widget buildBottomSheet(
-      BuildContext context,
-      double height,
-      double width,
-      bool inProfile,
-      bool userPosts,
-      int index,
-      SearchState? searchState,
-      ProfileState? profileState) {
+    BuildContext context,
+    double height,
+    double width,
+    bool inProfile,
+    bool userPosts,
+    int index,
+    SearchState? searchState,
+    ProfileState? profileState,
+    FeedState? feedState,
+  ) {
     return SizedBox(
       height: height * 0.3,
       child: Padding(
@@ -38,7 +43,9 @@ class UserPosts extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                if (profileState != null) {
+                if (feedState != null) {
+                  context.read<FeedBloc>().add(BookmarkFeed(index));
+                } else if (profileState != null) {
                   context.read<ProfileBloc>().add(BookmarkProfile(index));
                 } else {
                   context.read<SearchBloc>().add(BookmarkSearch(index));
@@ -58,9 +65,9 @@ class UserPosts extends StatelessWidget {
                       ),
                     ),
                     child: Center(
-                        child: profileState != null
-                            ? profileState.userData.bookmarks.contains(
-                                    profileState.userData.posts[index].id)
+                        child: feedState != null
+                            ? feedState.myData.bookmarks.contains(
+                                    feedState.userData.posts[index].id)
                                 ? const Icon(
                                     CupertinoIcons.bookmark_fill,
                                     color: Colors.white,
@@ -71,20 +78,34 @@ class UserPosts extends StatelessWidget {
                                     color: Colors.white,
                                     size: 30,
                                   )
-                            : searchState!.myData.bookmarks.contains(
-                                    searchState.usersPosts
-                                        ? searchState.userData.posts[index].id
-                                        : searchState.posts[index].id)
-                                ? const Icon(
-                                    CupertinoIcons.bookmark_fill,
-                                    color: Colors.white,
-                                    size: 30,
-                                  )
-                                : const Icon(
-                                    CupertinoIcons.bookmark,
-                                    color: Colors.white,
-                                    size: 30,
-                                  )),
+                            : profileState != null
+                                ? profileState.userData.bookmarks.contains(
+                                        profileState.userData.posts[index].id)
+                                    ? const Icon(
+                                        CupertinoIcons.bookmark_fill,
+                                        color: Colors.white,
+                                        size: 30,
+                                      )
+                                    : const Icon(
+                                        CupertinoIcons.bookmark,
+                                        color: Colors.white,
+                                        size: 30,
+                                      )
+                                : searchState!.myData.bookmarks.contains(
+                                        searchState.usersPosts
+                                            ? searchState
+                                                .userData.posts[index].id
+                                            : searchState.posts[index].id)
+                                    ? const Icon(
+                                        CupertinoIcons.bookmark_fill,
+                                        color: Colors.white,
+                                        size: 30,
+                                      )
+                                    : const Icon(
+                                        CupertinoIcons.bookmark,
+                                        color: Colors.white,
+                                        size: 30,
+                                      )),
                   ),
                   const SizedBox(
                     height: 4.0,
@@ -160,15 +181,20 @@ class UserPosts extends StatelessWidget {
         backgroundColor: Colors.black,
         leading: IconButton(
           onPressed: () async {
-            if (inProfile) {
-              var bloc = context.read<ProfileBloc>();
-              bloc.pageController.jumpToPage(0);
+            if (inFeed) {
+              var bloc = context.read<FeedBloc>();
+              bloc.pageController.jumpToPage(1);
             } else {
-              var bloc = context.read<SearchBloc>();
-              if (bloc.state.usersPosts) {
-                bloc.pageController.jumpToPage(1);
-              } else {
+              if (inProfile) {
+                var bloc = context.read<ProfileBloc>();
                 bloc.pageController.jumpToPage(0);
+              } else {
+                var bloc = context.read<SearchBloc>();
+                if (bloc.state.usersPosts) {
+                  bloc.pageController.jumpToPage(1);
+                } else {
+                  bloc.pageController.jumpToPage(0);
+                }
               }
             }
           },
@@ -183,102 +209,28 @@ class UserPosts extends StatelessWidget {
           fontWeight: FontWeight.w700,
           text: inProfile && context.read<ProfileBloc>().state.savedPosts
               ? "Saved"
-              : (inProfile || context.read<SearchBloc>().state.usersPosts)
+              : (inProfile ||
+                      context.read<SearchBloc>().state.usersPosts ||
+                      inFeed)
                   ? "Posts"
                   : "Explore",
         ),
       ),
-      body: inProfile
-          ? BlocBuilder<ProfileBloc, ProfileState>(
-              builder: (context, state) {
-                if (state is ProfileLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                      color: Colors.white,
-                    ),
-                  );
-                } else {
-                  return ScrollablePositionedList.builder(
-                    initialScrollIndex: state.savedPosts ? 0 : state.postsIndex,
-                    itemCount: state.savedPosts
-                        ? state.savedPostsList.length
-                        : state.userData.posts.length,
-                    itemBuilder: (context, index) {
-                      return PostTile(
-                        width: width,
-                        height: height,
-                        profileState: state,
-                        searchState: null,
-                        index: index,
-                        feedState: null,
-                        optionPressed: () {
-                          showModalBottomSheet(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: textFieldBackgroundColor,
-                              context: context,
-                              builder: (_) => BlocProvider.value(
-                                    value: context.read<ProfileBloc>(),
-                                    child: buildBottomSheet(
-                                        context,
-                                        height,
-                                        width,
-                                        inProfile,
-                                        false,
-                                        index,
-                                        null,
-                                        state),
-                                  ));
-                        },
-                        likePressed: () {
-                          context.read<ProfileBloc>().add(LikePostEvent(index));
-                        },
-                        onDoubleTap: () {
-                          context.read<ProfileBloc>().add(LikePostEvent(index));
-                        },
-                        commentPressed: () async {
-                          var sharedPreferences =
-                              await SharedPreferences.getInstance();
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                    value: context.read<ProfileBloc>(),
-                                    child: CommentPage(
-                                      sharedPreferences: sharedPreferences,
-                                      postIndex: index,
-                                      profileState: state,
-                                      searchState: null,
-                                      feedState: null,
-                                    ),
-                                  )));
-                        },
-                        bookmarkPressed: () {
-                          context
-                              .read<ProfileBloc>()
-                              .add(BookmarkProfile(index));
-                        },
-                        sharePressed: () {},
-                      );
-                    },
-                  );
-                }
-              },
-            )
-          : BlocBuilder<SearchBloc, SearchState>(
+      body: inFeed
+          ? BlocBuilder<FeedBloc, FeedState>(
               builder: (context, state) {
                 return ScrollablePositionedList.builder(
                   initialScrollIndex: state.postsIndex,
-                  itemCount: state.usersPosts
-                      ? state.userData.posts.length
-                      : state.posts.length,
+                  itemCount: state.userData.posts.length,
                   itemBuilder: (context, index) {
                     return PostTile(
+                      isFeedData: false,
                       width: width,
                       height: height,
                       profileState: null,
-                      searchState: state,
+                      searchState: null,
                       index: index,
-                      feedState: null,
+                      feedState: state,
                       optionPressed: () {
                         showModalBottomSheet(
                             shape: RoundedRectangleBorder(
@@ -286,64 +238,228 @@ class UserPosts extends StatelessWidget {
                             backgroundColor: textFieldBackgroundColor,
                             context: context,
                             builder: (_) => BlocProvider.value(
-                                  value: context.read<SearchBloc>(),
+                                  value: context.read<ProfileBloc>(),
                                   child: buildBottomSheet(
                                       context,
                                       height,
                                       width,
                                       inProfile,
-                                      state.usersPosts,
+                                      false,
                                       index,
-                                      state,
-                                      null),
+                                      null,
+                                      null,
+                                      state),
                                 ));
                       },
                       likePressed: () {
-                        context.read<SearchBloc>().add(SearchLikePostEvent(
-                            index,
-                            state.usersPosts,
-                            state.usersPosts
-                                ? state.userData.id
-                                : state.posts[index].userId,
-                            state.usersPosts
-                                ? state.userData.posts[index].id
-                                : state.posts[index].id));
+                        context.read<FeedBloc>().add(PostLikeEvent(
+                              state.userData.posts[index].id,
+                              index,
+                              state.userData.posts[index].userId,
+                            ));
+                      },
+                      onDoubleTap: () {
+                        context.read<FeedBloc>().add(PostLikeEvent(
+                              state.userData.posts[index].id,
+                              index,
+                              state.userData.posts[index].userId,
+                            ));
                       },
                       commentPressed: () async {
                         var sharedPreferences =
                             await SharedPreferences.getInstance();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
-                                  value: context.read<SearchBloc>(),
+                                  value: context.read<ProfileBloc>(),
                                   child: CommentPage(
                                     sharedPreferences: sharedPreferences,
                                     postIndex: index,
-                                    searchState: state,
                                     profileState: null,
-                                    feedState: null,
+                                    searchState: null,
+                                    feedState: state,
                                   ),
                                 )));
                       },
                       bookmarkPressed: () {
-                        context.read<SearchBloc>().add(BookmarkSearch(index));
+                        context.read<FeedBloc>().add(BookmarkFeed(index));
                       },
                       sharePressed: () {},
-                      onDoubleTap: () {
-                        context.read<SearchBloc>().add(SearchLikePostEvent(
-                            index,
-                            state.usersPosts,
-                            state.usersPosts
-                                ? state.userData.id
-                                : state.posts[index].userId,
-                            state.usersPosts
-                                ? state.userData.posts[index].id
-                                : state.posts[index].id));
-                      },
+                      onUserNamePressed: () {},
                     );
                   },
                 );
               },
-            ),
+            )
+          : inProfile
+              ? BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, state) {
+                    if (state is ProfileLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      return ScrollablePositionedList.builder(
+                        initialScrollIndex:
+                            state.savedPosts ? 0 : state.postsIndex,
+                        itemCount: state.savedPosts
+                            ? state.savedPostsList.length
+                            : state.userData.posts.length,
+                        itemBuilder: (context, index) {
+                          return PostTile(
+                            isFeedData: false,
+                            width: width,
+                            height: height,
+                            profileState: state,
+                            searchState: null,
+                            index: index,
+                            feedState: null,
+                            optionPressed: () {
+                              showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  backgroundColor: textFieldBackgroundColor,
+                                  context: context,
+                                  builder: (_) => BlocProvider.value(
+                                        value: context.read<ProfileBloc>(),
+                                        child: buildBottomSheet(
+                                          context,
+                                          height,
+                                          width,
+                                          inProfile,
+                                          false,
+                                          index,
+                                          null,
+                                          state,
+                                          null,
+                                        ),
+                                      ));
+                            },
+                            likePressed: () {
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(LikePostEvent(index));
+                            },
+                            onDoubleTap: () {
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(LikePostEvent(index));
+                            },
+                            commentPressed: () async {
+                              var sharedPreferences =
+                                  await SharedPreferences.getInstance();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                        value: context.read<ProfileBloc>(),
+                                        child: CommentPage(
+                                          sharedPreferences: sharedPreferences,
+                                          postIndex: index,
+                                          profileState: state,
+                                          searchState: null,
+                                          feedState: null,
+                                        ),
+                                      )));
+                            },
+                            bookmarkPressed: () {
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(BookmarkProfile(index));
+                            },
+                            sharePressed: () {},
+                            onUserNamePressed: () {},
+                          );
+                        },
+                      );
+                    }
+                  },
+                )
+              : BlocBuilder<SearchBloc, SearchState>(
+                  builder: (context, state) {
+                    return ScrollablePositionedList.builder(
+                      initialScrollIndex: state.postsIndex,
+                      itemCount: state.usersPosts
+                          ? state.userData.posts.length
+                          : state.posts.length,
+                      itemBuilder: (context, index) {
+                        return PostTile(
+                          isFeedData: false,
+                          width: width,
+                          height: height,
+                          profileState: null,
+                          searchState: state,
+                          index: index,
+                          feedState: null,
+                          optionPressed: () {
+                            showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: textFieldBackgroundColor,
+                                context: context,
+                                builder: (_) => BlocProvider.value(
+                                      value: context.read<SearchBloc>(),
+                                      child: buildBottomSheet(
+                                          context,
+                                          height,
+                                          width,
+                                          inProfile,
+                                          state.usersPosts,
+                                          index,
+                                          state,
+                                          null,
+                                          null),
+                                    ));
+                          },
+                          likePressed: () {
+                            context.read<SearchBloc>().add(SearchLikePostEvent(
+                                index,
+                                state.usersPosts,
+                                state.usersPosts
+                                    ? state.userData.id
+                                    : state.posts[index].userId,
+                                state.usersPosts
+                                    ? state.userData.posts[index].id
+                                    : state.posts[index].id));
+                          },
+                          commentPressed: () async {
+                            var sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => BlocProvider.value(
+                                      value: context.read<SearchBloc>(),
+                                      child: CommentPage(
+                                        sharedPreferences: sharedPreferences,
+                                        postIndex: index,
+                                        searchState: state,
+                                        profileState: null,
+                                        feedState: null,
+                                      ),
+                                    )));
+                          },
+                          bookmarkPressed: () {
+                            context
+                                .read<SearchBloc>()
+                                .add(BookmarkSearch(index));
+                          },
+                          sharePressed: () {},
+                          onDoubleTap: () {
+                            context.read<SearchBloc>().add(SearchLikePostEvent(
+                                index,
+                                state.usersPosts,
+                                state.usersPosts
+                                    ? state.userData.id
+                                    : state.posts[index].userId,
+                                state.usersPosts
+                                    ? state.userData.posts[index].id
+                                    : state.posts[index].id));
+                          },
+                          onUserNamePressed: () {},
+                        );
+                      },
+                    );
+                  },
+                ),
     );
   }
 }

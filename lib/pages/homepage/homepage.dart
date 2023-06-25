@@ -38,7 +38,16 @@ class _HomePageState extends State<HomePage> {
         var homePageBlocState = context.read<HomepageBloc>().state;
         var profileBloc = context.read<ProfileBloc>();
         if (homePageBlocState.index == 0) {
-          return true;
+          var bloc = context.read<FeedBloc>();
+          if (bloc.pageController.page == 2) {
+            bloc.pageController.jumpToPage(1);
+            return false;
+          } else if (bloc.pageController.page == 1) {
+            bloc.pageController.jumpTo(0);
+            return false;
+          } else {
+            return true;
+          }
         } else if (homePageBlocState.index == 1) {
           var bloc = context.read<SearchBloc>();
           if (bloc.pageController.page == 1 ||

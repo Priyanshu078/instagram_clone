@@ -49,3 +49,24 @@ class BookmarkFeed extends FeedEvent {
   @override
   List<Object> get props => [postIndex];
 }
+
+class FetchUserData extends FeedEvent {
+  final String userId;
+  const FetchUserData(this.userId);
+  @override
+  List<Object> get props => [userId];
+}
+
+class TabChangeFeedEvent extends FeedEvent {
+  final int tabIndex;
+  const TabChangeFeedEvent(this.tabIndex);
+  @override
+  List<Object> get props => [tabIndex];
+}
+
+class FeedPostsIndexChangeEvent extends FeedEvent {
+  final int postIndex;
+  const FeedPostsIndexChangeEvent(this.postIndex);
+  @override
+  List<Object> get props => [postIndex];
+}

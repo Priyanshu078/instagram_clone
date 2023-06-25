@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/chat_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/user_profile.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
+import 'package:instagram_clone/widgets/user_posts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bloc/feed_bloc.dart';
 
@@ -98,106 +100,138 @@ class FeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: textFieldBackgroundColor,
-        title: SizedBox(
-          height: AppBar().preferredSize.height * 0.8,
-          width: width * 0.3,
-          child: Image.asset('assets/images/instagram.png'),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const ChatPage()));
-            },
-            icon: SizedBox(
+    return PageView(
+      physics: const NeverScrollableScrollPhysics(),
+      controller: context.read<FeedBloc>().pageController,
+      children: [
+        Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: textFieldBackgroundColor,
+            title: SizedBox(
               height: AppBar().preferredSize.height * 0.8,
-              width: width * 0.07,
-              child: Image.asset('assets/images/messanger.png'),
+              width: width * 0.3,
+              child: Image.asset('assets/images/instagram.png'),
             ),
-          ),
-        ],
-      ),
-      body: BlocBuilder<FeedBloc, FeedState>(
-        builder: (context, state) {
-          if (state is FeedFetched ||
-              state is PostLikedState ||
-              state is CommentAddedState ||
-              state is CommentDeletedState ||
-              state is BookmarkedState) {
-            return ListView.builder(
-                itemCount: state.posts.length,
-                itemBuilder: (context, index) {
-                  return PostTile(
-                    width: width,
-                    height: height,
-                    profileState: null,
-                    searchState: null,
-                    index: index,
-                    feedState: state,
-                    optionPressed: () {
-                      showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: textFieldBackgroundColor,
-                          context: context,
-                          builder: (_) => BlocProvider.value(
-                                value: context.read<FeedBloc>(),
-                                child: buildBottomSheet(
-                                  context,
-                                  height,
-                                  width,
-                                  index,
-                                ),
-                              ));
-                    },
-                    likePressed: () {
-                      context.read<FeedBloc>().add(PostLikeEvent(
-                          state.posts[index].id,
-                          index,
-                          state.posts[index].userId));
-                    },
-                    onDoubleTap: () {
-                      context.read<FeedBloc>().add(PostLikeEvent(
-                          state.posts[index].id,
-                          index,
-                          state.posts[index].userId));
-                    },
-                    commentPressed: () async {
-                      var sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                                value: context.read<FeedBloc>(),
-                                child: CommentPage(
-                                  sharedPreferences: sharedPreferences,
-                                  feedState: state,
-                                  profileState: null,
-                                  searchState: null,
-                                  postIndex: index,
-                                ),
-                              )));
-                    },
-                    bookmarkPressed: () {
-                      context.read<FeedBloc>().add(BookmarkFeed(index));
-                    },
-                    sharePressed: () {},
-                  );
-                });
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 1,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ChatPage()));
+                },
+                icon: SizedBox(
+                  height: AppBar().preferredSize.height * 0.8,
+                  width: width * 0.07,
+                  child: Image.asset('assets/images/messanger.png'),
+                ),
               ),
-            );
-          }
-        },
-      ),
+            ],
+          ),
+          body: BlocBuilder<FeedBloc, FeedState>(
+            builder: (context, state) {
+              if (state is FeedFetched ||
+                  state is PostLikedState ||
+                  state is CommentAddedState ||
+                  state is CommentDeletedState ||
+                  state is BookmarkedState ||
+                  state is UserDataLoadingState ||
+                  state is UserDataFetchedState ||
+                  state is TabChangedFeedState ||
+                  state is PostIndexChangeFeedState) {
+                return ListView.builder(
+                    itemCount: state.posts.length,
+                    itemBuilder: (context, index) {
+                      return PostTile(
+                        isFeedData: true,
+                        width: width,
+                        height: height,
+                        profileState: null,
+                        searchState: null,
+                        index: index,
+                        feedState: state,
+                        onUserNamePressed: () async {
+                          var bloc = context.read<FeedBloc>();
+                          bloc.add(FetchUserData(state.posts[index].userId));
+                          await bloc.pageController.animateToPage(1,
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.ease);
+                        },
+                        optionPressed: () {
+                          showModalBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: textFieldBackgroundColor,
+                              context: context,
+                              builder: (_) => BlocProvider.value(
+                                    value: context.read<FeedBloc>(),
+                                    child: buildBottomSheet(
+                                      context,
+                                      height,
+                                      width,
+                                      index,
+                                    ),
+                                  ));
+                        },
+                        likePressed: () {
+                          context.read<FeedBloc>().add(PostLikeEvent(
+                              state.posts[index].id,
+                              index,
+                              state.posts[index].userId));
+                        },
+                        onDoubleTap: () {
+                          context.read<FeedBloc>().add(PostLikeEvent(
+                              state.posts[index].id,
+                              index,
+                              state.posts[index].userId));
+                        },
+                        commentPressed: () async {
+                          var sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                    value: context.read<FeedBloc>(),
+                                    child: CommentPage(
+                                      sharedPreferences: sharedPreferences,
+                                      feedState: state,
+                                      profileState: null,
+                                      searchState: null,
+                                      postIndex: index,
+                                    ),
+                                  )));
+                        },
+                        bookmarkPressed: () {
+                          context.read<FeedBloc>().add(BookmarkFeed(index));
+                        },
+                        sharePressed: () {},
+                      );
+                    });
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 1,
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+        BlocProvider.value(
+          value: context.read<FeedBloc>(),
+          child: UserProfilePage(
+            inSearch: false,
+            pageController: context.read<FeedBloc>().pageController,
+          ),
+        ),
+        BlocProvider.value(
+          value: context.read<FeedBloc>(),
+          child: const UserPosts(
+            inProfile: false,
+            inFeed: true,
+          ),
+        )
+      ],
     );
   }
 }

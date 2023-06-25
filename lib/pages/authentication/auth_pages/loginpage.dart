@@ -58,7 +58,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       BlocProvider(
                         create: (context) =>
-                            FeedBloc()..add(const GetFeed(true)),
+                            FeedBloc(PageController(initialPage: 0))
+                              ..add(const GetFeed(true)),
                       )
                     ],
                     child: const HomePage(),

@@ -47,7 +47,9 @@ class SplashScreen extends StatelessWidget {
                     ),
                   ),
                   BlocProvider(
-                    create: (context) => FeedBloc()..add(const GetFeed(true)),
+                    create: (context) =>
+                        FeedBloc(PageController(initialPage: 0))
+                          ..add(const GetFeed(true)),
                   )
                 ],
                 child: const HomePage(),

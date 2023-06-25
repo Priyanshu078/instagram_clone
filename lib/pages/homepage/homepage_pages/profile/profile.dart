@@ -571,6 +571,7 @@ class _ProfilePageState extends State<ProfilePage>
           value: context.read<ProfileBloc>(),
           child: const UserPosts(
             inProfile: true,
+            inFeed: false,
           ),
         ),
       ],

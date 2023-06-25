@@ -184,7 +184,10 @@ class _SearchPageState extends State<SearchPage> {
         ),
         BlocProvider.value(
           value: context.read<SearchBloc>(),
-          child: const UserPosts(inProfile: false),
+          child: const UserPosts(
+            inProfile: false,
+            inFeed: false,
+          ),
         )
       ],
     );
