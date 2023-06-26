@@ -132,10 +132,12 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String? userId = sharedPreferences.getString("userId");
     var firestore = FirebaseFirestore.instance;
     var collectionRef = firestore.collection("users");
-    var docsSnapshot =
-        await collectionRef.where("id", isNotEqualTo: userId).get();
-    var alldocs = docsSnapshot.docs;
-    List<Post> posts = List.from(state.posts);
+    // var docsSnapshot =
+    //     await collectionRef.where("id", isNotEqualTo: userId).get();
+    // var alldocs = docsSnapshot.docs;
+
+    List<Post> posts =
+        event.inFeed ? List.from(state.posts) : List.from(state.userData.posts);
     List likes = posts[event.index].likes;
     if (likes.contains(userId)) {
       likes.remove(userId);
@@ -143,18 +145,27 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       likes.add(userId);
     }
     posts[event.index] = posts[event.index].copyWith(likes: likes);
-    emit(PostLikedState(
-        posts, state.myData, state.userData, state.tabIndex, state.postsIndex));
-    for (int i = 0; i < alldocs.length; i++) {
-      Map<String, dynamic> documentData = alldocs[i].data();
-      if (documentData["id"] == event.userId) {
-        for (int j = 0; j < documentData["posts"].length; j++) {
-          if (documentData["posts"][j]["id"] == event.postId) {
-            documentData["posts"][j]["likes"] = likes;
-            await collectionRef.doc(event.userId).set(documentData);
-          }
+    for (int i = 0; i < posts.length; i++) {
+      if (posts[i].id == event.postId) {
+        if (event.inFeed) {
+          var docSnapshot = await collectionRef.doc(event.userId).get();
+          UserData userdata = UserData.fromJson(docSnapshot.data()!);
+          await collectionRef
+              .doc(event.userId)
+              .update(userdata.copyWith(posts: posts).toJson());
+        } else {
+          UserData userData = state.userData.copyWith(posts: posts);
+          await collectionRef.doc(event.userId).update(userData.toJson());
         }
       }
+    }
+    if (event.inFeed) {
+      emit(PostLikedState(posts, state.myData, state.userData, state.tabIndex,
+          state.postsIndex));
+    } else {
+      UserData userData = state.userData.copyWith(posts: posts);
+      emit(PostLikedState(state.posts, state.myData, userData, state.tabIndex,
+          state.postsIndex));
     }
   }
 

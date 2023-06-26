@@ -256,6 +256,7 @@ class UserPosts extends StatelessWidget {
                               state.userData.posts[index].id,
                               index,
                               state.userData.posts[index].userId,
+                              false,
                             ));
                       },
                       onDoubleTap: () {
@@ -263,6 +264,7 @@ class UserPosts extends StatelessWidget {
                               state.userData.posts[index].id,
                               index,
                               state.userData.posts[index].userId,
+                              false,
                             ));
                       },
                       commentPressed: () async {

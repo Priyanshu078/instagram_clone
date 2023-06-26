@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
             bloc.pageController.jumpToPage(1);
             return false;
           } else if (bloc.pageController.page == 1) {
+            bloc.add(const GetFeed(false));
             bloc.pageController.jumpTo(0);
             return false;
           } else {

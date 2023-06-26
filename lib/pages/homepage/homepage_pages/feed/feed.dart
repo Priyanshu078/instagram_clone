@@ -177,13 +177,15 @@ class FeedPage extends StatelessWidget {
                           context.read<FeedBloc>().add(PostLikeEvent(
                               state.posts[index].id,
                               index,
-                              state.posts[index].userId));
+                              state.posts[index].userId,
+                              true));
                         },
                         onDoubleTap: () {
                           context.read<FeedBloc>().add(PostLikeEvent(
                               state.posts[index].id,
                               index,
-                              state.posts[index].userId));
+                              state.posts[index].userId,
+                              true));
                         },
                         commentPressed: () async {
                           var sharedPreferences =
