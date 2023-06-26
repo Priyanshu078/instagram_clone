@@ -28,7 +28,7 @@ class FeedPage extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                context.read<FeedBloc>().add(BookmarkFeed(index));
+                context.read<FeedBloc>().add(BookmarkFeed(index, true));
                 Navigator.of(context).pop();
               },
               child: Column(
@@ -201,7 +201,9 @@ class FeedPage extends StatelessWidget {
                                   )));
                         },
                         bookmarkPressed: () {
-                          context.read<FeedBloc>().add(BookmarkFeed(index));
+                          context
+                              .read<FeedBloc>()
+                              .add(BookmarkFeed(index, true));
                         },
                         sharePressed: () {},
                       );

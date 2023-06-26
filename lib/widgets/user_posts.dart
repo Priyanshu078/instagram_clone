@@ -44,7 +44,7 @@ class UserPosts extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (feedState != null) {
-                  context.read<FeedBloc>().add(BookmarkFeed(index));
+                  context.read<FeedBloc>().add(BookmarkFeed(index, false));
                 } else if (profileState != null) {
                   context.read<ProfileBloc>().add(BookmarkProfile(index));
                 } else {
@@ -281,7 +281,9 @@ class UserPosts extends StatelessWidget {
                                 )));
                       },
                       bookmarkPressed: () {
-                        context.read<FeedBloc>().add(BookmarkFeed(index));
+                        context
+                            .read<FeedBloc>()
+                            .add(BookmarkFeed(index, false));
                       },
                       sharePressed: () {},
                       onUserNamePressed: () {},

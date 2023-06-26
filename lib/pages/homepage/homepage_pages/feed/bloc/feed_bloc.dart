@@ -48,7 +48,9 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     List bookmarks = List.from(state.myData.bookmarks);
-    String postId = state.posts[event.postIndex].id;
+    String postId = event.inFeed
+        ? state.posts[event.postIndex].id
+        : state.userData.posts[event.postIndex].id;
     if (bookmarks.contains(postId)) {
       bookmarks.remove(postId);
     } else {

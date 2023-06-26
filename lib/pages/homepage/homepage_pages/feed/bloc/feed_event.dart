@@ -45,9 +45,10 @@ class DeleteFeedComment extends FeedEvent {
 
 class BookmarkFeed extends FeedEvent {
   final int postIndex;
-  const BookmarkFeed(this.postIndex);
+  final bool inFeed;
+  const BookmarkFeed(this.postIndex, this.inFeed);
   @override
-  List<Object> get props => [postIndex];
+  List<Object> get props => [postIndex, inFeed];
 }
 
 class FetchUserData extends FeedEvent {
