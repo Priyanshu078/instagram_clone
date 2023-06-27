@@ -145,16 +145,19 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       likes.add(userId);
     }
     posts[event.index] = posts[event.index].copyWith(likes: likes);
-    for (int i = 0; i < posts.length; i++) {
-      if (posts[i].id == event.postId) {
+    var docSnapshot = await collectionRef.doc(event.userId).get();
+    List<Post> userPosts = UserData.fromJson(docSnapshot.data()!).posts;
+    for (int i = 0; i < userPosts.length; i++) {
+      if (userPosts[i].id == event.postId) {
         if (event.inFeed) {
-          var docSnapshot = await collectionRef.doc(event.userId).get();
           UserData userdata = UserData.fromJson(docSnapshot.data()!);
+          userPosts[i] = userPosts[i].copyWith(likes: likes);
           await collectionRef
               .doc(event.userId)
-              .update(userdata.copyWith(posts: posts).toJson());
+              .update(userdata.copyWith(posts: userPosts).toJson());
         } else {
-          UserData userData = state.userData.copyWith(posts: posts);
+          userPosts[i] = userPosts[i].copyWith(likes: likes);
+          UserData userData = state.userData.copyWith(posts: userPosts);
           await collectionRef.doc(event.userId).update(userData.toJson());
         }
       }

@@ -65,6 +65,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                               .add(UserProfileBackEvent());
                           widget.pageController.jumpToPage(0);
                         } else {
+                          var bloc = context.read<FeedBloc>();
+                          bloc.add(const GetFeed(false));
                           widget.pageController.jumpToPage(0);
                         }
                       },
