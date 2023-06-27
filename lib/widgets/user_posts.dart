@@ -272,13 +272,14 @@ class UserPosts extends StatelessWidget {
                             await SharedPreferences.getInstance();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
-                                  value: context.read<ProfileBloc>(),
+                                  value: context.read<FeedBloc>(),
                                   child: CommentPage(
                                     sharedPreferences: sharedPreferences,
                                     postIndex: index,
                                     profileState: null,
                                     searchState: null,
                                     feedState: state,
+                                    inFeed: false,
                                   ),
                                 )));
                       },
@@ -363,6 +364,7 @@ class UserPosts extends StatelessWidget {
                                           profileState: state,
                                           searchState: null,
                                           feedState: null,
+                                          inFeed: false,
                                         ),
                                       )));
                             },
@@ -438,6 +440,7 @@ class UserPosts extends StatelessWidget {
                                         searchState: state,
                                         profileState: null,
                                         feedState: null,
+                                        inFeed: false,
                                       ),
                                     )));
                           },

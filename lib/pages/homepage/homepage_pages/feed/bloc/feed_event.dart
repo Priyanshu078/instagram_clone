@@ -30,10 +30,12 @@ class AddFeedComment extends FeedEvent {
   final List<Comments> comments;
   final int postIndex;
   final String comment;
-  const AddFeedComment(this.comments, this.postIndex, this.comment);
+  final bool inFeed;
+  const AddFeedComment(
+      this.comments, this.postIndex, this.comment, this.inFeed);
 
   @override
-  List<Object> get props => [comments, postIndex, comment];
+  List<Object> get props => [comments, postIndex, comment, inFeed];
 }
 
 class DeleteFeedComment extends FeedEvent {

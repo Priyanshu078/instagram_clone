@@ -99,7 +99,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         await SharedPreferences.getInstance();
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var collectionRef = firebaseFirestore.collection("users");
-    List<Post> posts = List.from(state.posts);
+    List<Post> posts =
+        event.inFeed ? List.from(state.posts) : List.from(state.userData.posts);
     String? profilePhotoUrl = sharedPreferences.getString('profilePhotoUrl');
     String? username = sharedPreferences.getString('username');
     String? myUserId = sharedPreferences.getString("userId");
@@ -110,21 +111,27 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     exisitingComments.add(newComment);
     posts[event.postIndex].comments = exisitingComments;
     String userId = posts[event.postIndex].userId;
-    var docRef = collectionRef.doc(userId);
-    var documentSnapshot = await docRef.get();
-    var documentData = documentSnapshot.data()!;
-    for (int i = 0; i < documentData["posts"].length; i++) {
-      if (documentData["posts"][i]["id"] == posts[event.postIndex].id) {
-        List comments = [];
+    var documentSnapshot = await collectionRef.doc(userId).get();
+    UserData userData = UserData.fromJson(documentSnapshot.data()!);
+    List<Post> userPosts = userData.posts;
+    for (int i = 0; i < userPosts.length; i++) {
+      if (userPosts[i].id == posts[event.postIndex].id) {
+        List<Comments> comments = [];
         for (Comments element in exisitingComments) {
-          comments.add(element.toJson());
+          comments.add(element);
         }
-        documentData["posts"][i]['comments'] = comments;
+        userPosts[i].comments = comments;
       }
     }
-    await docRef.update(documentData);
-    emit(CommentAddedState(
-        posts, state.myData, state.userData, state.tabIndex, state.postsIndex));
+    UserData updatedUserData = userData.copyWith(posts: userPosts);
+    // await collectionRef.doc(userId).update(updatedUserData.toJson());
+    if (event.inFeed) {
+      emit(CommentAddedState(posts, state.myData, state.userData,
+          state.tabIndex, state.postsIndex));
+    } else {
+      emit(CommentAddedState(state.posts, state.myData, updatedUserData,
+          state.tabIndex, state.postsIndex));
+    }
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {
@@ -132,10 +139,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String? userId = sharedPreferences.getString("userId");
     var firestore = FirebaseFirestore.instance;
     var collectionRef = firestore.collection("users");
-    // var docsSnapshot =
-    //     await collectionRef.where("id", isNotEqualTo: userId).get();
-    // var alldocs = docsSnapshot.docs;
-
     List<Post> posts =
         event.inFeed ? List.from(state.posts) : List.from(state.userData.posts);
     List likes = posts[event.index].likes;

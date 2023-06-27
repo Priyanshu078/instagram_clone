@@ -18,6 +18,7 @@ class CommentPage extends StatefulWidget {
     required this.profileState,
     required this.postIndex,
     required this.sharedPreferences,
+    required this.inFeed,
   });
 
   final SearchState? searchState;
@@ -25,6 +26,7 @@ class CommentPage extends StatefulWidget {
   final ProfileState? profileState;
   final int postIndex;
   final SharedPreferences sharedPreferences;
+  final bool inFeed;
 
   @override
   State<CommentPage> createState() => _CommentPageState();
@@ -158,18 +160,36 @@ class _CommentPageState extends State<CommentPage> {
                           ? BlocBuilder<FeedBloc, FeedState>(
                               builder: (context, state) {
                                 List<Comments> comments = [];
-                                comments.add(
-                                  Comments(
-                                    state.posts[widget.postIndex].caption,
-                                    state.posts[widget.postIndex]
-                                        .userProfilePhotoUrl,
-                                    state.posts[widget.postIndex].username,
-                                    state.posts[widget.postIndex].userId,
-                                    state.posts[widget.postIndex].id,
-                                  ),
-                                );
-                                comments.addAll(
-                                    state.posts[widget.postIndex].comments);
+                                if (widget.inFeed) {
+                                  comments.add(
+                                    Comments(
+                                      state.posts[widget.postIndex].caption,
+                                      state.posts[widget.postIndex]
+                                          .userProfilePhotoUrl,
+                                      state.posts[widget.postIndex].username,
+                                      state.posts[widget.postIndex].userId,
+                                      state.posts[widget.postIndex].id,
+                                    ),
+                                  );
+                                  comments.addAll(
+                                      state.posts[widget.postIndex].comments);
+                                } else {
+                                  comments.add(
+                                    Comments(
+                                      state.userData.posts[widget.postIndex]
+                                          .caption,
+                                      state.userData.posts[widget.postIndex]
+                                          .userProfilePhotoUrl,
+                                      state.userData.posts[widget.postIndex]
+                                          .username,
+                                      state.userData.posts[widget.postIndex]
+                                          .userId,
+                                      state.userData.posts[widget.postIndex].id,
+                                    ),
+                                  );
+                                  comments.addAll(state.userData
+                                      .posts[widget.postIndex].comments);
+                                }
                                 return CommentList(
                                   postIndex: widget.postIndex,
                                   sharedPreferences: widget.sharedPreferences,
@@ -238,8 +258,13 @@ class _CommentPageState extends State<CommentPage> {
                       var bloc = context.read<FeedBloc>();
                       List<Comments> comments =
                           bloc.state.posts[widget.postIndex].comments;
-                      bloc.add(AddFeedComment(
-                          comments, widget.postIndex, controller.text));
+                      if (widget.inFeed) {
+                        bloc.add(AddFeedComment(comments, widget.postIndex,
+                            controller.text, widget.inFeed));
+                      } else {
+                        bloc.add(AddFeedComment(comments, widget.postIndex,
+                            controller.text, widget.inFeed));
+                      }
                     }
                     controller.clear();
                     FocusManager.instance.primaryFocus!.unfocus();

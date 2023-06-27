@@ -199,6 +199,7 @@ class FeedPage extends StatelessWidget {
                                       profileState: null,
                                       searchState: null,
                                       postIndex: index,
+                                      inFeed: true,
                                     ),
                                   )));
                         },
