@@ -99,37 +99,44 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         await SharedPreferences.getInstance();
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var collectionRef = firebaseFirestore.collection("users");
-    List<Post> posts =
-        event.inFeed ? List.from(state.posts) : List.from(state.userData.posts);
     String? profilePhotoUrl = sharedPreferences.getString('profilePhotoUrl');
     String? username = sharedPreferences.getString('username');
     String? myUserId = sharedPreferences.getString("userId");
     String id = const Uuid().v4();
     Comments newComment =
         Comments(event.comment, profilePhotoUrl, username, myUserId, id);
-    List<Comments> exisitingComments = event.comments;
-    exisitingComments.add(newComment);
-    posts[event.postIndex].comments = exisitingComments;
-    String userId = posts[event.postIndex].userId;
-    var documentSnapshot = await collectionRef.doc(userId).get();
-    UserData userData = UserData.fromJson(documentSnapshot.data()!);
-    List<Post> userPosts = userData.posts;
-    for (int i = 0; i < userPosts.length; i++) {
-      if (userPosts[i].id == posts[event.postIndex].id) {
-        List<Comments> comments = [];
-        for (Comments element in exisitingComments) {
-          comments.add(element);
-        }
-        userPosts[i].comments = comments;
-      }
-    }
-    UserData updatedUserData = userData.copyWith(posts: userPosts);
-    // await collectionRef.doc(userId).update(updatedUserData.toJson());
+    List<Comments> existingComments = event.comments;
+    existingComments.add(newComment);
     if (event.inFeed) {
+      List<Post> posts = List.from(state.posts);
+      posts[event.postIndex].comments = existingComments;
+      String userId = posts[event.postIndex].userId;
+      var docRef = collectionRef.doc(userId);
+      var documentSnapshot = await docRef.get();
+      var documentData = documentSnapshot.data()!;
+      for (int i = 0; i < documentData["posts"].length; i++) {
+        if (documentData["posts"][i]["id"] == posts[event.postIndex].id) {
+          List comments = [];
+          for (Comments element in existingComments) {
+            comments.add(element.toJson());
+          }
+          documentData["posts"][i]['comments'] = comments;
+        }
+      }
+      await docRef.update(documentData);
       emit(CommentAddedState(posts, state.myData, state.userData,
           state.tabIndex, state.postsIndex));
     } else {
-      emit(CommentAddedState(state.posts, state.myData, updatedUserData,
+      List<Post> posts = List.from(state.userData.posts);
+      posts[event.postIndex] =
+          posts[event.postIndex].copyWith(comments: existingComments);
+      UserData userData = state.userData.copyWith(posts: posts);
+      String userId = posts[event.postIndex].userId;
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .update(userData.toJson());
+      emit(CommentAddedState(state.posts, state.myData, userData,
           state.tabIndex, state.postsIndex));
     }
   }
