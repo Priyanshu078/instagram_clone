@@ -102,9 +102,10 @@ class _CommentPageState extends State<CommentPage> {
                           tileHeight: height * 0.08,
                           height: height,
                           sharedPreferences: widget.sharedPreferences,
-                          search: true,
-                          feed: false,
-                          profile: false,
+                          searchComments: true,
+                          feedComments: false,
+                          profileComments: false,
+                          inFeed: false,
                         );
                       },
                     )
@@ -151,9 +152,10 @@ class _CommentPageState extends State<CommentPage> {
                               tileHeight: height * 0.08,
                               height: height,
                               sharedPreferences: widget.sharedPreferences,
-                              profile: true,
-                              feed: false,
-                              search: false,
+                              profileComments: true,
+                              feedComments: false,
+                              searchComments: false,
+                              inFeed: false,
                             );
                           },
                         )
@@ -199,9 +201,10 @@ class _CommentPageState extends State<CommentPage> {
                                   comments: comments,
                                   tileHeight: height * 0.08,
                                   height: height,
-                                  feed: true,
-                                  search: false,
-                                  profile: false,
+                                  feedComments: true,
+                                  inFeed: widget.inFeed,
+                                  searchComments: false,
+                                  profileComments: false,
                                 );
                               },
                             )
@@ -212,9 +215,10 @@ class _CommentPageState extends State<CommentPage> {
                               tileHeight: height * 0.08,
                               height: height,
                               sharedPreferences: widget.sharedPreferences,
-                              feed: true,
-                              profile: false,
-                              search: false,
+                              feedComments: true,
+                              inFeed: true,
+                              profileComments: false,
+                              searchComments: false,
                             ),
             ),
             Row(

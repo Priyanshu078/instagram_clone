@@ -66,7 +66,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   Future<void> deleteComment(DeleteFeedComment event, Emitter emit) async {
-    List<Post> posts = List.from(state.posts);
+    List<Post> posts =
+        event.inFeed ? List.from(state.posts) : List.from(state.userData.posts);
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     String userId = posts[event.postIndex].userId;
     var collectionRef = firebaseFirestore.collection("users");
@@ -74,11 +75,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     var documentSnapshot = await docRef.get();
     var documentData = documentSnapshot.data()!;
     for (int i = 0; i < documentData["posts"].length; i++) {
-      if (documentData["posts"][i]['id'] == state.posts[event.postIndex].id) {
+      if (documentData["posts"][i]['id'] == posts[event.postIndex].id) {
         List comments = documentData["posts"][i]['comments'];
         for (int j = 0; j < comments.length; j++) {
           if (comments[j]['id'] ==
-              state.posts[event.postIndex].comments[event.commentIndex].id) {
+              posts[event.postIndex].comments[event.commentIndex].id) {
             comments.removeAt(j);
             documentData["posts"][i]['comments'] = comments;
           }
@@ -90,8 +91,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     posts[event.postIndex] =
         posts[event.postIndex].copyWith(comments: comments);
     await docRef.update(documentData);
-    emit(CommentDeletedState(
-        posts, state.myData, state.userData, state.tabIndex, state.postsIndex));
+    if (event.inFeed) {
+      emit(CommentDeletedState(posts, state.myData, state.userData,
+          state.tabIndex, state.postsIndex));
+    } else {
+      UserData userData = state.userData.copyWith(posts: posts);
+      emit(CommentDeletedState(state.posts, state.myData, userData,
+          state.tabIndex, state.postsIndex));
+    }
   }
 
   Future<void> addComment(AddFeedComment event, Emitter emit) async {

@@ -17,10 +17,11 @@ class CommentList extends StatelessWidget {
     required this.height,
     required this.width,
     required this.sharedPreferences,
-    required this.feed,
-    required this.search,
-    required this.profile,
+    required this.feedComments,
+    required this.searchComments,
+    required this.profileComments,
     required this.postIndex,
+    required this.inFeed,
   });
 
   final List<Comments> comments;
@@ -28,10 +29,11 @@ class CommentList extends StatelessWidget {
   final double height;
   final double width;
   final SharedPreferences sharedPreferences;
-  final bool feed;
-  final bool search;
-  final bool profile;
+  final bool feedComments;
+  final bool searchComments;
+  final bool profileComments;
   final int postIndex;
+  final bool inFeed;
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +88,16 @@ class CommentList extends StatelessWidget {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            if (feed) {
-                              context
-                                  .read<FeedBloc>()
-                                  .add(DeleteFeedComment(postIndex, index - 1));
-                            } else if (search) {
+                            if (feedComments) {
+                              context.read<FeedBloc>().add(DeleteFeedComment(
+                                    postIndex,
+                                    index - 1,
+                                    inFeed,
+                                  ));
+                            } else if (searchComments) {
                               context.read<SearchBloc>().add(
                                   DeleteSearchComment(postIndex, index - 1));
-                            } else if (profile) {
+                            } else if (profileComments) {
                               context.read<ProfileBloc>().add(
                                   DeleteProfileComment(postIndex, index - 1));
                             }
