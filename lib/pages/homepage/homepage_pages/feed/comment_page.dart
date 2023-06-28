@@ -9,6 +9,7 @@ import 'package:instagram_clone/widgets/comment_list.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class CommentPage extends StatefulWidget {
   const CommentPage({
@@ -160,6 +161,7 @@ class _CommentPageState extends State<CommentPage> {
                           ? BlocBuilder<FeedBloc, FeedState>(
                               builder: (context, state) {
                                 List<Comments> comments = [];
+                                String id = const Uuid().v4();
                                 if (widget.inFeed) {
                                   comments.add(
                                     Comments(
@@ -168,7 +170,7 @@ class _CommentPageState extends State<CommentPage> {
                                           .userProfilePhotoUrl,
                                       state.posts[widget.postIndex].username,
                                       state.posts[widget.postIndex].userId,
-                                      state.posts[widget.postIndex].id,
+                                      id,
                                     ),
                                   );
                                   comments.addAll(
@@ -184,7 +186,7 @@ class _CommentPageState extends State<CommentPage> {
                                           .username,
                                       state.userData.posts[widget.postIndex]
                                           .userId,
-                                      state.userData.posts[widget.postIndex].id,
+                                      id,
                                     ),
                                   );
                                   comments.addAll(state.userData
@@ -256,8 +258,10 @@ class _CommentPageState extends State<CommentPage> {
                           comments, widget.postIndex, controller.text));
                     } else if (widget.feedState != null) {
                       var bloc = context.read<FeedBloc>();
-                      List<Comments> comments =
-                          bloc.state.posts[widget.postIndex].comments;
+                      List<Comments> comments = widget.inFeed
+                          ? bloc.state.posts[widget.postIndex].comments
+                          : bloc
+                              .state.userData.posts[widget.postIndex].comments;
                       if (widget.inFeed) {
                         bloc.add(AddFeedComment(comments, widget.postIndex,
                             controller.text, widget.inFeed));
