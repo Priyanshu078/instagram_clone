@@ -172,7 +172,9 @@ class _HomePageState extends State<HomePage> {
                   }
                 } else if (index == 1) {
                   var bloc = context.read<SearchBloc>();
-                  bloc.add(GetPosts());
+                  if (homePageBloc.state.index != 1) {
+                    bloc.add(GetPosts());
+                  }
                   bloc.searchController.clear();
                   if (bloc.pageController.page == 1) {
                     await bloc.pageController.animateToPage(
