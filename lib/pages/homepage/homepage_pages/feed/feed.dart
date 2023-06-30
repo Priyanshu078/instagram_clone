@@ -145,18 +145,36 @@ class FeedPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(top: 5),
                           child: Row(
                             children: [
                               SizedBox(
                                 height: height * 0.1,
                                 width: width * 0.2,
-                                child: ProfilePhoto(
-                                  height: height * 0.09,
-                                  width: height * 0.1,
-                                  wantBorder: false,
-                                  storyAdder: false,
-                                  imageUrl: state.myData.profilePhotoUrl,
+                                child: GestureDetector(
+                                  child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        ProfilePhoto(
+                                          height: height * 0.1,
+                                          width: height * 0.1,
+                                          wantBorder: false,
+                                          storyAdder: false,
+                                          imageUrl:
+                                              state.myData.profilePhotoUrl,
+                                        ),
+                                        Container(
+                                          height: height * 0.1,
+                                          width: height * 0.1,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              width: 2,
+                                              color: Colors.pink.shade900,
+                                            ),
+                                          ),
+                                        )
+                                      ]),
                                 ),
                               ),
                               SizedBox(
@@ -164,17 +182,34 @@ class FeedPage extends StatelessWidget {
                                 width: width * 0.8,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: state.userData.stories.length,
+                                  itemCount: 10,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding:
                                           const EdgeInsets.only(left: 10.5),
-                                      child: ProfilePhoto(
-                                        height: height * 0.09,
-                                        width: height * 0.1,
-                                        wantBorder: true,
-                                        storyAdder: false,
-                                        imageUrl: state.myData.profilePhotoUrl,
+                                      child: GestureDetector(
+                                        child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              ProfilePhoto(
+                                                height: height * 0.1,
+                                                width: height * 0.1,
+                                                wantBorder: false,
+                                                storyAdder: false,
+                                                imageUrl: state
+                                                    .myData.profilePhotoUrl,
+                                              ),
+                                              Container(
+                                                height: height * 0.1,
+                                                width: height * 0.1,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                        width: 2,
+                                                        color: Colors
+                                                            .pink.shade900)),
+                                              )
+                                            ]),
                                       ),
                                     );
                                   },
