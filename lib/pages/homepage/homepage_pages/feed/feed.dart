@@ -152,6 +152,7 @@ class FeedPage extends StatelessWidget {
                                 height: height * 0.1,
                                 width: width * 0.2,
                                 child: GestureDetector(
+                                  onTap: () {},
                                   child: Stack(
                                       alignment: Alignment.center,
                                       children: [
@@ -188,6 +189,7 @@ class FeedPage extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(left: 10.5),
                                       child: GestureDetector(
+                                        onTap: () {},
                                         child: Stack(
                                             alignment: Alignment.center,
                                             children: [

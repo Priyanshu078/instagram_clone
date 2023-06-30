@@ -17,6 +17,7 @@ class UserData {
   final String profilePhotoUrl;
   final bool private;
   final List bookmarks;
+  final bool addedStory;
 
   UserData(
     this.id,
@@ -34,29 +35,32 @@ class UserData {
     this.profilePhotoUrl,
     this.private,
     this.bookmarks,
+    this.addedStory,
   );
 
   factory UserData.temp() {
     return UserData("id", "name", "username", "contact", "password", 1, "bio",
-        "tagline", [], [], [], [], "", false, []);
+        "tagline", [], [], [], [], "", false, [], false);
   }
 
-  UserData copyWith(
-      {String? id,
-      String? name,
-      String? username,
-      String? contact,
-      String? password,
-      int? gender,
-      String? bio,
-      String? tagline,
-      List<Post>? posts,
-      List? stories,
-      List? followers,
-      List? following,
-      String? profilePhotoUrl,
-      bool? private,
-      List? bookmarks}) {
+  UserData copyWith({
+    String? id,
+    String? name,
+    String? username,
+    String? contact,
+    String? password,
+    int? gender,
+    String? bio,
+    String? tagline,
+    List<Post>? posts,
+    List? stories,
+    List? followers,
+    List? following,
+    String? profilePhotoUrl,
+    bool? private,
+    List? bookmarks,
+    bool? addedStory,
+  }) {
     return UserData(
       id ?? this.id,
       name ?? this.name,
@@ -73,44 +77,47 @@ class UserData {
       profilePhotoUrl ?? this.profilePhotoUrl,
       private ?? this.private,
       bookmarks ?? this.bookmarks,
+      addedStory ?? this.addedStory,
     );
   }
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-        json['id'],
-        json['name'],
-        json['username'],
-        json['contact'],
-        json['password'],
-        json['gender'],
-        json['bio'],
-        json['tagline'],
-        List<Post>.from(
-          json['posts'].map(
-            (post) => Post(
-                id: post['id'],
-                username: post['username'],
-                imageUrl: post['imageUrl'],
-                likes: post['likes'],
-                comments: List.from(post["comments"].map((comment) => Comments(
-                      comment["comment"],
-                      comment['profilePhotoUrl'],
-                      comment['username'],
-                      comment["userId"],
-                      comment["id"],
-                    ))),
-                caption: post['caption'],
-                userId: post['userId'],
-                userProfilePhotoUrl: post['userProfilePhotoUrl']),
-          ),
+      json['id'],
+      json['name'],
+      json['username'],
+      json['contact'],
+      json['password'],
+      json['gender'],
+      json['bio'],
+      json['tagline'],
+      List<Post>.from(
+        json['posts'].map(
+          (post) => Post(
+              id: post['id'],
+              username: post['username'],
+              imageUrl: post['imageUrl'],
+              likes: post['likes'],
+              comments: List.from(post["comments"].map((comment) => Comments(
+                    comment["comment"],
+                    comment['profilePhotoUrl'],
+                    comment['username'],
+                    comment["userId"],
+                    comment["id"],
+                  ))),
+              caption: post['caption'],
+              userId: post['userId'],
+              userProfilePhotoUrl: post['userProfilePhotoUrl']),
         ),
-        json['stories'],
-        json['followers'],
-        json['following'],
-        json['profilePhotoUrl'],
-        json['private'],
-        json['bookmarks']);
+      ),
+      json['stories'],
+      json['followers'],
+      json['following'],
+      json['profilePhotoUrl'],
+      json['private'],
+      json['bookmarks'],
+      json['addedStory'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -130,6 +137,7 @@ class UserData {
       "profilePhotoUrl": profilePhotoUrl,
       "private": private,
       "bookmarks": bookmarks,
+      "addedStory": addedStory,
     };
   }
 }
