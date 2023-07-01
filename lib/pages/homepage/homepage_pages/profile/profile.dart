@@ -7,6 +7,7 @@ import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/edit_profile.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/previous_stories.dart';
 import 'package:instagram_clone/widgets/user_posts.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
@@ -167,7 +168,8 @@ class _ProfilePageState extends State<ProfilePage>
                 state is DeletedCommentProfileState ||
                 state is BookmarkedState ||
                 state is SavedPostsState ||
-                state is DeletedPostState) {
+                state is DeletedPostState ||
+                state is FetchedPreviousStories) {
               return Scaffold(
                 backgroundColor: textFieldBackgroundColor,
                 appBar: AppBar(
@@ -355,21 +357,33 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                           Row(
                             children: [
-                              Column(
-                                children: [
-                                  ProfilePhoto(
-                                    height: height * 0.09,
-                                    width: height * 0.1,
-                                    wantBorder: true,
-                                    storyAdder: true,
-                                    imageUrl: "",
-                                  ),
-                                  const InstaText(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.normal,
-                                      text: "New")
-                                ],
+                              GestureDetector(
+                                onTap: () {
+                                  context
+                                      .read<ProfileBloc>()
+                                      .add(FetchPreviousStories());
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => BlocProvider.value(
+                                            value: context.read<ProfileBloc>(),
+                                            child: const PreviousStories(),
+                                          )));
+                                },
+                                child: Column(
+                                  children: [
+                                    ProfilePhoto(
+                                      height: height * 0.09,
+                                      width: height * 0.1,
+                                      wantBorder: true,
+                                      storyAdder: true,
+                                      imageUrl: "",
+                                    ),
+                                    const InstaText(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.normal,
+                                        text: "New")
+                                  ],
+                                ),
                               ),
                               SizedBox(
                                 height: height * 0.12,

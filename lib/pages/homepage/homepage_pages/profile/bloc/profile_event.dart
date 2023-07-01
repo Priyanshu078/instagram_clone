@@ -93,3 +93,5 @@ class DeletePost extends ProfileEvent {
   @override
   List<Object> get props => [index];
 }
+
+class FetchPreviousStories extends ProfileEvent {}
