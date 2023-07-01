@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/chat_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/add_story.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/bloc/story_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/view_story.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/user_profile.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
@@ -152,7 +155,23 @@ class FeedPage extends StatelessWidget {
                                 height: height * 0.1,
                                 width: width * 0.2,
                                 child: GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    if (state.myData.addedStory) {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  const ViewStoryPage()));
+                                    } else {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BlocProvider(
+                                                    create: (context) =>
+                                                        StoryBloc(),
+                                                    child: const AddStoryPage(),
+                                                  )));
+                                    }
+                                  },
                                   child: Stack(
                                       alignment: Alignment.center,
                                       children: [

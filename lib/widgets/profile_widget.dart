@@ -49,6 +49,8 @@ class ProfileWidget extends StatelessWidget {
               child: Container(
                 decoration: const BoxDecoration(shape: BoxShape.circle),
                 child: CachedNetworkImage(
+                  height: 340,
+                  width: 340,
                   fit: BoxFit.fill,
                   imageUrl: url,
                   placeholder: (context, val) {

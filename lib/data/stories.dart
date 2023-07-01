@@ -22,6 +22,7 @@ class Story {
   final String imageUrl;
   final String caption;
   final String userId;
+  final String date;
 
   Story({
     required this.id,
@@ -30,7 +31,19 @@ class Story {
     required this.imageUrl,
     required this.caption,
     required this.userId,
+    required this.date,
   });
+
+  factory Story.temp() {
+    return Story(
+        id: "id",
+        userProfilePhotoUrl: "userProfilePhotoUrl",
+        username: "username",
+        imageUrl: "imageUrl",
+        caption: "caption",
+        userId: "userId",
+        date: "date");
+  }
 
   factory Story.fromJson(Map<String, dynamic> json) {
     return Story(
@@ -40,6 +53,7 @@ class Story {
       imageUrl: json["imageUrl"],
       caption: json["caption"],
       userId: json["userId"],
+      date: json["date"],
     );
   }
 
@@ -51,6 +65,7 @@ class Story {
       "imageUrl": imageUrl,
       "caption": caption,
       "userId": userId,
+      "date": date,
     };
   }
 }

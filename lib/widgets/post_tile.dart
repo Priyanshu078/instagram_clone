@@ -127,6 +127,7 @@ class PostTile extends StatelessWidget {
             child: GestureDetector(
               onDoubleTap: onDoubleTap,
               child: CachedNetworkImage(
+                width: double.infinity,
                 imageUrl: searchState == null
                     ? profileState == null
                         ? isFeedData
