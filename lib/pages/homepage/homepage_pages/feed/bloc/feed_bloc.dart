@@ -212,19 +212,22 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (event.atStart) {
       posts.shuffle();
     }
-    var peopleAddedStoriesSnapshot =
-        await firestoreCollectionRef.where("addedStory", isEqualTo: true).get();
-    var peopleAddedStoryDocs = peopleAddedStoriesSnapshot.docs;
-    var usersAddedStoryList = peopleAddedStoryDocs.map((element) => element.id);
     var storiesCollectionRef = FirebaseFirestore.instance.collection("stories");
-    List<Story> stories = [];
-    for (var id in usersAddedStoryList) {
-      var docData = await storiesCollectionRef.doc(id).get();
-      List allStories = docData.data()!["previous_stories"];
-      if (allStories.isNotEmpty) {
-        stories.add(Story(post: allStories.last, viewed: false));
-      }
-    }
+    var peopleAddedStoriesSnapshot =
+        await storiesCollectionRef.where("addedStory", isEqualTo: true).get();
+    var peopleAddedStoryDocs = peopleAddedStoriesSnapshot.docs;
+    var usersAddedStoryList = peopleAddedStoryDocs
+        .map((element) => element.data()["previous_stories"].last);
+    List<StoryData> stories = usersAddedStoryList
+        .map((story) => StoryData(story: Story.fromJson(story), viewed: false))
+        .toList();
+    // for (var id in usersAddedStoryList) {
+    //   var docData = await storiesCollectionRef.doc(id).get();
+    //   List allStories = docData.data()!["previous_stories"];
+    //   if (allStories.isNotEmpty) {
+    //     stories.add(Story(post: allStories.last, viewed: false));
+    //   }
+    // }
     emit(FeedFetched(posts, myData, state.userData, state.tabIndex,
         state.postsIndex, stories));
   }

@@ -36,6 +36,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             .collection('users')
             .doc(userData.id)
             .set(userData.toJson());
+        await FirebaseFirestore.instance
+            .collection("stories")
+            .doc(userData.id)
+            .set({"previous_stories": [], "storyAdded": false});
         emit(SignUpDone(state.obscurePassword, state.gender));
       } else {
         emit(FillAllDetails(state.obscurePassword, state.gender));

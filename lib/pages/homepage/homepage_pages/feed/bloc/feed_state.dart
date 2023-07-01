@@ -8,7 +8,7 @@ abstract class FeedState extends Equatable {
   final UserData userData;
   final int postsIndex;
   final int tabIndex;
-  final List<Story> stories;
+  final List<StoryData> stories;
   @override
   List<Object> get props =>
       [posts, myData, userData, tabIndex, postsIndex, stories];
