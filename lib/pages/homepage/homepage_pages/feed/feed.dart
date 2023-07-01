@@ -164,17 +164,37 @@ class FeedPage extends StatelessWidget {
                                           imageUrl:
                                               state.myData.profilePhotoUrl,
                                         ),
-                                        Container(
-                                          height: height * 0.1,
-                                          width: height * 0.1,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Colors.pink.shade900,
-                                            ),
-                                          ),
-                                        )
+                                        state.myData.addedStory
+                                            ? Container(
+                                                height: height * 0.1,
+                                                width: height * 0.1,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    width: 2,
+                                                    color: Colors.pink.shade900,
+                                                  ),
+                                                ),
+                                              )
+                                            : Positioned(
+                                                bottom: 8,
+                                                right: 8,
+                                                child: Container(
+                                                  height: width * 0.04,
+                                                  width: width * 0.04,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: instablue,
+                                                  ),
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.add,
+                                                      color: Colors.white,
+                                                      size: 11,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
                                       ]),
                                 ),
                               ),
@@ -183,7 +203,7 @@ class FeedPage extends StatelessWidget {
                                 width: width * 0.8,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: 10,
+                                  itemCount: state.stories.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding:
@@ -201,16 +221,19 @@ class FeedPage extends StatelessWidget {
                                                 imageUrl: state
                                                     .myData.profilePhotoUrl,
                                               ),
-                                              Container(
-                                                height: height * 0.1,
-                                                width: height * 0.1,
-                                                decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                        width: 2,
-                                                        color: Colors
-                                                            .pink.shade900)),
-                                              )
+                                              state.stories[index].viewed
+                                                  ? Container()
+                                                  : Container(
+                                                      height: height * 0.1,
+                                                      width: height * 0.1,
+                                                      decoration: BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          border: Border.all(
+                                                              width: 2,
+                                                              color: Colors.pink
+                                                                  .shade900)),
+                                                    )
                                             ]),
                                       ),
                                     );
