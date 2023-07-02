@@ -99,3 +99,11 @@ class PostIndexChangeFeedState extends FeedState {
   List<Object> get props =>
       [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
 }
+
+class MyStoryFetchedState extends FeedState {
+  const MyStoryFetchedState(super.posts, super.myData, super.userData,
+      super.tabIndex, super.postsIndex, super.stories, super.myStory);
+  @override
+  List<Object> get props =>
+      [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
+}

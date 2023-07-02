@@ -148,11 +148,11 @@ class FeedPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return Padding(
-                          padding: const EdgeInsets.only(top: 5),
+                          padding: const EdgeInsets.only(top: 2),
                           child: Row(
                             children: [
                               SizedBox(
-                                height: height * 0.1,
+                                height: height * 0.11,
                                 width: width * 0.2,
                                 child: GestureDetector(
                                   onTap: () {
@@ -172,53 +172,63 @@ class FeedPage extends StatelessWidget {
                                                   )));
                                     }
                                   },
-                                  child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        ProfilePhoto(
-                                          height: height * 0.1,
-                                          width: height * 0.1,
-                                          wantBorder: false,
-                                          storyAdder: false,
-                                          imageUrl:
-                                              state.myData.profilePhotoUrl,
-                                        ),
-                                        state.myData.addedStory
-                                            ? Container(
-                                                height: height * 0.1,
-                                                width: height * 0.1,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    width: 2,
-                                                    color: Colors.pink.shade900,
-                                                  ),
-                                                ),
-                                              )
-                                            : Positioned(
-                                                bottom: 8,
-                                                right: 8,
-                                                child: Container(
-                                                  height: width * 0.04,
-                                                  width: width * 0.04,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: instablue,
-                                                  ),
-                                                  child: const Center(
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      color: Colors.white,
-                                                      size: 11,
+                                  child: Column(
+                                    children: [
+                                      Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            ProfilePhoto(
+                                              height: height * 0.09,
+                                              width: height * 0.095,
+                                              wantBorder: false,
+                                              storyAdder: false,
+                                              imageUrl:
+                                                  state.myData.profilePhotoUrl,
+                                            ),
+                                            state.myData.addedStory
+                                                ? Container(
+                                                    height: height * 0.1,
+                                                    width: height * 0.1,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(
+                                                        width: 2,
+                                                        color: Colors
+                                                            .pink.shade900,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              )
-                                      ]),
+                                                  )
+                                                : Positioned(
+                                                    bottom: 8,
+                                                    right: 8,
+                                                    child: Container(
+                                                      height: width * 0.04,
+                                                      width: width * 0.04,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: instablue,
+                                                      ),
+                                                      child: const Center(
+                                                        child: Icon(
+                                                          Icons.add,
+                                                          color: Colors.white,
+                                                          size: 11,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                          ]),
+                                      const InstaText(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.normal,
+                                          text: "Your story"),
+                                    ],
+                                  ),
                                 ),
                               ),
                               SizedBox(
-                                height: height * 0.1,
+                                height: height * 0.11,
                                 width: width * 0.8,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
@@ -228,32 +238,48 @@ class FeedPage extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(left: 10.5),
                                       child: GestureDetector(
-                                        onTap: () {},
-                                        child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              ProfilePhoto(
-                                                height: height * 0.1,
-                                                width: height * 0.1,
-                                                wantBorder: false,
-                                                storyAdder: false,
-                                                imageUrl: state
-                                                    .myData.profilePhotoUrl,
-                                              ),
-                                              state.stories[index].viewed
-                                                  ? Container()
-                                                  : Container(
-                                                      height: height * 0.1,
-                                                      width: height * 0.1,
-                                                      decoration: BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                              width: 2,
-                                                              color: Colors.pink
-                                                                  .shade900)),
-                                                    )
-                                            ]),
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const ViewStoryPage()));
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  ProfilePhoto(
+                                                    height: height * 0.09,
+                                                    width: height * 0.095,
+                                                    wantBorder: false,
+                                                    storyAdder: false,
+                                                    imageUrl: state
+                                                        .myData.profilePhotoUrl,
+                                                  ),
+                                                  state.stories[index].viewed
+                                                      ? Container()
+                                                      : Container(
+                                                          height: height * 0.1,
+                                                          width: height * 0.1,
+                                                          decoration: BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              border: Border.all(
+                                                                  width: 2,
+                                                                  color: Colors
+                                                                      .pink
+                                                                      .shade900)),
+                                                        )
+                                                ]),
+                                            InstaText(
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                text: state.stories[index].story
+                                                    .username),
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },

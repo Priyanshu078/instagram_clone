@@ -75,3 +75,5 @@ class FeedPostsIndexChangeEvent extends FeedEvent {
   @override
   List<Object> get props => [postIndex];
 }
+
+class GetMyStory extends FeedEvent {}

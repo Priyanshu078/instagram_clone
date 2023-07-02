@@ -34,6 +34,21 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<FeedPostsIndexChangeEvent>((event, emit) => emit(
         PostIndexChangeFeedState(state.posts, state.myData, state.userData,
             state.tabIndex, event.postIndex, state.stories, Story.temp())));
+    on<GetMyStory>((event, emit) => getMyStory(event, emit));
+  }
+
+  Future<void> getMyStory(GetMyStory event, Emitter emit) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? myUserId = sharedPreferences.getString("userId");
+    var docSnapshot = await FirebaseFirestore.instance
+        .collection("stories")
+        .doc(myUserId)
+        .get();
+    var docData = docSnapshot.data()!;
+    Story myStory = Story.fromJson(docData["previous_stories"].last);
+    UserData myData = state.myData.copyWith(addedStory: true);
+    emit(MyStoryFetchedState(state.posts, myData, state.userData,
+        state.tabIndex, state.postsIndex, state.stories, myStory));
   }
 
   Future<void> fetchUserData(FetchUserData event, Emitter emit) async {
