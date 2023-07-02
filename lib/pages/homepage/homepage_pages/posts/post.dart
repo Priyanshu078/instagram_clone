@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
@@ -62,6 +63,7 @@ class _PostPageState extends State<PostPage> {
                     fontWeight: FontWeight.w700,
                     buttonColor: Colors.black,
                     height: height * 0.08,
+                    buttonIcon: const Icon(CupertinoIcons.photo_fill),
                   )
                 ],
               );

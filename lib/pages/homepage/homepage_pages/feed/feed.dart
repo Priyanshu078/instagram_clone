@@ -142,7 +142,8 @@ class FeedPage extends StatelessWidget {
                   state is UserDataLoadingState ||
                   state is UserDataFetchedState ||
                   state is TabChangedFeedState ||
-                  state is PostIndexChangeFeedState) {
+                  state is PostIndexChangeFeedState ||
+                  state is MyStoryFetchedState) {
                 return ListView.builder(
                     itemCount: state.posts.length + 1,
                     itemBuilder: (context, index) {
@@ -157,19 +158,26 @@ class FeedPage extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () {
                                     if (state.myData.addedStory) {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  const ViewStoryPage()));
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (_) => ViewStoryPage(
+                                                    story: state.myStory,
+                                                  )));
                                     } else {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BlocProvider(
-                                                    create: (context) =>
-                                                        StoryBloc(),
-                                                    child: const AddStoryPage(),
-                                                  )));
+                                              builder: (_) => MultiBlocProvider(
+                                                      providers: [
+                                                        BlocProvider(
+                                                            create: (context) =>
+                                                                StoryBloc()),
+                                                        BlocProvider.value(
+                                                          value: context
+                                                              .read<FeedBloc>(),
+                                                        )
+                                                      ],
+                                                      child:
+                                                          const AddStoryPage())));
                                     }
                                   },
                                   child: Column(
@@ -179,7 +187,7 @@ class FeedPage extends StatelessWidget {
                                           children: [
                                             ProfilePhoto(
                                               height: height * 0.09,
-                                              width: height * 0.095,
+                                              width: height * 0.09,
                                               wantBorder: false,
                                               storyAdder: false,
                                               imageUrl:
@@ -187,8 +195,8 @@ class FeedPage extends StatelessWidget {
                                             ),
                                             state.myData.addedStory
                                                 ? Container(
-                                                    height: height * 0.1,
-                                                    width: height * 0.1,
+                                                    height: height * 0.09,
+                                                    width: height * 0.09,
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
                                                       border: Border.all(
@@ -239,10 +247,13 @@ class FeedPage extends StatelessWidget {
                                           const EdgeInsets.only(left: 10.5),
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const ViewStoryPage()));
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (_) => ViewStoryPage(
+                                                        story: state
+                                                            .stories[index]
+                                                            .story,
+                                                      )));
                                         },
                                         child: Column(
                                           children: [
@@ -251,17 +262,19 @@ class FeedPage extends StatelessWidget {
                                                 children: [
                                                   ProfilePhoto(
                                                     height: height * 0.09,
-                                                    width: height * 0.095,
+                                                    width: height * 0.09,
                                                     wantBorder: false,
                                                     storyAdder: false,
                                                     imageUrl: state
-                                                        .myData.profilePhotoUrl,
+                                                        .stories[index]
+                                                        .story
+                                                        .userProfilePhotoUrl,
                                                   ),
                                                   state.stories[index].viewed
                                                       ? Container()
                                                       : Container(
-                                                          height: height * 0.1,
-                                                          width: height * 0.1,
+                                                          height: height * 0.09,
+                                                          width: height * 0.09,
                                                           decoration: BoxDecoration(
                                                               shape: BoxShape
                                                                   .circle,

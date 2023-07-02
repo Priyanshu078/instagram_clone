@@ -233,16 +233,31 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         await storiesCollectionRef.where("addedStory", isEqualTo: true).get();
     var peopleAddedStoryDocs = peopleAddedStoriesSnapshot.docs;
     Story myStory = Story.temp();
-    var usersAddedStoryList = peopleAddedStoryDocs.map((element) {
-      if (element.id == userId) {
-        myStory = element.data()["previous_stories"].last;
+    // var usersAddedStoryList = peopleAddedStoryDocs.map((element) {
+    //   if (element.id == userId) {
+    //     myStory = Story.fromJson(element.data()["previous_stories"].last);
+    //   } else {
+    //     return element.data()["previous_stories"].last;
+    //   }
+    // });
+    // List<StoryData> stories = usersAddedStoryList.isNotEmpty
+    //     ? usersAddedStoryList
+    //         .map((story) =>
+    //             StoryData(story: Story.fromJson(story), viewed: false))
+    //         .toList()
+    //     : [];
+    List<StoryData> stories = [];
+    for (int i = 0; i < peopleAddedStoryDocs.length; i++) {
+      if (peopleAddedStoryDocs[i].id == userId) {
+        myStory = Story.fromJson(
+            peopleAddedStoryDocs[i].data()["previous_stories"].last);
       } else {
-        return element.data()["previous_stories"].last;
+        stories.add(StoryData(
+            story: Story.fromJson(
+                peopleAddedStoryDocs[i].data()["previous_stories"].last),
+            viewed: false));
       }
-    });
-    List<StoryData> stories = usersAddedStoryList
-        .map((story) => StoryData(story: Story.fromJson(story), viewed: false))
-        .toList();
+    }
     emit(FeedFetched(
       posts,
       myData,
