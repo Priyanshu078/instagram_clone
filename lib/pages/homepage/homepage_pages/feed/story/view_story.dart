@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/data/stories.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
 
@@ -9,10 +12,41 @@ class ViewStoryPage extends StatelessWidget {
 
   final Story story;
 
+  Widget buildBottomSheet(BuildContext context, double height, double width) {
+    return SizedBox(
+      height: height * 0.15,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 16.0,
+          bottom: 16.0,
+        ),
+        child: Column(
+          children: [
+            ListTile(
+              minLeadingWidth: 0,
+              leading: Icon(
+                Icons.delete_outline,
+                color: instaRed,
+              ),
+              title: InstaText(
+                fontSize: 17,
+                color: instaRed,
+                fontWeight: FontWeight.normal,
+                text: "Delete Story",
+              ),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    var sharedPreferences = context.read<HomepageBloc>().sharedPreferences;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -43,13 +77,23 @@ class ViewStoryPage extends StatelessWidget {
                   ],
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.white,
-                ),
-              ),
+              story.userId == sharedPreferences.getString("userId")!
+                  ? IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            backgroundColor: Colors.black,
+                            context: context,
+                            builder: ((context) =>
+                                buildBottomSheet(context, height, width)));
+                      },
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Container(),
             ],
           ),
           Expanded(

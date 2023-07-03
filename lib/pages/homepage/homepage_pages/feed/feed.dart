@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/chat_page.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/add_story.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/bloc/story_bloc.dart';
@@ -160,8 +161,15 @@ class FeedPage extends StatelessWidget {
                                     if (state.myData.addedStory) {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
-                                              builder: (_) => ViewStoryPage(
-                                                    story: state.myStory,
+                                              builder: (_) => MultiBlocProvider(
+                                                    providers: [
+                                                      BlocProvider.value(
+                                                          value: context.read<
+                                                              HomepageBloc>())
+                                                    ],
+                                                    child: ViewStoryPage(
+                                                      story: state.myStory,
+                                                    ),
                                                   )));
                                     } else {
                                       Navigator.of(context).push(
@@ -247,13 +255,20 @@ class FeedPage extends StatelessWidget {
                                           const EdgeInsets.only(left: 10.5),
                                       child: GestureDetector(
                                         onTap: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                                  builder: (_) => ViewStoryPage(
-                                                        story: state
-                                                            .stories[index]
-                                                            .story,
-                                                      )));
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      MultiBlocProvider(
+                                                          providers: [
+                                                            BlocProvider.value(
+                                                                value: context.read<
+                                                                    HomepageBloc>())
+                                                          ],
+                                                          child: ViewStoryPage(
+                                                            story: state
+                                                                .stories[index]
+                                                                .story,
+                                                          ))));
                                         },
                                         child: Column(
                                           children: [
