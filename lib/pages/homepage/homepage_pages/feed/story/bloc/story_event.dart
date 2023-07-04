@@ -21,3 +21,5 @@ class PostStory extends StoryEvent {
   @override
   List<Object> get props => [caption];
 }
+
+class DeleteStory extends StoryEvent {}

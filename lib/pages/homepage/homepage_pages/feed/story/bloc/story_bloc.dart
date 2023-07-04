@@ -18,6 +18,26 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
     on<ChooseImageEvent>((event, emit) => chooseImage(event, emit));
     on<CancelEvent>((event, emit) => emit(const StoryInitial("")));
     on<PostStory>((event, emit) => postStory(event, emit));
+    on<DeleteStory>((event, emit) => deleteStory(event, emit));
+  }
+
+  Future<void> deleteStory(DeleteStory event, Emitter emit) async {
+    emit(const DeletingStoryState(""));
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update({"addedStory": false});
+    var collectionRef = FirebaseFirestore.instance.collection("stories");
+    var docSnapshot = await collectionRef.doc(userId).get();
+    var docData = docSnapshot.data()!;
+    List previousStories = docData['previous_stories'];
+    previousStories.removeLast();
+    await collectionRef
+        .doc(userId)
+        .update({"previous_stories": previousStories, "addedStory": false});
+    emit(const StoryDeleted(""));
   }
 
   Future<void> chooseImage(ChooseImageEvent event, Emitter emit) async {

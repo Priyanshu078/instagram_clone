@@ -35,6 +35,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         PostIndexChangeFeedState(state.posts, state.myData, state.userData,
             state.tabIndex, event.postIndex, state.stories, Story.temp())));
     on<GetMyStory>((event, emit) => getMyStory(event, emit));
+    on<DeleteMyStory>((event, emit) => deleteMyStory(event, emit));
+  }
+
+  Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {
+    UserData myData = state.myData.copyWith(addedStory: false);
+    Story myStory = Story.temp();
+    emit(MyStoryDeletedState(state.posts, myData, state.userData,
+        state.tabIndex, state.postsIndex, state.stories, myStory));
   }
 
   Future<void> getMyStory(GetMyStory event, Emitter emit) async {

@@ -144,7 +144,8 @@ class FeedPage extends StatelessWidget {
                   state is UserDataFetchedState ||
                   state is TabChangedFeedState ||
                   state is PostIndexChangeFeedState ||
-                  state is MyStoryFetchedState) {
+                  state is MyStoryFetchedState ||
+                  state is MyStoryDeletedState) {
                 return ListView.builder(
                     itemCount: state.posts.length + 1,
                     itemBuilder: (context, index) {
@@ -165,7 +166,15 @@ class FeedPage extends StatelessWidget {
                                                     providers: [
                                                       BlocProvider.value(
                                                           value: context.read<
-                                                              HomepageBloc>())
+                                                              HomepageBloc>()),
+                                                      BlocProvider(
+                                                        create: (context) =>
+                                                            StoryBloc(),
+                                                      ),
+                                                      BlocProvider.value(
+                                                        value: context
+                                                            .read<FeedBloc>(),
+                                                      ),
                                                     ],
                                                     child: ViewStoryPage(
                                                       story: state.myStory,
@@ -262,7 +271,15 @@ class FeedPage extends StatelessWidget {
                                                           providers: [
                                                             BlocProvider.value(
                                                                 value: context.read<
-                                                                    HomepageBloc>())
+                                                                    HomepageBloc>()),
+                                                            BlocProvider(
+                                                              create: (context) =>
+                                                                  StoryBloc(),
+                                                            ),
+                                                            BlocProvider.value(
+                                                              value: context.read<
+                                                                  FeedBloc>(),
+                                                            ),
                                                           ],
                                                           child: ViewStoryPage(
                                                             story: state

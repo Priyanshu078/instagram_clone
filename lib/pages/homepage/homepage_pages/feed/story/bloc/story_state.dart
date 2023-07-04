@@ -33,3 +33,15 @@ class StoryPostingState extends StoryState {
   @override
   List<Object> get props => [imagePath];
 }
+
+class StoryDeleted extends StoryState {
+  const StoryDeleted(super.imagePath);
+  @override
+  List<Object> get props => [imagePath];
+}
+
+class DeletingStoryState extends StoryState {
+  const DeletingStoryState(super.imagePath);
+  @override
+  List<Object> get props => [imagePath];
+}

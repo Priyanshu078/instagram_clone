@@ -107,3 +107,11 @@ class MyStoryFetchedState extends FeedState {
   List<Object> get props =>
       [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
 }
+
+class MyStoryDeletedState extends FeedState {
+  const MyStoryDeletedState(super.posts, super.myData, super.userData,
+      super.tabIndex, super.postsIndex, super.stories, super.myStory);
+  @override
+  List<Object> get props =>
+      [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
+}

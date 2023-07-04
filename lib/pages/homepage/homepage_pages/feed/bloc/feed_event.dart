@@ -77,3 +77,5 @@ class FeedPostsIndexChangeEvent extends FeedEvent {
 }
 
 class GetMyStory extends FeedEvent {}
+
+class DeleteMyStory extends FeedEvent {}
