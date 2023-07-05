@@ -284,6 +284,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
                   peopleAddedStoryDocs[i].data()["previous_stories"].last),
               viewed: false));
           await FirebaseFirestore.instance
+              .collection("users")
+              .doc(peopleAddedStoryDocs[i].id)
+              .update({"addedStory": false});
+          await FirebaseFirestore.instance
               .collection("stories")
               .doc(peopleAddedStoryDocs[i].id)
               .update({"addedStory": false});
