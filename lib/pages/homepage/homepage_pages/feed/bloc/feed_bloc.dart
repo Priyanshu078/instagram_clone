@@ -241,29 +241,20 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         await storiesCollectionRef.where("addedStory", isEqualTo: true).get();
     var peopleAddedStoryDocs = peopleAddedStoriesSnapshot.docs;
     Story myStory = Story.temp();
-    // var usersAddedStoryList = peopleAddedStoryDocs.map((element) {
-    //   if (element.id == userId) {
-    //     myStory = Story.fromJson(element.data()["previous_stories"].last);
-    //   } else {
-    //     return element.data()["previous_stories"].last;
-    //   }
-    // });
-    // List<StoryData> stories = usersAddedStoryList.isNotEmpty
-    //     ? usersAddedStoryList
-    //         .map((story) =>
-    //             StoryData(story: Story.fromJson(story), viewed: false))
-    //         .toList()
-    //     : [];
     List<StoryData> stories = [];
+    String todaysDate = DateTime.now().toString().split(" ")[0];
     for (int i = 0; i < peopleAddedStoryDocs.length; i++) {
-      if (peopleAddedStoryDocs[i].id == userId) {
-        myStory = Story.fromJson(
-            peopleAddedStoryDocs[i].data()["previous_stories"].last);
-      } else {
-        stories.add(StoryData(
-            story: Story.fromJson(
-                peopleAddedStoryDocs[i].data()["previous_stories"].last),
-            viewed: false));
+      if (peopleAddedStoryDocs[i].data()['previous_stories'].last['date'] ==
+          todaysDate) {
+        if (peopleAddedStoryDocs[i].id == userId) {
+          myStory = Story.fromJson(
+              peopleAddedStoryDocs[i].data()["previous_stories"].last);
+        } else {
+          stories.add(StoryData(
+              story: Story.fromJson(
+                  peopleAddedStoryDocs[i].data()["previous_stories"].last),
+              viewed: false));
+        }
       }
     }
     emit(FeedFetched(
@@ -275,5 +266,29 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       stories,
       myStory,
     ));
+    for (int i = 0; i < peopleAddedStoryDocs.length; i++) {
+      if (peopleAddedStoryDocs[i].data()['previous_stories'].last['date'] !=
+          todaysDate) {
+        if (peopleAddedStoryDocs[i].id == userId) {
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(userId)
+              .update({"addedStory": false});
+          await FirebaseFirestore.instance
+              .collection("stories")
+              .doc(userId)
+              .update({"addedStory": false});
+        } else {
+          stories.add(StoryData(
+              story: Story.fromJson(
+                  peopleAddedStoryDocs[i].data()["previous_stories"].last),
+              viewed: false));
+          await FirebaseFirestore.instance
+              .collection("stories")
+              .doc(peopleAddedStoryDocs[i].id)
+              .update({"addedStory": false});
+        }
+      }
+    }
   }
 }
