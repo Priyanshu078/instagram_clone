@@ -178,6 +178,7 @@ class FeedPage extends StatelessWidget {
                                                     ],
                                                     child: ViewStoryPage(
                                                       story: state.myStory,
+                                                      inProfile: false,
                                                     ),
                                                   )));
                                     } else {
@@ -285,6 +286,7 @@ class FeedPage extends StatelessWidget {
                                                             story: state
                                                                 .stories[index]
                                                                 .story,
+                                                            inProfile: false,
                                                           ))));
                                         },
                                         child: Column(

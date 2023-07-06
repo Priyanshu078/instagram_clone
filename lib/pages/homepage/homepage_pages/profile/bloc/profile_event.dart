@@ -103,3 +103,11 @@ class AddHighlight extends ProfileEvent {
   @override
   List<Object> get props => [story];
 }
+
+class DeleteHighlight extends ProfileEvent {
+  final Story story;
+  const DeleteHighlight(this.story);
+
+  @override
+  List<Object> get props => [story];
+}

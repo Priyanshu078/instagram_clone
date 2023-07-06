@@ -6,16 +6,18 @@ import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/bloc/story_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
 
 class ViewStoryPage extends StatelessWidget {
-  const ViewStoryPage({super.key, required this.story});
+  const ViewStoryPage(
+      {super.key, required this.story, required this.inProfile});
 
   final Story story;
+  final bool inProfile;
 
   Widget buildBottomSheet(BuildContext context, double height, double width) {
-    var bloc = context.read<StoryBloc>();
     return SizedBox(
       height: height * 0.15,
       child: Padding(
@@ -35,11 +37,15 @@ class ViewStoryPage extends StatelessWidget {
                 fontSize: 17,
                 color: instaRed,
                 fontWeight: FontWeight.normal,
-                text: "Delete Story",
+                text: inProfile ? "Delete Highlight" : "Delete Story",
               ),
               onTap: () {
                 // update myData addedstory false in feed and firestore
-                bloc.add(DeleteStory());
+                if (inProfile) {
+                  context.read<ProfileBloc>().add(const DeleteHighlight());
+                } else {
+                  context.read<StoryBloc>().add(DeleteStory());
+                }
                 Navigator.of(context).pop();
               },
             ),
@@ -54,123 +60,135 @@ class ViewStoryPage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     var sharedPreferences = context.read<HomepageBloc>().sharedPreferences;
-    return BlocConsumer<StoryBloc, StoryState>(listener: (context, state) {
-      if (state is StoryDeleted) {
-        var bloc = context.read<FeedBloc>();
-        bloc.add(DeleteMyStory());
-        Navigator.of(context).pop();
-      }
-    }, builder: (context, state) {
-      return Scaffold(
-        backgroundColor: Colors.black,
-        body: Stack(alignment: Alignment.center, children: [
-          SafeArea(
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        ProfilePhoto(
-                          height: height * 0.06,
-                          width: height * 0.065,
-                          wantBorder: false,
-                          storyAdder: false,
-                          imageUrl: story.userProfilePhotoUrl,
+    return BlocConsumer<StoryBloc, StoryState>(
+      listener: (context, state) {
+        if (state is HighlightDeleted) {
+          Navigator.of(context).pop();
+        }
+      },
+      builder: (context, state) {
+        return BlocConsumer<StoryBloc, StoryState>(listener: (context, state) {
+          if (state is StoryDeleted) {
+            var bloc = context.read<FeedBloc>();
+            bloc.add(DeleteMyStory());
+            Navigator.of(context).pop();
+          }
+        }, builder: (context, state) {
+          return Scaffold(
+            backgroundColor: Colors.black,
+            body: Stack(alignment: Alignment.center, children: [
+              SafeArea(
+                child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            ProfilePhoto(
+                              height: height * 0.06,
+                              width: height * 0.065,
+                              wantBorder: false,
+                              storyAdder: false,
+                              imageUrl: story.userProfilePhotoUrl,
+                            ),
+                            SizedBox(
+                              width: width * 0.02,
+                            ),
+                            InstaText(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              text: story.username,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: width * 0.02,
-                        ),
-                        InstaText(
-                          fontSize: 14,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          text: story.username,
-                        ),
-                      ],
+                      ),
+                      story.userId == sharedPreferences.getString("userId")!
+                          ? IconButton(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    backgroundColor: Colors.black,
+                                    context: context,
+                                    builder: ((_) => BlocProvider.value(
+                                          value: context.read<StoryBloc>(),
+                                          child: buildBottomSheet(
+                                              context, height, width),
+                                        )));
+                              },
+                              icon: const Icon(
+                                Icons.more_vert,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        width: double.infinity,
+                        imageUrl: story.imageUrl,
+                        fit: BoxFit.fill,
+                        placeholder: (context, val) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                  story.userId == sharedPreferences.getString("userId")!
-                      ? IconButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                backgroundColor: Colors.black,
-                                context: context,
-                                builder: ((_) => BlocProvider.value(
-                                      value: context.read<StoryBloc>(),
-                                      child: buildBottomSheet(
-                                          context, height, width),
-                                    )));
-                          },
-                          icon: const Icon(
-                            Icons.more_vert,
-                            color: Colors.white,
-                          ),
-                        )
-                      : Container(),
-                ],
-              ),
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    width: double.infinity,
-                    imageUrl: story.imageUrl,
-                    fit: BoxFit.fill,
-                    placeholder: (context, val) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 1,
-                          color: Colors.white,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InstaText(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    text: story.caption),
-              ),
-            ]),
-          ),
-          state is DeletingStoryState
-              ? Container(
-                  height: height * 0.15,
-                  width: width * 0.7,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: textFieldBackgroundColor),
-                  child: Center(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircularProgressIndicator(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InstaText(
+                        fontSize: 20,
                         color: Colors.white,
-                        strokeWidth: 1,
-                      ),
-                      SizedBox(
-                        width: width * 0.05,
-                      ),
-                      const InstaText(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          text: "Deleting Story")
-                    ],
-                  )),
-                )
-              : Container()
-        ]),
-      );
-    });
+                        fontWeight: FontWeight.w600,
+                        text: story.caption),
+                  ),
+                ]),
+              ),
+              (state is DeletingStoryState || state is DeletingHighlight)
+                  ? Container(
+                      height: height * 0.15,
+                      width: width * 0.7,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: textFieldBackgroundColor),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 1,
+                          ),
+                          SizedBox(
+                            width: width * 0.05,
+                          ),
+                          InstaText(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              text: inProfile
+                                  ? "Deleting Highlight"
+                                  : "Deleting Story")
+                        ],
+                      )),
+                    )
+                  : Container()
+            ]),
+          );
+        });
+      },
+    );
   }
 }
