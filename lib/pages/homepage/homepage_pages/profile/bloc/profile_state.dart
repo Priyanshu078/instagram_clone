@@ -6,7 +6,7 @@ abstract class ProfileState extends Equatable {
   final int postsIndex;
   final bool savedPosts;
   final List<Post> savedPostsList;
-  final List previousStories;
+  final List<Story> previousStories;
   const ProfileState(this.userData, this.tabIndex, this.postsIndex,
       this.savedPosts, this.savedPostsList, this.previousStories);
 
@@ -250,6 +250,34 @@ class DeletedPostState extends ProfileState {
 
 class FetchedPreviousStories extends ProfileState {
   const FetchedPreviousStories(super.userData, super.tabIndex, super.postsIndex,
+      super.savedPosts, super.savedPostsList, super.previousStories);
+  @override
+  List<Object> get props => [
+        userData,
+        tabIndex,
+        postsIndex,
+        savedPosts,
+        savedPostsList,
+        previousStories
+      ];
+}
+
+class HighLightAddedState extends ProfileState {
+  const HighLightAddedState(super.userData, super.tabIndex, super.postsIndex,
+      super.savedPosts, super.savedPostsList, super.previousStories);
+  @override
+  List<Object> get props => [
+        userData,
+        tabIndex,
+        postsIndex,
+        savedPosts,
+        savedPostsList,
+        previousStories
+      ];
+}
+
+class AddingHighLight extends ProfileState {
+  const AddingHighLight(super.userData, super.tabIndex, super.postsIndex,
       super.savedPosts, super.savedPostsList, super.previousStories);
   @override
   List<Object> get props => [

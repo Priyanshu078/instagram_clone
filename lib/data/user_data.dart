@@ -1,5 +1,6 @@
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
+import 'package:instagram_clone/data/stories.dart';
 
 class UserData {
   final String id;
@@ -10,7 +11,7 @@ class UserData {
   final int gender;
   final String bio;
   final String tagline;
-  final List<dynamic> stories;
+  final List<Story> stories;
   final List<Post> posts;
   final List followers;
   final List following;
@@ -53,7 +54,7 @@ class UserData {
     String? bio,
     String? tagline,
     List<Post>? posts,
-    List? stories,
+    List<Story>? stories,
     List? followers,
     List? following,
     String? profilePhotoUrl,
@@ -110,7 +111,19 @@ class UserData {
               userProfilePhotoUrl: post['userProfilePhotoUrl']),
         ),
       ),
-      json['stories'],
+      List.from(
+        json['stories'].map(
+          (story) => Story(
+            id: story['id'],
+            userProfilePhotoUrl: story['userProfilePhotoUrl'],
+            username: story['username'],
+            imageUrl: story['imageUrl'],
+            caption: story['caption'],
+            userId: story['userId'],
+            date: story['date'],
+          ),
+        ),
+      ),
       json['followers'],
       json['following'],
       json['profilePhotoUrl'],
@@ -130,7 +143,7 @@ class UserData {
       "gender": gender,
       "bio": bio,
       "tagline": tagline,
-      "stories": stories,
+      "stories": stories.map((e) => e.toJson()),
       "posts": posts.map((e) => e.toJson()),
       "followers": followers,
       "following": following,

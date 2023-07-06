@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
+import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,9 +47,26 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ShowSavedPosts>((event, emit) => getSavedPosts(event, emit));
     on<DeletePost>((event, emit) => deletePost(event, emit));
     on<FetchPreviousStories>((event, emit) => fetchStories(event, emit));
+    on<AddHighlight>((event, emit) => addHighlight(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> addHighlight(AddHighlight event, Emitter emit) async {
+    emit(AddingHighLight(state.userData, state.tabIndex, state.postsIndex,
+        state.savedPosts, state.savedPostsList, state.previousStories));
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    List<Story> highlights = state.userData.stories;
+    highlights.add(event.story);
+    UserData userData = state.userData.copyWith(stories: highlights);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(userData.toJson());
+    emit(HighLightAddedState(userData, state.tabIndex, state.postsIndex,
+        state.savedPosts, state.savedPostsList, state.previousStories));
+  }
 
   Future<void> fetchStories(FetchPreviousStories event, Emitter emit) async {
     var sharedPreferences = await SharedPreferences.getInstance();
@@ -58,7 +76,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .doc(userId)
         .get();
     var docData = docSnapshot.data()!;
-    List previousStories = docData['previous_stories'];
+    List<Story> previousStories = [];
+    for (var story in docData['previous_stories']) {
+      previousStories.add(Story.fromJson(story));
+    }
     emit(FetchedPreviousStories(
         state.userData,
         state.tabIndex,

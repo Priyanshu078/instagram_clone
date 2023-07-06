@@ -95,3 +95,11 @@ class DeletePost extends ProfileEvent {
 }
 
 class FetchPreviousStories extends ProfileEvent {}
+
+class AddHighlight extends ProfileEvent {
+  final Story story;
+  const AddHighlight(this.story);
+
+  @override
+  List<Object> get props => [story];
+}

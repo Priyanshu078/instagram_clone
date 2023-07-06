@@ -169,7 +169,9 @@ class _ProfilePageState extends State<ProfilePage>
                 state is BookmarkedState ||
                 state is SavedPostsState ||
                 state is DeletedPostState ||
-                state is FetchedPreviousStories) {
+                state is FetchedPreviousStories ||
+                state is AddingHighLight ||
+                state is HighLightAddedState) {
               return Scaffold(
                 backgroundColor: textFieldBackgroundColor,
                 appBar: AppBar(
@@ -372,13 +374,13 @@ class _ProfilePageState extends State<ProfilePage>
                                   children: [
                                     ProfilePhoto(
                                       height: height * 0.09,
-                                      width: height * 0.1,
+                                      width: height * 0.09,
                                       wantBorder: true,
                                       storyAdder: true,
                                       imageUrl: "",
                                     ),
                                     const InstaText(
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         color: Colors.white,
                                         fontWeight: FontWeight.normal,
                                         text: "New")
@@ -386,7 +388,7 @@ class _ProfilePageState extends State<ProfilePage>
                                 ),
                               ),
                               SizedBox(
-                                height: height * 0.12,
+                                height: height * 0.11,
                                 width: width * 0.7,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
@@ -395,21 +397,24 @@ class _ProfilePageState extends State<ProfilePage>
                                     return Padding(
                                       padding:
                                           const EdgeInsets.only(left: 10.5),
-                                      child: Column(
-                                        children: [
-                                          ProfilePhoto(
-                                            height: height * 0.09,
-                                            width: height * 0.1,
-                                            wantBorder: true,
-                                            storyAdder: false,
-                                            imageUrl: "",
-                                          ),
-                                          InstaText(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.normal,
-                                              text: "Party ${index + 1}")
-                                        ],
+                                      child: GestureDetector(
+                                        child: Column(
+                                          children: [
+                                            ProfilePhoto(
+                                              height: height * 0.09,
+                                              width: height * 0.09,
+                                              wantBorder: true,
+                                              storyAdder: false,
+                                              imageUrl: state.userData
+                                                  .stories[index].imageUrl,
+                                            ),
+                                            const InstaText(
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                text: "highlights")
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },
