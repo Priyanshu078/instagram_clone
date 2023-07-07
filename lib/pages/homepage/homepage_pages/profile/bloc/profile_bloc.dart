@@ -48,9 +48,26 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<DeletePost>((event, emit) => deletePost(event, emit));
     on<FetchPreviousStories>((event, emit) => fetchStories(event, emit));
     on<AddHighlight>((event, emit) => addHighlight(event, emit));
+    on<DeleteHighlight>((event, emit) => deleteHighlight(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> deleteHighlight(DeleteHighlight event, Emitter emit) async {
+    emit(DeletingHighLight(state.userData, state.tabIndex, state.postsIndex,
+        state.savedPosts, state.savedPostsList, state.previousStories));
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    List<Story> highlights = state.userData.stories;
+    highlights.removeAt(event.index);
+    UserData userData = state.userData.copyWith(stories: highlights);
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(userData.toJson());
+    emit(HighlightDeleted(userData, state.tabIndex, state.postsIndex,
+        state.savedPosts, state.savedPostsList, state.previousStories));
+  }
 
   Future<void> addHighlight(AddHighlight event, Emitter emit) async {
     emit(AddingHighLight(state.userData, state.tabIndex, state.postsIndex,

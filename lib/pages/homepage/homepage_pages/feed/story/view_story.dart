@@ -12,10 +12,14 @@ import 'package:instagram_clone/widgets/profile_photo.dart';
 
 class ViewStoryPage extends StatelessWidget {
   const ViewStoryPage(
-      {super.key, required this.story, required this.inProfile});
+      {super.key,
+      required this.story,
+      required this.inProfile,
+      required this.index});
 
   final Story story;
   final bool inProfile;
+  final int index;
 
   Widget buildBottomSheet(BuildContext context, double height, double width) {
     return SizedBox(
@@ -42,7 +46,7 @@ class ViewStoryPage extends StatelessWidget {
               onTap: () {
                 // update myData addedstory false in feed and firestore
                 if (inProfile) {
-                  context.read<ProfileBloc>().add(const DeleteHighlight());
+                  context.read<ProfileBloc>().add(DeleteHighlight(index));
                 } else {
                   context.read<StoryBloc>().add(DeleteStory());
                 }
@@ -60,20 +64,21 @@ class ViewStoryPage extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     var sharedPreferences = context.read<HomepageBloc>().sharedPreferences;
-    return BlocConsumer<StoryBloc, StoryState>(
-      listener: (context, state) {
-        if (state is HighlightDeleted) {
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listener: (context, profileState) {
+        if (profileState is HighlightDeleted) {
           Navigator.of(context).pop();
         }
       },
-      builder: (context, state) {
-        return BlocConsumer<StoryBloc, StoryState>(listener: (context, state) {
-          if (state is StoryDeleted) {
+      builder: (context, profileState) {
+        return BlocConsumer<StoryBloc, StoryState>(
+            listener: (context, storyState) {
+          if (storyState is StoryDeleted) {
             var bloc = context.read<FeedBloc>();
             bloc.add(DeleteMyStory());
             Navigator.of(context).pop();
           }
-        }, builder: (context, state) {
+        }, builder: (context, storyState) {
           return Scaffold(
             backgroundColor: Colors.black,
             body: Stack(alignment: Alignment.center, children: [
@@ -156,7 +161,8 @@ class ViewStoryPage extends StatelessWidget {
                   ),
                 ]),
               ),
-              (state is DeletingStoryState || state is DeletingHighlight)
+              (storyState is DeletingStoryState ||
+                      profileState is DeletingHighLight)
                   ? Container(
                       height: height * 0.15,
                       width: width * 0.7,

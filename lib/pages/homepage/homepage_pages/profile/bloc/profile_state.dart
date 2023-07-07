@@ -289,3 +289,31 @@ class AddingHighLight extends ProfileState {
         previousStories
       ];
 }
+
+class DeletingHighLight extends ProfileState {
+  const DeletingHighLight(super.userData, super.tabIndex, super.postsIndex,
+      super.savedPosts, super.savedPostsList, super.previousStories);
+  @override
+  List<Object> get props => [
+        userData,
+        tabIndex,
+        postsIndex,
+        savedPosts,
+        savedPostsList,
+        previousStories
+      ];
+}
+
+class HighlightDeleted extends ProfileState {
+  const HighlightDeleted(super.userData, super.tabIndex, super.postsIndex,
+      super.savedPosts, super.savedPostsList, super.previousStories);
+  @override
+  List<Object> get props => [
+        userData,
+        tabIndex,
+        postsIndex,
+        savedPosts,
+        savedPostsList,
+        previousStories
+      ];
+}

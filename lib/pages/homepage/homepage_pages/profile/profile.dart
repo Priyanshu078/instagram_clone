@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/loginpage.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/bloc/story_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/view_story.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/edit_profile.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/previous_stories.dart';
@@ -171,7 +173,8 @@ class _ProfilePageState extends State<ProfilePage>
                 state is DeletedPostState ||
                 state is FetchedPreviousStories ||
                 state is AddingHighLight ||
-                state is HighLightAddedState) {
+                state is HighLightAddedState ||
+                state is HighlightDeleted) {
               return Scaffold(
                 backgroundColor: textFieldBackgroundColor,
                 appBar: AppBar(
@@ -398,6 +401,30 @@ class _ProfilePageState extends State<ProfilePage>
                                       padding:
                                           const EdgeInsets.only(left: 10.5),
                                       child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      MultiBlocProvider(
+                                                        providers: [
+                                                          BlocProvider.value(
+                                                              value: context.read<
+                                                                  HomepageBloc>()),
+                                                          BlocProvider.value(
+                                                              value: context.read<
+                                                                  ProfileBloc>()),
+                                                          BlocProvider(
+                                                              create: (context) =>
+                                                                  StoryBloc())
+                                                        ],
+                                                        child: ViewStoryPage(
+                                                            story: state
+                                                                .userData
+                                                                .stories[index],
+                                                            inProfile: true,
+                                                            index: index),
+                                                      )));
+                                        },
                                         child: Column(
                                           children: [
                                             ProfilePhoto(

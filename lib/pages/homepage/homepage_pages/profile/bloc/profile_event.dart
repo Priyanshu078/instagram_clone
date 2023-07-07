@@ -105,9 +105,9 @@ class AddHighlight extends ProfileEvent {
 }
 
 class DeleteHighlight extends ProfileEvent {
-  final Story story;
-  const DeleteHighlight(this.story);
+  final int index;
+  const DeleteHighlight(this.index);
 
   @override
-  List<Object> get props => [story];
+  List<Object> get props => [index];
 }
