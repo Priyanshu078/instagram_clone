@@ -86,3 +86,5 @@ class DeleteSearchProfilePost extends SearchEvent {
   @override
   List<Object> get props => [index];
 }
+
+class FollowSearchEvent extends SearchEvent {}

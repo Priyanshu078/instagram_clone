@@ -242,29 +242,89 @@ class _UserProfilePageState extends State<UserProfilePage>
                                             postButton: false,
                                             height: height * 0.05,
                                             buttonColor: instablue,
-                                            onPressed: () async {},
+                                            onPressed: () async {
+                                              context
+                                                  .read<SearchBloc>()
+                                                  .add(FollowSearchEvent());
+                                            },
                                             text: "Follow",
                                             fontSize: 13,
                                             textColor: Colors.white,
                                             fontWeight: FontWeight.w700,
                                           )
                                         : Container()
-                                    : feedState.userData.id !=
-                                            homePageBloc.sharedPreferences
-                                                .getString("userId")
-                                        ? InstaButton(
-                                            borderWidth: 1,
-                                            width: double.infinity,
-                                            postButton: false,
+                                    : feedState is FollowingFeedState
+                                        ? SizedBox(
                                             height: height * 0.05,
-                                            buttonColor: instablue,
-                                            onPressed: () async {},
-                                            text: "Follow",
-                                            fontSize: 13,
-                                            textColor: Colors.white,
-                                            fontWeight: FontWeight.w700,
+                                            child: const Center(
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 1,
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                           )
-                                        : Container(),
+                                        : feedState.userData.followers.contains(
+                                                homePageBloc.sharedPreferences
+                                                    .getString("userId"))
+                                            ? SizedBox(
+                                                height: height * 0.05,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    InstaButton(
+                                                      borderWidth: 1,
+                                                      width: width * 0.4,
+                                                      postButton: false,
+                                                      height: height * 0.05,
+                                                      buttonColor:
+                                                          textFieldBackgroundColor,
+                                                      onPressed: () async {},
+                                                      text: "following",
+                                                      fontSize: 13,
+                                                      textColor: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                    InstaButton(
+                                                      borderWidth: 1,
+                                                      width: width * 0.4,
+                                                      postButton: false,
+                                                      height: height * 0.05,
+                                                      buttonColor:
+                                                          textFieldBackgroundColor,
+                                                      onPressed: () async {},
+                                                      text: "message",
+                                                      fontSize: 13,
+                                                      textColor: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    )
+                                                  ],
+                                                ))
+                                            : feedState.userData.id !=
+                                                    homePageBloc
+                                                        .sharedPreferences
+                                                        .getString("userId")
+                                                ? InstaButton(
+                                                    borderWidth: 1,
+                                                    width: double.infinity,
+                                                    postButton: false,
+                                                    height: height * 0.05,
+                                                    buttonColor: instablue,
+                                                    onPressed: () async {
+                                                      context
+                                                          .read<FeedBloc>()
+                                                          .add(
+                                                              FollowFeedEvent());
+                                                    },
+                                                    text: "Follow",
+                                                    fontSize: 13,
+                                                    textColor: Colors.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  )
+                                                : Container(),
                               ],
                             ),
                           ),

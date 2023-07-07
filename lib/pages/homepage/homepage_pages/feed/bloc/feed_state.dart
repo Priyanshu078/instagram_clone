@@ -115,3 +115,19 @@ class MyStoryDeletedState extends FeedState {
   List<Object> get props =>
       [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
 }
+
+class FollowedUserFeedState extends FeedState {
+  const FollowedUserFeedState(super.posts, super.myData, super.userData,
+      super.tabIndex, super.postsIndex, super.stories, super.myStory);
+  @override
+  List<Object> get props =>
+      [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
+}
+
+class FollowingFeedState extends FeedState {
+  const FollowingFeedState(super.posts, super.myData, super.userData,
+      super.tabIndex, super.postsIndex, super.stories, super.myStory);
+  @override
+  List<Object> get props =>
+      [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
+}
