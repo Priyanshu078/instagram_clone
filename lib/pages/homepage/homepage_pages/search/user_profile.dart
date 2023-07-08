@@ -54,9 +54,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                 );
               } else {
                 return Scaffold(
-                  backgroundColor: Colors.black,
+                  backgroundColor: textFieldBackgroundColor,
                   appBar: AppBar(
-                    backgroundColor: Colors.black,
+                    backgroundColor: textFieldBackgroundColor,
                     leading: IconButton(
                       onPressed: () async {
                         if (widget.inSearch) {
@@ -230,7 +230,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                   ),
                                 ),
                                 SizedBox(
-                                  height: height * 0.01,
+                                  height: height * 0.02,
                                 ),
                                 widget.inSearch
                                     ? searchState.userData.id !=
@@ -275,11 +275,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                   children: [
                                                     InstaButton(
                                                       borderWidth: 1,
-                                                      width: width * 0.4,
+                                                      width: width * 0.43,
                                                       postButton: false,
                                                       height: height * 0.05,
-                                                      buttonColor:
-                                                          textFieldBackgroundColor,
+                                                      buttonColor: Colors.black,
                                                       onPressed: () async {},
                                                       text: "following",
                                                       fontSize: 13,
@@ -289,11 +288,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                     ),
                                                     InstaButton(
                                                       borderWidth: 1,
-                                                      width: width * 0.4,
+                                                      width: width * 0.43,
                                                       postButton: false,
                                                       height: height * 0.05,
-                                                      buttonColor:
-                                                          textFieldBackgroundColor,
+                                                      buttonColor: Colors.black,
                                                       onPressed: () async {},
                                                       text: "message",
                                                       fontSize: 13,

@@ -44,15 +44,17 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         state.tabIndex, state.postsIndex, state.stories, state.myStory));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
+    var collectionRef = FirebaseFirestore.instance.collection("users");
     List followers = state.userData.followers;
     followers.add(myUserId);
     UserData userData = state.userData.copyWith(followers: followers);
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(userData.id)
-        .update(userData.toJson());
-    emit(FollowedUserFeedState(state.posts, state.myData, userData,
-        state.tabIndex, state.postsIndex, state.stories, state.myStory));
+    await collectionRef.doc(userData.id).update(userData.toJson());
+    List following = state.myData.following;
+    following.add(userData.id);
+    UserData myData = state.myData.copyWith(following: following);
+    await collectionRef.doc(myUserId).update(myData.toJson());
+    emit(FollowedUserFeedState(state.posts, myData, userData, state.tabIndex,
+        state.postsIndex, state.stories, state.myStory));
   }
 
   Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {
