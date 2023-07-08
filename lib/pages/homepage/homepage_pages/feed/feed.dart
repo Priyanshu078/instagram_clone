@@ -83,17 +83,37 @@ class FeedPage extends StatelessWidget {
             ),
             ListTile(
               minLeadingWidth: 0,
-              leading: const Icon(
-                Icons.person_remove,
-                color: Colors.white,
-              ),
-              title: const InstaText(
+              leading: feedState.myData.following
+                      .contains(feedState.posts[index].userId)
+                  ? const Icon(
+                      Icons.person_remove,
+                      color: Colors.white,
+                    )
+                  : const Icon(
+                      Icons.person_add,
+                      color: Colors.white,
+                    ),
+              title: InstaText(
                 fontSize: 17,
                 color: Colors.white,
                 fontWeight: FontWeight.normal,
-                text: "Unfollow",
+                text: feedState.myData.following
+                        .contains(feedState.posts[index].userId)
+                    ? "Unfollow"
+                    : "follow",
               ),
-              onTap: () {},
+              onTap: () {
+                if (feedState.myData.following
+                    .contains(feedState.posts[index].userId)) {
+                  context
+                      .read<FeedBloc>()
+                      .add(const UnFollowFeedEvent(fromFeed: true));
+                } else {
+                  context
+                      .read<FeedBloc>()
+                      .add(const FollowFeedEvent(fromFeed: true));
+                }
+              },
             ),
           ],
         ),

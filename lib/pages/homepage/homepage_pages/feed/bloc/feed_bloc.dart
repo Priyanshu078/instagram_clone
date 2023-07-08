@@ -37,6 +37,25 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<GetMyStory>((event, emit) => getMyStory(event, emit));
     on<DeleteMyStory>((event, emit) => deleteMyStory(event, emit));
     on<FollowFeedEvent>((event, emit) => follow(event, emit));
+    on<UnFollowFeedEvent>((event, emit) => unfollow(event, emit));
+  }
+
+  Future<void> unfollow(UnFollowFeedEvent event, Emitter emit) async {
+    emit(UnFollowingFeedState(state.posts, state.myData, state.userData,
+        state.tabIndex, state.postsIndex, state.stories, state.myStory));
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? myUserId = sharedPreferences.getString("userId");
+    var collectionRef = FirebaseFirestore.instance.collection("users");
+    List followers = state.userData.followers;
+    followers.remove(myUserId);
+    UserData userData = state.userData.copyWith(followers: followers);
+    await collectionRef.doc(userData.id).update(userData.toJson());
+    List following = state.myData.following;
+    following.remove(userData.id);
+    UserData myData = state.myData.copyWith(following: following);
+    await collectionRef.doc(myUserId).update(myData.toJson());
+    emit(UnFollowedUserFeedState(state.posts, myData, userData, state.tabIndex,
+        state.postsIndex, state.stories, state.myStory));
   }
 
   Future<void> follow(FollowFeedEvent event, Emitter emit) async {

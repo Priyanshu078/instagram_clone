@@ -35,6 +35,41 @@ class _UserProfilePageState extends State<UserProfilePage>
     super.dispose();
   }
 
+  Widget buildBottomSheet(BuildContext context, double height, double width) {
+    return SizedBox(
+      height: height * 0.15,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 16.0,
+          bottom: 16.0,
+        ),
+        child: Column(
+          children: [
+            ListTile(
+              minLeadingWidth: 0,
+              leading: const Icon(
+                Icons.person_remove,
+                color: Colors.white,
+              ),
+              title: const InstaText(
+                fontSize: 17,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+                text: "Unfollow",
+              ),
+              onTap: () {
+                context
+                    .read<FeedBloc>()
+                    .add(const UnFollowFeedEvent(fromFeed: false));
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var homePageBloc = context.read<HomepageBloc>();
@@ -279,7 +314,22 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                       postButton: false,
                                                       height: height * 0.05,
                                                       buttonColor: Colors.black,
-                                                      onPressed: () async {},
+                                                      onPressed: () async {
+                                                        showModalBottomSheet(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10)),
+                                                            backgroundColor:
+                                                                Colors.black,
+                                                            context: context,
+                                                            builder: (_) =>
+                                                                buildBottomSheet(
+                                                                    context,
+                                                                    height,
+                                                                    width));
+                                                      },
                                                       text: "following",
                                                       fontSize: 13,
                                                       textColor: Colors.white,
@@ -312,10 +362,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                     height: height * 0.05,
                                                     buttonColor: instablue,
                                                     onPressed: () async {
-                                                      context
-                                                          .read<FeedBloc>()
-                                                          .add(
-                                                              FollowFeedEvent());
+                                                      context.read<FeedBloc>().add(
+                                                          const FollowFeedEvent(
+                                                              fromFeed: false));
                                                     },
                                                     text: "Follow",
                                                     fontSize: 13,

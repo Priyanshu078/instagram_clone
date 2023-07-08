@@ -80,4 +80,16 @@ class GetMyStory extends FeedEvent {}
 
 class DeleteMyStory extends FeedEvent {}
 
-class FollowFeedEvent extends FeedEvent {}
+class FollowFeedEvent extends FeedEvent {
+  final bool fromFeed;
+  const FollowFeedEvent({required this.fromFeed});
+  @override
+  List<Object> get props => [fromFeed];
+}
+
+class UnFollowFeedEvent extends FeedEvent {
+  final bool fromFeed;
+  const UnFollowFeedEvent({required this.fromFeed});
+  @override
+  List<Object> get props => [fromFeed];
+}

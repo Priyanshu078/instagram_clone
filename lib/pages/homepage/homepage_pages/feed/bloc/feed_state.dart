@@ -131,3 +131,19 @@ class FollowingFeedState extends FeedState {
   List<Object> get props =>
       [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
 }
+
+class UnFollowingFeedState extends FeedState {
+  const UnFollowingFeedState(super.posts, super.myData, super.userData,
+      super.tabIndex, super.postsIndex, super.stories, super.myStory);
+  @override
+  List<Object> get props =>
+      [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
+}
+
+class UnFollowedUserFeedState extends FeedState {
+  const UnFollowedUserFeedState(super.posts, super.myData, super.userData,
+      super.tabIndex, super.postsIndex, super.stories, super.myStory);
+  @override
+  List<Object> get props =>
+      [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
+}
