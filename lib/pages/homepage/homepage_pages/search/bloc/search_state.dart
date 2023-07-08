@@ -120,3 +120,39 @@ class DeletedSearchProfilePostState extends SearchState {
   List<Object> get props =>
       [posts, usersList, userData, tabIndex, postsIndex, usersPosts, myData];
 }
+
+class FollowingSearchState extends SearchState {
+  const FollowingSearchState(super.posts, super.usersList, super.userData,
+      super.tabIndex, super.postsIndex, super.usersPosts, super.myData);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts, myData];
+}
+
+class FollowedUserSearchState extends SearchState {
+  const FollowedUserSearchState(super.posts, super.usersList, super.userData,
+      super.tabIndex, super.postsIndex, super.usersPosts, super.myData);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts, myData];
+}
+
+class UnFollowedUserSearchState extends SearchState {
+  const UnFollowedUserSearchState(super.posts, super.usersList, super.userData,
+      super.tabIndex, super.postsIndex, super.usersPosts, super.myData);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts, myData];
+}
+
+class UnFollowingSearchState extends SearchState {
+  const UnFollowingSearchState(super.posts, super.usersList, super.userData,
+      super.tabIndex, super.postsIndex, super.usersPosts, super.myData);
+
+  @override
+  List<Object> get props =>
+      [posts, usersList, userData, tabIndex, postsIndex, usersPosts, myData];
+}

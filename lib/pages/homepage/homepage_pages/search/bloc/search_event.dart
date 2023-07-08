@@ -87,4 +87,18 @@ class DeleteSearchProfilePost extends SearchEvent {
   List<Object> get props => [index];
 }
 
-class FollowSearchEvent extends SearchEvent {}
+class FollowSearchEvent extends SearchEvent {
+  final bool fromProfile;
+  final int? index;
+  const FollowSearchEvent({required this.fromProfile, this.index});
+  @override
+  List<Object> get props => [fromProfile];
+}
+
+class UnFollowSearchEvent extends SearchEvent {
+  final bool fromProfile;
+  final int? index;
+  const UnFollowSearchEvent({required this.fromProfile, this.index});
+  @override
+  List<Object> get props => [fromProfile];
+}

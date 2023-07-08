@@ -35,7 +35,8 @@ class _UserProfilePageState extends State<UserProfilePage>
     super.dispose();
   }
 
-  Widget buildBottomSheet(BuildContext context, double height, double width) {
+  Widget buildBottomSheet(
+      BuildContext context, double height, double width, bool inSearch) {
     return SizedBox(
       height: height * 0.15,
       child: Padding(
@@ -58,9 +59,15 @@ class _UserProfilePageState extends State<UserProfilePage>
                 text: "Unfollow",
               ),
               onTap: () {
-                context
-                    .read<FeedBloc>()
-                    .add(const UnFollowFeedEvent(fromFeed: false));
+                if (inSearch) {
+                  context
+                      .read<SearchBloc>()
+                      .add(const UnFollowSearchEvent(fromProfile: true));
+                } else {
+                  context
+                      .read<FeedBloc>()
+                      .add(const UnFollowFeedEvent(fromFeed: false));
+                }
                 Navigator.of(context).pop();
               },
             ),
@@ -268,27 +275,100 @@ class _UserProfilePageState extends State<UserProfilePage>
                                   height: height * 0.02,
                                 ),
                                 widget.inSearch
-                                    ? searchState.userData.id !=
-                                            homePageBloc.sharedPreferences
-                                                .getString("userId")
-                                        ? InstaButton(
-                                            borderWidth: 1,
-                                            width: double.infinity,
-                                            postButton: false,
+                                    ? (searchState is FollowingSearchState ||
+                                            searchState
+                                                is UnFollowingSearchState)
+                                        ? SizedBox(
                                             height: height * 0.05,
-                                            buttonColor: instablue,
-                                            onPressed: () async {
-                                              context
-                                                  .read<SearchBloc>()
-                                                  .add(FollowSearchEvent());
-                                            },
-                                            text: "Follow",
-                                            fontSize: 13,
-                                            textColor: Colors.white,
-                                            fontWeight: FontWeight.w700,
+                                            child: const Center(
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 1,
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                           )
-                                        : Container()
-                                    : feedState is FollowingFeedState
+                                        : searchState.userData.followers
+                                                .contains(homePageBloc
+                                                    .sharedPreferences
+                                                    .getString("userId"))
+                                            ? SizedBox(
+                                                height: height * 0.05,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    InstaButton(
+                                                      borderWidth: 1,
+                                                      width: width * 0.43,
+                                                      postButton: false,
+                                                      height: height * 0.05,
+                                                      buttonColor: Colors.black,
+                                                      onPressed: () async {
+                                                        showModalBottomSheet(
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10)),
+                                                            backgroundColor:
+                                                                Colors.black,
+                                                            context: context,
+                                                            builder: (_) =>
+                                                                buildBottomSheet(
+                                                                  context,
+                                                                  height,
+                                                                  width,
+                                                                  true,
+                                                                ));
+                                                      },
+                                                      text: "following",
+                                                      fontSize: 13,
+                                                      textColor: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                    InstaButton(
+                                                      borderWidth: 1,
+                                                      width: width * 0.43,
+                                                      postButton: false,
+                                                      height: height * 0.05,
+                                                      buttonColor: Colors.black,
+                                                      onPressed: () async {},
+                                                      text: "message",
+                                                      fontSize: 13,
+                                                      textColor: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    )
+                                                  ],
+                                                ))
+                                            : searchState.userData.id !=
+                                                    homePageBloc
+                                                        .sharedPreferences
+                                                        .getString("userId")
+                                                ? InstaButton(
+                                                    borderWidth: 1,
+                                                    width: double.infinity,
+                                                    postButton: false,
+                                                    height: height * 0.05,
+                                                    buttonColor: instablue,
+                                                    onPressed: () async {
+                                                      context
+                                                          .read<SearchBloc>()
+                                                          .add(
+                                                              const FollowSearchEvent(
+                                                                  fromProfile:
+                                                                      true));
+                                                    },
+                                                    text: "Follow",
+                                                    fontSize: 13,
+                                                    textColor: Colors.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  )
+                                                : Container()
+                                    : (feedState is FollowingFeedState ||
+                                            feedState is UnFollowingFeedState)
                                         ? SizedBox(
                                             height: height * 0.05,
                                             child: const Center(
@@ -326,9 +406,11 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                             context: context,
                                                             builder: (_) =>
                                                                 buildBottomSheet(
-                                                                    context,
-                                                                    height,
-                                                                    width));
+                                                                  context,
+                                                                  height,
+                                                                  width,
+                                                                  false,
+                                                                ));
                                                       },
                                                       text: "following",
                                                       fontSize: 13,

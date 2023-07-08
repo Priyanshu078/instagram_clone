@@ -58,6 +58,48 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<DeleteSearchComment>((event, emit) => deleteComment(event, emit));
     on<BookmarkSearch>((event, emit) => addBookmark(event, emit));
     on<DeleteSearchProfilePost>((event, emit) => deletePost(event, emit));
+    on<FollowSearchEvent>((event, emit) => follow(event, emit));
+    on<UnFollowSearchEvent>((event, emit) => unfollow(event, emit));
+  }
+
+  Future<void> follow(FollowSearchEvent event, Emitter emit) async {
+    emit(FollowingSearchState(state.posts, state.usersList, state.userData,
+        state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? myUserId = sharedPreferences.getString("userId");
+    var collectionRef = FirebaseFirestore.instance.collection("users");
+    if (event.fromProfile) {
+      List followers = state.userData.followers;
+      followers.add(myUserId);
+      UserData userData = state.userData.copyWith(followers: followers);
+      await collectionRef.doc(userData.id).update(userData.toJson());
+      List following = state.myData.following;
+      following.add(userData.id);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(FollowedUserSearchState(state.posts, state.usersList, userData,
+          state.tabIndex, state.postsIndex, state.usersPosts, myData));
+    } else {}
+  }
+
+  Future<void> unfollow(UnFollowSearchEvent event, Emitter emit) async {
+    emit(UnFollowingSearchState(state.posts, state.usersList, state.userData,
+        state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? myUserId = sharedPreferences.getString("userId");
+    var collectionRef = FirebaseFirestore.instance.collection("users");
+    if (event.fromProfile) {
+      List followers = state.userData.followers;
+      followers.remove(myUserId);
+      UserData userData = state.userData.copyWith(followers: followers);
+      await collectionRef.doc(userData.id).update(userData.toJson());
+      List following = state.myData.following;
+      following.remove(userData.id);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(UnFollowedUserSearchState(state.posts, state.usersList, userData,
+          state.tabIndex, state.postsIndex, state.usersPosts, myData));
+    } else {}
   }
 
   Future<void> deletePost(DeleteSearchProfilePost event, Emitter emit) async {
