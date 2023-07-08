@@ -150,8 +150,8 @@ class PostIndexChangedState extends ProfileState {
       ];
 }
 
-class PostLikedState extends ProfileState {
-  const PostLikedState(super.userData, super.tabIndex, super.postsIndex,
+class PostLikedProfileState extends ProfileState {
+  const PostLikedProfileState(super.userData, super.tabIndex, super.postsIndex,
       super.savedPosts, super.savedPostsList, super.previousStories);
 
   @override
@@ -205,8 +205,8 @@ class DeletedCommentProfileState extends ProfileState {
       ];
 }
 
-class BookmarkedState extends ProfileState {
-  const BookmarkedState(super.userData, super.tabIndex, super.postsIndex,
+class BookmarkedProfileState extends ProfileState {
+  const BookmarkedProfileState(super.userData, super.tabIndex, super.postsIndex,
       super.savedPosts, super.savedPostsList, super.previousStories);
   @override
   List<Object> get props => [

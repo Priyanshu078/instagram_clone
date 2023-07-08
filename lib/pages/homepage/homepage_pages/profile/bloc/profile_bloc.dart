@@ -164,7 +164,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         .collection("users")
         .doc(myUserId)
         .update(userData.toJson());
-    emit(BookmarkedState(
+    emit(BookmarkedProfileState(
         userData,
         state.tabIndex,
         state.postsIndex,
@@ -281,8 +281,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
       UserData updatedUserData = userData.copyWith(posts: posts);
       await collectionRef.doc(userId).update(updatedUserData.toJson());
-      emit(PostLikedState(state.userData, state.tabIndex, state.postsIndex,
-          state.savedPosts, savedPostsList, const []));
+      emit(PostLikedProfileState(state.userData, state.tabIndex,
+          state.postsIndex, state.savedPosts, savedPostsList, const []));
     } else {
       var documentData = collectionRef.doc(myUserId);
       List<Post> posts = List.from(state.userData.posts);
@@ -299,7 +299,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       var data = value.data()!;
       data["posts"][event.index]["likes"] = likes;
       await documentData.update(data);
-      emit(PostLikedState(userData, state.tabIndex, state.postsIndex,
+      emit(PostLikedProfileState(userData, state.tabIndex, state.postsIndex,
           state.savedPosts, state.savedPostsList, const []));
     }
   }

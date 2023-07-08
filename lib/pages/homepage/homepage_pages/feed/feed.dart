@@ -8,6 +8,7 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/add_story.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/bloc/story_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/view_story.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/user_profile.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
@@ -107,12 +108,13 @@ class FeedPage extends StatelessWidget {
                     .contains(feedState.posts[index].userId)) {
                   context
                       .read<FeedBloc>()
-                      .add(const UnFollowFeedEvent(fromFeed: true));
+                      .add(UnFollowFeedEvent(fromFeed: true, index: index));
                 } else {
                   context
                       .read<FeedBloc>()
-                      .add(const FollowFeedEvent(fromFeed: true));
+                      .add(FollowFeedEvent(fromFeed: true, index: index));
                 }
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -165,7 +167,11 @@ class FeedPage extends StatelessWidget {
                   state is TabChangedFeedState ||
                   state is PostIndexChangeFeedState ||
                   state is MyStoryFetchedState ||
-                  state is MyStoryDeletedState) {
+                  state is MyStoryDeletedState ||
+                  state is FollowingFeedState ||
+                  state is FollowedUserFeedState ||
+                  state is UnFollowedUserFeedState ||
+                  state is UnFollowingFeedState) {
                 return ListView.builder(
                     itemCount: state.posts.length + 1,
                     itemBuilder: (context, index) {
@@ -195,6 +201,10 @@ class FeedPage extends StatelessWidget {
                                                         value: context
                                                             .read<FeedBloc>(),
                                                       ),
+                                                      BlocProvider(
+                                                          create: (context) =>
+                                                              ProfileBloc(
+                                                                  PageController())),
                                                     ],
                                                     child: ViewStoryPage(
                                                       story: state.myStory,

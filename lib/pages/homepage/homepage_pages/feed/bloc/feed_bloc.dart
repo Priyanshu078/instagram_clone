@@ -46,16 +46,33 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     var collectionRef = FirebaseFirestore.instance.collection("users");
-    List followers = state.userData.followers;
-    followers.remove(myUserId);
-    UserData userData = state.userData.copyWith(followers: followers);
-    await collectionRef.doc(userData.id).update(userData.toJson());
-    List following = state.myData.following;
-    following.remove(userData.id);
-    UserData myData = state.myData.copyWith(following: following);
-    await collectionRef.doc(myUserId).update(myData.toJson());
-    emit(UnFollowedUserFeedState(state.posts, myData, userData, state.tabIndex,
-        state.postsIndex, state.stories, state.myStory));
+    if (event.fromFeed) {
+      String userId = state.posts[event.index!].userId;
+      var docSnapshot = await collectionRef.doc(userId).get();
+      UserData userData = UserData.fromJson(docSnapshot.data()!);
+      List followers = userData.followers;
+      followers.remove(myUserId);
+      await collectionRef
+          .doc(userId)
+          .update(userData.copyWith(followers: followers).toJson());
+      List following = state.myData.following;
+      following.remove(userId);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(UnFollowedUserFeedState(state.posts, myData, state.userData,
+          state.tabIndex, state.postsIndex, state.stories, state.myStory));
+    } else {
+      List followers = state.userData.followers;
+      followers.remove(myUserId);
+      UserData userData = state.userData.copyWith(followers: followers);
+      await collectionRef.doc(userData.id).update(userData.toJson());
+      List following = state.myData.following;
+      following.remove(userData.id);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(UnFollowedUserFeedState(state.posts, myData, userData,
+          state.tabIndex, state.postsIndex, state.stories, state.myStory));
+    }
   }
 
   Future<void> follow(FollowFeedEvent event, Emitter emit) async {
@@ -64,16 +81,33 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     var collectionRef = FirebaseFirestore.instance.collection("users");
-    List followers = state.userData.followers;
-    followers.add(myUserId);
-    UserData userData = state.userData.copyWith(followers: followers);
-    await collectionRef.doc(userData.id).update(userData.toJson());
-    List following = state.myData.following;
-    following.add(userData.id);
-    UserData myData = state.myData.copyWith(following: following);
-    await collectionRef.doc(myUserId).update(myData.toJson());
-    emit(FollowedUserFeedState(state.posts, myData, userData, state.tabIndex,
-        state.postsIndex, state.stories, state.myStory));
+    if (event.fromFeed) {
+      String userId = state.posts[event.index!].userId;
+      var docSnapshot = await collectionRef.doc(userId).get();
+      UserData userData = UserData.fromJson(docSnapshot.data()!);
+      List followers = userData.followers;
+      followers.add(myUserId);
+      await collectionRef
+          .doc(userId)
+          .update(userData.copyWith(followers: followers).toJson());
+      List following = state.myData.following;
+      following.add(userId);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(FollowedUserFeedState(state.posts, myData, state.userData,
+          state.tabIndex, state.postsIndex, state.stories, state.myStory));
+    } else {
+      List followers = state.userData.followers;
+      followers.add(myUserId);
+      UserData userData = state.userData.copyWith(followers: followers);
+      await collectionRef.doc(userData.id).update(userData.toJson());
+      List following = state.myData.following;
+      following.add(userData.id);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(FollowedUserFeedState(state.posts, myData, userData, state.tabIndex,
+          state.postsIndex, state.stories, state.myStory));
+    }
   }
 
   Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {

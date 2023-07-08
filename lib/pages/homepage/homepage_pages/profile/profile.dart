@@ -165,10 +165,10 @@ class _ProfilePageState extends State<ProfilePage>
                 state is ProfilePrivateState ||
                 state is TabChangedState ||
                 state is PostIndexChangedState ||
-                state is PostLikedState ||
+                state is PostLikedProfileState ||
                 state is CommentAddedProfileState ||
                 state is DeletedCommentProfileState ||
-                state is BookmarkedState ||
+                state is BookmarkedProfileState ||
                 state is SavedPostsState ||
                 state is DeletedPostState ||
                 state is FetchedPreviousStories ||

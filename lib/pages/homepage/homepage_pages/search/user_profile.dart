@@ -375,14 +375,22 @@ class _UserProfilePageState extends State<UserProfilePage>
                               ],
                             ),
                           ),
-                          (widget.inSearch
-                                      ? searchState.userData.private
-                                      : feedState.userData.private) &&
+                          ((widget.inSearch
+                                          ? searchState.userData.private
+                                          : feedState.userData.private) &&
+                                      (widget.inSearch
+                                          ? (searchState.userData.id !=
+                                              homePageBloc.sharedPreferences
+                                                  .getString("userId"))
+                                          : (feedState.userData.id !=
+                                              homePageBloc.sharedPreferences
+                                                  .getString("userId")))) &&
                                   (widget.inSearch
-                                      ? (searchState.userData.id !=
-                                          homePageBloc.sharedPreferences
+                                      ? !searchState.userData.followers
+                                          .contains(homePageBloc
+                                              .sharedPreferences
                                               .getString("userId"))
-                                      : (feedState.userData.id !=
+                                      : !feedState.userData.followers.contains(
                                           homePageBloc.sharedPreferences
                                               .getString("userId")))
                               ? Column(
