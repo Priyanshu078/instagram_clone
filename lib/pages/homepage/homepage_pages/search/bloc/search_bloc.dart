@@ -79,7 +79,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       await collectionRef.doc(myUserId).update(myData.toJson());
       emit(FollowedUserSearchState(state.posts, state.usersList, userData,
           state.tabIndex, state.postsIndex, state.usersPosts, myData));
-    } else {}
+    } else {
+      String userId = state.posts[event.index!].userId;
+      var docSnapshot = await collectionRef.doc(userId).get();
+      UserData userData = UserData.fromJson(docSnapshot.data()!);
+      List followers = userData.followers;
+      followers.add(myUserId);
+      await collectionRef
+          .doc(userId)
+          .update(userData.copyWith(followers: followers).toJson());
+      List following = state.myData.following;
+      following.add(userId);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(FollowedUserSearchState(state.posts, state.usersList, state.userData,
+          state.tabIndex, state.postsIndex, state.usersPosts, myData));
+    }
   }
 
   Future<void> unfollow(UnFollowSearchEvent event, Emitter emit) async {
@@ -99,7 +114,28 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       await collectionRef.doc(myUserId).update(myData.toJson());
       emit(UnFollowedUserSearchState(state.posts, state.usersList, userData,
           state.tabIndex, state.postsIndex, state.usersPosts, myData));
-    } else {}
+    } else {
+      String userId = state.posts[event.index!].userId;
+      var docSnapshot = await collectionRef.doc(userId).get();
+      UserData userData = UserData.fromJson(docSnapshot.data()!);
+      List followers = userData.followers;
+      followers.remove(myUserId);
+      await collectionRef
+          .doc(userId)
+          .update(userData.copyWith(followers: followers).toJson());
+      List following = state.myData.following;
+      following.remove(userId);
+      UserData myData = state.myData.copyWith(following: following);
+      await collectionRef.doc(myUserId).update(myData.toJson());
+      emit(UnFollowedUserSearchState(
+          state.posts,
+          state.usersList,
+          state.userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          myData));
+    }
   }
 
   Future<void> deletePost(DeleteSearchProfilePost event, Emitter emit) async {

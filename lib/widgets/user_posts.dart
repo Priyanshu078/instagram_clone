@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
@@ -32,6 +33,7 @@ class UserPosts extends StatelessWidget {
     ProfileState? profileState,
     FeedState? feedState,
   ) {
+    var homePageBloc = context.read<HomepageBloc>();
     return SizedBox(
       height: height * 0.3,
       child: Padding(
@@ -153,17 +155,36 @@ class UserPosts extends StatelessWidget {
                   )
                 : ListTile(
                     minLeadingWidth: 0,
-                    leading: const Icon(
-                      Icons.person_remove,
-                      color: Colors.white,
-                    ),
-                    title: const InstaText(
+                    leading: searchState!.myData.following
+                            .contains(searchState.posts[index].userId)
+                        ? const Icon(
+                            Icons.person_remove,
+                            color: Colors.white,
+                          )
+                        : const Icon(
+                            Icons.person_add,
+                            color: Colors.white,
+                          ),
+                    title: InstaText(
                       fontSize: 17,
                       color: Colors.white,
                       fontWeight: FontWeight.normal,
-                      text: "Unfollow",
+                      text: searchState.myData.following
+                              .contains(searchState.posts[index].userId)
+                          ? "Unfollow"
+                          : "follow",
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      if (searchState.myData.following
+                          .contains(searchState.posts[index].userId)) {
+                        context.read<SearchBloc>().add(UnFollowSearchEvent(
+                            fromProfile: false, index: index));
+                      } else {
+                        context.read<SearchBloc>().add(FollowSearchEvent(
+                            fromProfile: false, index: index));
+                      }
+                      Navigator.of(context).pop();
+                    },
                   ),
           ],
         ),
