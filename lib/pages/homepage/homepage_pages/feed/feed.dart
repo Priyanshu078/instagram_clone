@@ -312,6 +312,10 @@ class FeedPage extends StatelessWidget {
                                                               value: context.read<
                                                                   FeedBloc>(),
                                                             ),
+                                                            BlocProvider(
+                                                                create: (context) =>
+                                                                    ProfileBloc(
+                                                                        PageController())),
                                                           ],
                                                           child: ViewStoryPage(
                                                             story: state

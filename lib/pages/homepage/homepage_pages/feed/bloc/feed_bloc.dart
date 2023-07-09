@@ -309,24 +309,23 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       posts.shuffle();
     }
     var storiesCollectionRef = FirebaseFirestore.instance.collection("stories");
-    var peopleAddedStoriesSnapshot =
-        await storiesCollectionRef.where("addedStory", isEqualTo: true).get();
+    var storySnapshot = await storiesCollectionRef.doc(userId).get();
+    Story myStory =
+        Story.fromJson(storySnapshot.data()!["previous_stories"].last);
+    var peopleAddedStoriesSnapshot = await storiesCollectionRef
+        .where("addedStory", isEqualTo: true)
+        .where("followers", arrayContains: userId)
+        .get();
     var peopleAddedStoryDocs = peopleAddedStoriesSnapshot.docs;
-    Story myStory = Story.temp();
     List<StoryData> stories = [];
     String todaysDate = DateTime.now().toString().split(" ")[0];
     for (int i = 0; i < peopleAddedStoryDocs.length; i++) {
       if (peopleAddedStoryDocs[i].data()['previous_stories'].last['date'] ==
           todaysDate) {
-        if (peopleAddedStoryDocs[i].id == userId) {
-          myStory = Story.fromJson(
-              peopleAddedStoryDocs[i].data()["previous_stories"].last);
-        } else {
-          stories.add(StoryData(
-              story: Story.fromJson(
-                  peopleAddedStoryDocs[i].data()["previous_stories"].last),
-              viewed: false));
-        }
+        stories.add(StoryData(
+            story: Story.fromJson(
+                peopleAddedStoryDocs[i].data()["previous_stories"].last),
+            viewed: false));
       } else if (peopleAddedStoryDocs[i]
               .data()['previous_stories']
               .last['date'] !=
