@@ -57,7 +57,8 @@ class _HomePageState extends State<HomePage> {
             bloc.add(UserProfileBackEvent());
           } else if (bloc.pageController.page == 0 &&
               searchBlocState.previousPage == 2) {
-            bloc.pageController.jumpToPage(2);
+            bloc.pageController.jumpToPage(1);
+            bloc.add(GetPosts());
           } else if (searchBlocState is UsersSearched) {
             context.read<SearchBloc>().searchController.clear();
             context.read<SearchBloc>().focusNode.unfocus();

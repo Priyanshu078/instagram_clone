@@ -110,17 +110,15 @@ class _UserProfilePageState extends State<UserProfilePage>
                     leading: IconButton(
                       onPressed: () async {
                         if (widget.inSearch) {
-                          if (searchState.previousPage == 1 ||
-                              searchState.previousPage == 0) {
+                          if (searchState.previousPage == 1) {
                             context
                                 .read<SearchBloc>()
                                 .add(UserProfileBackEvent());
                             widget.pageController.jumpToPage(1);
                           } else if (searchState.previousPage == 2) {
-                            widget.pageController.jumpToPage(2);
+                            widget.pageController.jumpToPage(1);
+                            context.read<SearchBloc>().add(GetPosts());
                           }
-                          print(widget.inSearch);
-                          print(searchState.previousPage);
                         } else {
                           var bloc = context.read<FeedBloc>();
                           bloc.add(const GetFeed(false));

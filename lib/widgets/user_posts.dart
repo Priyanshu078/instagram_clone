@@ -483,12 +483,14 @@ class UserPosts extends StatelessWidget {
                                     : state.posts[index].id));
                           },
                           onUserNamePressed: () async {
-                            var bloc = context.read<SearchBloc>();
-                            bloc.add(FetchUserDataInSearch(
-                                userId: state.posts[index].userId));
-                            await bloc.pageController.animateToPage(0,
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.easeIn);
+                            if (!state.usersPosts) {
+                              var bloc = context.read<SearchBloc>();
+                              bloc.add(FetchUserDataInSearch(
+                                  userId: state.posts[index].userId));
+                              await bloc.pageController.animateToPage(0,
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeIn);
+                            }
                           },
                         );
                       },
