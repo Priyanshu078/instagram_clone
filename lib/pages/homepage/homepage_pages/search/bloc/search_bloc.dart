@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'search_event.dart';
@@ -18,7 +17,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   SearchBloc(this.pageController, this.focusNode, this.searchController)
       : super(SearchInitial(const <Post>[], const <UserData>[], UserData.temp(),
-            0, 0, true, UserData.temp())) {
+            0, 0, true, UserData.temp(), 1)) {
     on<GetPosts>((event, emit) => getPosts(event, emit));
     on<SearchUsers>((event, emit) => searchUsers(event, emit));
     on<UserProfileEvent>((event, emit) => emit(UserProfileState(
@@ -28,7 +27,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         state.tabIndex,
         state.postsIndex,
         state.usersPosts,
-        state.myData)));
+        state.myData,
+        1)));
     on<UserProfileBackEvent>((event, emit) => emit(UsersSearched(
         state.posts,
         state.usersList,
@@ -36,7 +36,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         state.tabIndex,
         state.postsIndex,
         state.usersPosts,
-        state.myData)));
+        state.myData,
+        0)));
     on<TabChangeEvent>((event, emit) => emit(TabChangeState(
         state.posts,
         state.usersList,
@@ -44,15 +45,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         event.tabIndex,
         state.postsIndex,
         state.usersPosts,
-        state.myData)));
-    on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedState(
-        state.posts,
-        state.usersList,
-        state.userData,
-        state.tabIndex,
-        event.postIndex,
-        event.usersPosts,
-        state.myData)));
+        state.myData,
+        state.previousPage)));
+    on<PostsIndexChangeEvent>((event, emit) => emit(PostIndexChangedSearchState(
+          state.posts,
+          state.usersList,
+          state.userData,
+          state.tabIndex,
+          event.postIndex,
+          event.usersPosts,
+          state.myData,
+          state.previousPage,
+        )));
     on<SearchLikePostEvent>((event, emit) => likePost(event, emit));
     on<AddSearchComment>((event, emit) => addComment(event, emit));
     on<DeleteSearchComment>((event, emit) => deleteComment(event, emit));
@@ -60,11 +64,44 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<DeleteSearchProfilePost>((event, emit) => deletePost(event, emit));
     on<FollowSearchEvent>((event, emit) => follow(event, emit));
     on<UnFollowSearchEvent>((event, emit) => unfollow(event, emit));
+    on<FetchUserDataInSearch>((event, emit) => fetchUserData(event, emit));
+  }
+
+  Future<void> fetchUserData(FetchUserDataInSearch event, Emitter emit) async {
+    emit(LoadingUserDataSearchState(
+        state.posts,
+        state.usersList,
+        state.userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        state.myData,
+        2));
+    String userId = event.userId;
+    var docSnapshot =
+        await FirebaseFirestore.instance.collection("users").doc(userId).get();
+    UserData userData = UserData.fromJson(docSnapshot.data()!);
+    emit(FetchedUserDataSearchState(
+        state.posts,
+        state.usersList,
+        userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        state.myData,
+        state.previousPage));
   }
 
   Future<void> follow(FollowSearchEvent event, Emitter emit) async {
-    emit(FollowingSearchState(state.posts, state.usersList, state.userData,
-        state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+    emit(FollowingSearchState(
+        state.posts,
+        state.usersList,
+        state.userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        state.myData,
+        state.previousPage));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     var collectionRef = FirebaseFirestore.instance.collection("users");
@@ -77,8 +114,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       following.add(userData.id);
       UserData myData = state.myData.copyWith(following: following);
       await collectionRef.doc(myUserId).update(myData.toJson());
-      emit(FollowedUserSearchState(state.posts, state.usersList, userData,
-          state.tabIndex, state.postsIndex, state.usersPosts, myData));
+      emit(FollowedUserSearchState(
+          state.posts,
+          state.usersList,
+          userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          myData,
+          state.previousPage));
     } else {
       String userId = state.posts[event.index!].userId;
       var docSnapshot = await collectionRef.doc(userId).get();
@@ -92,14 +136,28 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       following.add(userId);
       UserData myData = state.myData.copyWith(following: following);
       await collectionRef.doc(myUserId).update(myData.toJson());
-      emit(FollowedUserSearchState(state.posts, state.usersList, state.userData,
-          state.tabIndex, state.postsIndex, state.usersPosts, myData));
+      emit(FollowedUserSearchState(
+          state.posts,
+          state.usersList,
+          state.userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          myData,
+          state.previousPage));
     }
   }
 
   Future<void> unfollow(UnFollowSearchEvent event, Emitter emit) async {
-    emit(UnFollowingSearchState(state.posts, state.usersList, state.userData,
-        state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+    emit(UnFollowingSearchState(
+        state.posts,
+        state.usersList,
+        state.userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        state.myData,
+        state.previousPage));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     var collectionRef = FirebaseFirestore.instance.collection("users");
@@ -112,8 +170,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       following.remove(userData.id);
       UserData myData = state.myData.copyWith(following: following);
       await collectionRef.doc(myUserId).update(myData.toJson());
-      emit(UnFollowedUserSearchState(state.posts, state.usersList, userData,
-          state.tabIndex, state.postsIndex, state.usersPosts, myData));
+      emit(UnFollowedUserSearchState(
+          state.posts,
+          state.usersList,
+          userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          myData,
+          state.previousPage));
     } else {
       String userId = state.posts[event.index!].userId;
       var docSnapshot = await collectionRef.doc(userId).get();
@@ -134,7 +199,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           state.tabIndex,
           state.postsIndex,
           state.usersPosts,
-          myData));
+          myData,
+          state.previousPage));
     }
   }
 
@@ -148,8 +214,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         .collection("users")
         .doc(userId)
         .update(userData.toJson());
-    emit(DeletedSearchProfilePostState(state.posts, state.usersList, userData,
-        state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+    emit(DeletedSearchProfilePostState(
+        state.posts,
+        state.usersList,
+        userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        state.myData,
+        state.previousPage));
   }
 
   Future<void> addBookmark(BookmarkSearch event, Emitter emit) async {
@@ -167,8 +240,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         .collection("users")
         .doc(myData.id)
         .update(myData.toJson());
-    emit(BookmarkedSearchState(state.posts, state.usersList, state.userData,
-        state.tabIndex, state.postsIndex, state.usersPosts, myData));
+    emit(BookmarkedSearchState(
+        state.posts,
+        state.usersList,
+        state.userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        myData,
+        state.previousPage));
   }
 
   Future<void> addComment(AddSearchComment event, Emitter emit) async {
@@ -192,8 +272,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           .collection("users")
           .doc(userId)
           .update(userData.toJson());
-      emit(AddedCommentSearchState(state.posts, state.usersList, userData,
-          state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+      emit(AddedCommentSearchState(
+          state.posts,
+          state.usersList,
+          userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          state.myData,
+          state.previousPage));
     } else {
       List<Post> posts = List.from(state.posts);
       posts[event.postIndex] =
@@ -213,8 +300,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           .collection("users")
           .doc(userId)
           .update(documentData);
-      emit(AddedCommentSearchState(posts, state.usersList, state.userData,
-          state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+      emit(AddedCommentSearchState(
+          posts,
+          state.usersList,
+          state.userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          state.myData,
+          state.previousPage));
     }
   }
 
@@ -233,8 +327,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           .collection("users")
           .doc(userId)
           .update(userData.toJson());
-      emit(DeletedCommentSearchState(state.posts, state.usersList, userData,
-          state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+      emit(DeletedCommentSearchState(
+          state.posts,
+          state.usersList,
+          userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          state.myData,
+          state.previousPage));
     } else {
       List<Post> posts = List.from(state.posts);
       String userId = posts[event.postIndex].userId;
@@ -256,8 +357,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       existingComments.removeAt(event.commentIndex);
       posts[event.postIndex] =
           posts[event.postIndex].copyWith(comments: existingComments);
-      emit(DeletedCommentSearchState(posts, state.usersList, state.userData,
-          state.tabIndex, state.postsIndex, state.usersPosts, state.myData));
+      emit(DeletedCommentSearchState(
+          posts,
+          state.usersList,
+          state.userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          state.myData,
+          state.previousPage));
     }
   }
 
@@ -277,8 +385,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
       posts[event.postIndex] = posts[event.postIndex].copyWith(likes: likes);
       UserData userData = state.userData.copyWith(posts: posts);
-      emit(LikePostState(state.posts, state.usersList, userData, state.tabIndex,
-          state.postsIndex, state.usersPosts, state.myData));
+      emit(LikePostState(
+          state.posts,
+          state.usersList,
+          userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          state.myData,
+          state.previousPage));
       var docRef = collectionRef.doc(event.userId);
       var docData = await docRef.get();
       Map<String, dynamic> userDocData = docData.data()!;
@@ -293,8 +408,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         likes.add(myUserId);
       }
       posts[event.postIndex] = posts[event.postIndex].copyWith(likes: likes);
-      emit(LikePostState(posts, state.usersList, state.userData, state.tabIndex,
-          state.postsIndex, state.usersPosts, state.myData));
+      emit(LikePostState(
+          posts,
+          state.usersList,
+          state.userData,
+          state.tabIndex,
+          state.postsIndex,
+          state.usersPosts,
+          state.myData,
+          state.previousPage));
       var docsSnapshot =
           await collectionRef.where("id", isNotEqualTo: myUserId).get();
       var alldocs = docsSnapshot.docs;
@@ -313,8 +435,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> searchUsers(SearchUsers event, Emitter emit) async {
-    emit(SearchInitial(state.posts, const <UserData>[], UserData.temp(),
-        state.tabIndex, state.postsIndex, state.usersPosts, UserData.temp()));
+    emit(SearchInitial(
+        state.posts,
+        const <UserData>[],
+        UserData.temp(),
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        UserData.temp(),
+        1));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString('userId');
     var firebaseCollectionRef = FirebaseFirestore.instance.collection("users");
@@ -330,12 +459,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     var docData = docSnapshot.data()!;
     UserData myData = UserData.fromJson(docData);
     emit(UsersSearched(state.posts, usersList, UserData.temp(), state.tabIndex,
-        state.postsIndex, state.usersPosts, myData));
+        state.postsIndex, state.usersPosts, myData, state.previousPage));
   }
 
   Future<void> getPosts(GetPosts event, Emitter emit) async {
-    emit(SearchInitial(const <Post>[], const <UserData>[], UserData.temp(),
-        state.tabIndex, state.postsIndex, state.usersPosts, UserData.temp()));
+    emit(SearchInitial(const <Post>[], const <UserData>[],
+        UserData.temp(),
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        UserData.temp(),
+        1));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString('userId');
     var firestoreCollectionRef = FirebaseFirestore.instance.collection("users");
@@ -353,7 +487,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     var docSnapshot = await firestoreCollectionRef.doc(userId).get();
     var docData = docSnapshot.data()!;
     UserData myData = UserData.fromJson(docData);
-    emit(PostsFetched(posts, const <UserData>[], UserData.temp(),
-        state.tabIndex, state.postsIndex, state.usersPosts, myData));
+    emit(PostsFetched(
+        posts,
+        const <UserData>[],
+        UserData.temp(),
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        myData,
+        state.previousPage));
   }
 }

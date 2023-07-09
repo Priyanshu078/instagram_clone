@@ -10,7 +10,6 @@ import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
-import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 

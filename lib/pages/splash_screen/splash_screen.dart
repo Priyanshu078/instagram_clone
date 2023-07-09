@@ -40,7 +40,7 @@ class SplashScreen extends StatelessWidget {
                   BlocProvider(
                     create: (context) => SearchBloc(
                       PageController(
-                        initialPage: 0,
+                        initialPage: 1,
                       ),
                       FocusNode(),
                       TextEditingController(),

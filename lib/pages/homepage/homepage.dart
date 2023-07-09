@@ -51,19 +51,22 @@ class _HomePageState extends State<HomePage> {
           }
         } else if (homePageBlocState.index == 1) {
           var bloc = context.read<SearchBloc>();
-          if (bloc.pageController.page == 1 ||
-              searchBlocState is UserProfileState) {
-            bloc.pageController.jumpToPage(0);
+          if (bloc.pageController.page == 0 &&
+              searchBlocState.previousPage == 1) {
+            bloc.pageController.jumpToPage(1);
             bloc.add(UserProfileBackEvent());
+          } else if (bloc.pageController.page == 0 &&
+              searchBlocState.previousPage == 2) {
+            bloc.pageController.jumpToPage(2);
           } else if (searchBlocState is UsersSearched) {
             context.read<SearchBloc>().searchController.clear();
             context.read<SearchBloc>().focusNode.unfocus();
             context.read<SearchBloc>().add(GetPosts());
           } else if (bloc.pageController.page == 2 && bloc.state.usersPosts) {
-            bloc.pageController.jumpToPage(1);
-          } else if (bloc.pageController.page == 2 && !bloc.state.usersPosts) {
             bloc.pageController.jumpToPage(0);
-          } else if (bloc.pageController.page == 0 ||
+          } else if (bloc.pageController.page == 2 && !bloc.state.usersPosts) {
+            bloc.pageController.jumpToPage(1);
+          } else if (bloc.pageController.page == 1 ||
               searchBlocState is PostsFetched) {
             context.read<HomepageBloc>().add(TabChange(0));
             context.read<FeedBloc>().add(const GetFeed(false));

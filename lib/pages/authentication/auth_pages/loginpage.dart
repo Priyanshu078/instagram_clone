@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                       BlocProvider(
                         create: (context) => SearchBloc(
                           PageController(
-                            initialPage: 0,
+                            initialPage: 1,
                           ),
                           FocusNode(),
                           TextEditingController(),

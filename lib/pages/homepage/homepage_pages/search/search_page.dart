@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/widgets/user_posts.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/user_profile.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
@@ -25,6 +24,13 @@ class _SearchPageState extends State<SearchPage> {
       physics: const NeverScrollableScrollPhysics(),
       controller: context.read<SearchBloc>().pageController,
       children: [
+        BlocProvider.value(
+          value: context.read<SearchBloc>(),
+          child: UserProfilePage(
+            inSearch: true,
+            pageController: context.read<SearchBloc>().pageController,
+          ),
+        ),
         Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
@@ -76,11 +82,17 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 );
               } else if (state is PostsFetched ||
-                  state is PostIndexChangedState ||
+                  state is PostIndexChangedSearchState ||
                   state is LikePostState ||
                   state is AddedCommentSearchState ||
                   state is DeletedCommentSearchState ||
-                  state is BookmarkedSearchState) {
+                  state is BookmarkedSearchState ||
+                  state is FollowedUserSearchState ||
+                  state is UnFollowedUserSearchState ||
+                  state is UnFollowingSearchState ||
+                  state is FollowingSearchState ||
+                  state is FetchedUserDataSearchState ||
+                  state is LoadingUserDataSearchState) {
                 return SizedBox(
                   width: width,
                   height: height,
@@ -99,7 +111,7 @@ class _SearchPageState extends State<SearchPage> {
                           bloc.add(PostsIndexChangeEvent(index, false));
                           await bloc.pageController.animateToPage(
                             2,
-                            duration: const Duration(milliseconds: 100),
+                            duration: const Duration(milliseconds: 200),
                             curve: Curves.ease,
                           );
                         },
@@ -131,7 +143,7 @@ class _SearchPageState extends State<SearchPage> {
                           FocusManager.instance.primaryFocus?.unfocus();
                           var bloc = context.read<SearchBloc>();
                           bloc.add(UserProfileEvent(state.usersList[index]));
-                          await bloc.pageController.animateToPage(1,
+                          await bloc.pageController.animateToPage(0,
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.ease);
                         },
@@ -173,13 +185,6 @@ class _SearchPageState extends State<SearchPage> {
                 );
               }
             },
-          ),
-        ),
-        BlocProvider.value(
-          value: context.read<SearchBloc>(),
-          child: UserProfilePage(
-            inSearch: true,
-            pageController: context.read<SearchBloc>().pageController,
           ),
         ),
         BlocProvider.value(

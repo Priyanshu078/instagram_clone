@@ -102,3 +102,10 @@ class UnFollowSearchEvent extends SearchEvent {
   @override
   List<Object> get props => [fromProfile];
 }
+
+class FetchUserDataInSearch extends SearchEvent {
+  final String userId;
+  const FetchUserDataInSearch({required this.userId});
+  @override
+  List<Object> get props => [userId];
+}

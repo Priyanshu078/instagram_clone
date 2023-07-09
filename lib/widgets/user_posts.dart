@@ -212,9 +212,9 @@ class UserPosts extends StatelessWidget {
               } else {
                 var bloc = context.read<SearchBloc>();
                 if (bloc.state.usersPosts) {
-                  bloc.pageController.jumpToPage(1);
-                } else {
                   bloc.pageController.jumpToPage(0);
+                } else {
+                  bloc.pageController.jumpToPage(1);
                 }
               }
             }
@@ -482,7 +482,14 @@ class UserPosts extends StatelessWidget {
                                     ? state.userData.posts[index].id
                                     : state.posts[index].id));
                           },
-                          onUserNamePressed: () {},
+                          onUserNamePressed: () async {
+                            var bloc = context.read<SearchBloc>();
+                            bloc.add(FetchUserDataInSearch(
+                                userId: state.posts[index].userId));
+                            await bloc.pageController.animateToPage(0,
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeIn);
+                          },
                         );
                       },
                     );

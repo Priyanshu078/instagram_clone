@@ -327,6 +327,13 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
                   peopleAddedStoryDocs[i].data()["previous_stories"].last),
               viewed: false));
         }
+      } else if (peopleAddedStoryDocs[i]
+              .data()['previous_stories']
+              .last['date'] !=
+          todaysDate) {
+        if (peopleAddedStoryDocs[i].id == userId) {
+          myData = myData.copyWith(addedStory: false);
+        }
       }
     }
     emit(FeedFetched(
