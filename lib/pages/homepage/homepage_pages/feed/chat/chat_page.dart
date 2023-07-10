@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/widgets/insta_textfield.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
-import '../constants/colors.dart';
+import '../../../../../constants/colors.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -17,27 +19,17 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    var feedBloc = context.read<FeedBloc>();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        centerTitle: true,
         backgroundColor: textFieldBackgroundColor,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: SizedBox(
-                width: width * 0.06,
-                height: AppBar().preferredSize.height,
-                child: Image.asset('assets/images/add_Chat.png')),
-          ),
-        ],
-        title: const InstaText(
-            fontSize: 16,
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            text: "priyanshu paliwal"),
+        title: InstaText(
+          fontSize: 18,
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          text: feedBloc.state.myData.username,
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();

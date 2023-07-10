@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
-import 'package:instagram_clone/pages/chat_page.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/chat/bloc/chat_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/chat/chat_page.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/add_story.dart';
@@ -145,7 +146,17 @@ class FeedPage extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ChatPage()));
+                      builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: context.read<FeedBloc>(),
+                              ),
+                              BlocProvider(
+                                create: (context) => ChatBloc(),
+                              ),
+                            ],
+                            child: const ChatPage(),
+                          )));
                 },
                 icon: SizedBox(
                   height: AppBar().preferredSize.height * 0.8,
