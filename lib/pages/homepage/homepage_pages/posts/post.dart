@@ -52,7 +52,7 @@ class _PostPageState extends State<PostPage> {
                   ),
                   InstaButton(
                     borderWidth: 1,
-                    width: double.infinity,
+                    width: width,
                     postButton: true,
                     onPressed: () {
                       context.read<PostsBloc>().add(ChooseImage());

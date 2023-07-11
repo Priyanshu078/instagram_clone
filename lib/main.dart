@@ -1,16 +1,29 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:instagram_clone/firebase_options.dart';
 import 'package:instagram_clone/pages/splash_screen/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'insta_bloc_observer.dart';
 import 'pages/splash_screen/splash_cubit/splash_cubit.dart';
 
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin(); // instance of flutterLocalNotificationsPlugin
+const AndroidInitializationSettings androidInitializationSettings =
+    AndroidInitializationSettings('@mipmap/ic_launcher'); // for android
+const DarwinInitializationSettings darwinInitializationSettings =
+    DarwinInitializationSettings(); // for iOS
+InitializationSettings initializationSettings = const InitializationSettings(
+  android: androidInitializationSettings,
+  iOS: darwinInitializationSettings,
+);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   Bloc.observer = InstaBlocObserver();
   runApp(const MyApp());
 }

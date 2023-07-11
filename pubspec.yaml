@@ -47,7 +47,7 @@ dependencies:
   image_picker: ^0.8.7+5
   cached_network_image: ^3.2.3
   scrollable_positioned_list: ^0.3.8
-  
+  flutter_local_notifications: ^15.1.0+1
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,15 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:instagram_clone/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'posts_event.dart';
@@ -29,8 +32,10 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   }
 
   Future<void> postImage(PostImage event, Emitter emit) async {
+    int id = Random().nextInt(100000);
     try {
       emit(PostingImageState(state.imagePath));
+      await sendNotification(id);
       var sharedPreferences = await SharedPreferences.getInstance();
       var userId = sharedPreferences.getString('userId');
       var caption = event.caption;
@@ -61,12 +66,35 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       List newPosts = posts.map((post) => post.toJson()).toList();
       newPosts.add(post.toJson());
       await fireStoreCollectionRef.doc(userId).update({"posts": newPosts});
+      // flutterLocalNotificationsPlugin.cancel(id);
       emit(const PostsInitial(""));
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
+      // flutterLocalNotificationsPlugin.cancel(id);
       emit(const PostsInitial(""));
     }
+  }
+
+  Future sendNotification(int id) async {
+    AndroidNotificationDetails androidNotificationDetails =
+        const AndroidNotificationDetails(
+      "Local Notification",
+      "Local Notification",
+      importance: Importance.max,
+      priority: Priority.max,
+      onlyAlertOnce: true,
+      enableVibration: true,
+      playSound: true,
+      maxProgress: 100,
+      progress: 0,
+    );
+    DarwinNotificationDetails darwinNotificationDetails =
+        const DarwinNotificationDetails();
+    NotificationDetails notificationDetails = NotificationDetails(
+        android: androidNotificationDetails, iOS: darwinNotificationDetails);
+    await flutterLocalNotificationsPlugin.show(
+        id, "Hello everyone", "I am a notification", notificationDetails);
   }
 }
