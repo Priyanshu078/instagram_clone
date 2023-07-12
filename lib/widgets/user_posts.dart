@@ -10,7 +10,6 @@ import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../constants/colors.dart';
 
 class UserPosts extends StatelessWidget {

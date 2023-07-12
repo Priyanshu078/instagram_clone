@@ -6,7 +6,6 @@ import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
-
 import '../pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import '../pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
 

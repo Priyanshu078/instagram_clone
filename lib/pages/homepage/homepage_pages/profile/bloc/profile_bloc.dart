@@ -12,7 +12,6 @@ import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-
 import 'package:uuid/uuid.dart';
 part 'profile_event.dart';
 part 'profile_state.dart';
