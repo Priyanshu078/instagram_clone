@@ -66,13 +66,13 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       List newPosts = posts.map((post) => post.toJson()).toList();
       newPosts.add(post.toJson());
       await fireStoreCollectionRef.doc(userId).update({"posts": newPosts});
-      // flutterLocalNotificationsPlugin.cancel(id);
+      flutterLocalNotificationsPlugin.cancel(id);
       emit(const PostsInitial(""));
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      // flutterLocalNotificationsPlugin.cancel(id);
+      flutterLocalNotificationsPlugin.cancel(id);
       emit(const PostsInitial(""));
     }
   }
@@ -80,21 +80,22 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   Future sendNotification(int id) async {
     AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails(
-      "Local Notification",
-      "Local Notification",
+      "Instagram Channel Id",
+      "Instagram Channel name",
       importance: Importance.max,
       priority: Priority.max,
       onlyAlertOnce: true,
       enableVibration: true,
       playSound: true,
-      maxProgress: 100,
-      progress: 0,
+      showProgress: true,
+      category: AndroidNotificationCategory.progress,
+      indeterminate: true,
     );
     DarwinNotificationDetails darwinNotificationDetails =
         const DarwinNotificationDetails();
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails, iOS: darwinNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
-        id, "Hello everyone", "I am a notification", notificationDetails);
+        id, "Posting", "", notificationDetails);
   }
 }
