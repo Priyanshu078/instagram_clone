@@ -96,6 +96,6 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails, iOS: darwinNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
-        id, "Posting", "", notificationDetails);
+        id, "Posting...", "", notificationDetails);
   }
 }

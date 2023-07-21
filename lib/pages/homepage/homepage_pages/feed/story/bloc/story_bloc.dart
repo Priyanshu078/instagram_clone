@@ -127,6 +127,6 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails, iOS: darwinNotificationDetails);
     await flutterLocalNotificationsPlugin.show(
-        id, "Adding to Story", "", notificationDetails);
+        id, "Posting...", "", notificationDetails);
   }
 }
