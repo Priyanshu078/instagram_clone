@@ -271,23 +271,23 @@ class _SignupPageState extends State<SignupPage> {
                                 ? 1
                                 : 0;
                         UserData userData = UserData(
-                          uId,
-                          name,
-                          username,
-                          contact,
-                          password,
-                          gender,
-                          "",
-                          "",
-                          [],
-                          [],
-                          [],
-                          [],
-                          "",
-                          false,
-                          [],
-                          false,
-                        );
+                            uId,
+                            name,
+                            username,
+                            contact,
+                            password,
+                            gender,
+                            "",
+                            "",
+                            [],
+                            [],
+                            [],
+                            [],
+                            "",
+                            false,
+                            [],
+                            false,
+                            "");
                         context
                             .read<AuthBloc>()
                             .add(RequestSignUpEvent(userData));

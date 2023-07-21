@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -22,7 +23,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> signUp(RequestSignUpEvent event, Emitter emit) async {
     emit(LoadingState(state.obscurePassword, state.gender));
     try {
-      UserData data = event.userData;
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      UserData data = event.userData.copyWith(fcmToken: fcmToken!);
+      print("fcm Token $fcmToken");
       if (data.contact.isNotEmpty &&
           data.name.isNotEmpty &&
           data.password.isNotEmpty &&
@@ -73,6 +76,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await sharedPreferences.setString(
               "profilePhotoUrl", userData.profilePhotoUrl);
           await sharedPreferences.setString("username", userData.username);
+          String? fcmToken = await FirebaseMessaging.instance.getToken();
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(userData.id)
+              .update({"fcmToken": fcmToken});
+          print("fcm Token $fcmToken");
           if (kDebugMode) {
             print("UserId: ${sharedPreferences.getString("userId")}");
           }

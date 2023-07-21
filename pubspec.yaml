@@ -48,6 +48,7 @@ dependencies:
   cached_network_image: ^3.2.3
   scrollable_positioned_list: ^0.3.8
   flutter_local_notifications: ^15.1.0+1
+  firebase_messaging: ^14.6.5
 
 dev_dependencies:
   flutter_test:

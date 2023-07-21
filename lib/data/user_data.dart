@@ -19,6 +19,7 @@ class UserData {
   final bool private;
   final List bookmarks;
   final bool addedStory;
+  final String fcmToken;
 
   UserData(
     this.id,
@@ -37,11 +38,12 @@ class UserData {
     this.private,
     this.bookmarks,
     this.addedStory,
+    this.fcmToken,
   );
 
   factory UserData.temp() {
     return UserData("id", "name", "username", "contact", "password", 1, "bio",
-        "tagline", [], [], [], [], "", false, [], false);
+        "tagline", [], [], [], [], "", false, [], false, "");
   }
 
   UserData copyWith({
@@ -61,6 +63,7 @@ class UserData {
     bool? private,
     List? bookmarks,
     bool? addedStory,
+    String? fcmToken,
   }) {
     return UserData(
       id ?? this.id,
@@ -79,6 +82,7 @@ class UserData {
       private ?? this.private,
       bookmarks ?? this.bookmarks,
       addedStory ?? this.addedStory,
+      fcmToken ?? this.fcmToken,
     );
   }
 
@@ -130,6 +134,7 @@ class UserData {
       json['private'],
       json['bookmarks'],
       json['addedStory'],
+      json['fcmToken'],
     );
   }
 
@@ -151,6 +156,7 @@ class UserData {
       "private": private,
       "bookmarks": bookmarks,
       "addedStory": addedStory,
+      "fcmToken": fcmToken,
     };
   }
 }
