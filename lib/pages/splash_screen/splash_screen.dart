@@ -18,13 +18,14 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SplashCubit, SplashState>(builder: (context, state) {
-      return AnimatedSplashScreen(
-        duration: 3000,
-        centered: true,
-        splash: Image.asset('assets/images/instagram_logo.jpg'),
-        backgroundColor: Colors.black,
-        nextScreen: state.dataSaved
-            ? MultiBlocProvider(
+      return AnimatedSplashScreen.withScreenFunction(
+          duration: 3000,
+          centered: true,
+          splash: Image.asset('assets/images/instagram_logo.jpg'),
+          backgroundColor: Colors.black,
+          screenFunction: () async {
+            if (state.dataSaved) {
+              return MultiBlocProvider(
                 providers: [
                   BlocProvider(
                     create: (context) => HomepageBloc()..add(GetDetails()),
@@ -53,12 +54,14 @@ class SplashScreen extends StatelessWidget {
                   )
                 ],
                 child: const HomePage(),
-              )
-            : BlocProvider(
+              );
+            } else {
+              return BlocProvider(
                 create: (context) => AuthBloc(),
                 child: const LoginPage(),
-              ),
-      );
+              );
+            }
+          });
     });
   }
 }
