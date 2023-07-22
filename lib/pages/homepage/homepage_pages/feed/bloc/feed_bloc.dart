@@ -41,15 +41,20 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<StoryViewEvent>((event, emit) => viewStory(event, emit));
   }
 
-  void viewStory(StoryViewEvent event, Emitter emit) {
+  Future<void> viewStory(StoryViewEvent event, Emitter emit) async {
+    var collectionRef = FirebaseFirestore.instance.collection("stories");
     if (event.viewMyStory) {
       StoryData myStory = state.myStory.copyWith(viewed: true);
+      await collectionRef.doc(myStory.story.userId).update({"viewed": true});
       emit(StoryViewedState(state.posts, state.myData, state.userData,
           state.tabIndex, state.postsIndex, state.stories, myStory));
     } else {
       List<StoryData> stories = List.from(state.stories);
       stories[event.index!] =
           StoryData(story: stories[event.index!].story, viewed: true);
+      await collectionRef
+          .doc(stories[event.index!].story.userId)
+          .update({"viewed": true});
       emit(StoryViewedState(state.posts, state.myData, state.userData,
           state.tabIndex, state.postsIndex, stories, state.myStory));
     }
@@ -339,7 +344,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         myStory = StoryData(
             story:
                 Story.fromJson(storySnapshot.data()!["previous_stories"].last),
-            viewed: false);
+            viewed: storySnapshot.data()!['viewed']);
       }
     }
     var peopleAddedStoriesSnapshot = await storiesCollectionRef
@@ -354,7 +359,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         stories.add(StoryData(
             story: Story.fromJson(
                 peopleAddedStoryDocs[i].data()["previous_stories"].last),
-            viewed: false));
+            viewed: peopleAddedStoryDocs[i].data()['viewed']));
       }
     }
     emit(FeedFetched(

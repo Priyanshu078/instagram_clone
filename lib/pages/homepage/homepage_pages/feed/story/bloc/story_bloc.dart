@@ -88,6 +88,7 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
           "addedStory": false,
           "userId": userId,
           "previous_stories": [],
+          "viewed": false,
         });
       }
       List previousStories = docData == null ? [] : docData["previous_stories"];

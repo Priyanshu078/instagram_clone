@@ -45,6 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           "addedStory": false,
           "userId": userData.id,
           "previous_stories": [],
+          "viewed": false,
         });
         emit(SignUpDone(state.obscurePassword, state.gender));
       } else {
