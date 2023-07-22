@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:instagram_clone/main.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
@@ -23,9 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> signUp(RequestSignUpEvent event, Emitter emit) async {
     emit(LoadingState(state.obscurePassword, state.gender));
     try {
-      String? fcmToken = await FirebaseMessaging.instance.getToken();
       UserData data = event.userData.copyWith(fcmToken: fcmToken!);
-      print("fcm Token $fcmToken");
       if (data.contact.isNotEmpty &&
           data.name.isNotEmpty &&
           data.password.isNotEmpty &&
@@ -76,12 +75,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await sharedPreferences.setString(
               "profilePhotoUrl", userData.profilePhotoUrl);
           await sharedPreferences.setString("username", userData.username);
-          String? fcmToken = await FirebaseMessaging.instance.getToken();
           await FirebaseFirestore.instance
               .collection("users")
               .doc(userData.id)
               .update({"fcmToken": fcmToken});
-          print("fcm Token $fcmToken");
           if (kDebugMode) {
             print("UserId: ${sharedPreferences.getString("userId")}");
           }

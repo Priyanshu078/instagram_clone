@@ -1,4 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:instagram_clone/firebase_options.dart';
@@ -18,12 +20,18 @@ InitializationSettings initializationSettings = const InitializationSettings(
   iOS: darwinInitializationSettings,
 );
 
+String? fcmToken = "";
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  fcmToken = await FirebaseMessaging.instance.getToken();
+  if (kDebugMode) {
+    print("fcm Token $fcmToken");
+  }
   Bloc.observer = InstaBlocObserver();
   runApp(const MyApp());
 }
