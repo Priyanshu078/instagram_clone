@@ -9,7 +9,7 @@ abstract class FeedState extends Equatable {
   final int postsIndex;
   final int tabIndex;
   final List<StoryData> stories;
-  final Story myStory;
+  final StoryData myStory;
   @override
   List<Object> get props =>
       [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
@@ -143,6 +143,15 @@ class UnFollowingFeedState extends FeedState {
 class UnFollowedUserFeedState extends FeedState {
   const UnFollowedUserFeedState(super.posts, super.myData, super.userData,
       super.tabIndex, super.postsIndex, super.stories, super.myStory);
+  @override
+  List<Object> get props =>
+      [posts, myData, userData, tabIndex, postsIndex, stories, myStory];
+}
+
+class StoryViewedState extends FeedState {
+  const StoryViewedState(super.posts, super.myData, super.userData,
+      super.tabIndex, super.postsIndex, super.stories, super.myStory);
+
   @override
   List<Object> get props =>
       [posts, myData, userData, tabIndex, postsIndex, stories, myStory];

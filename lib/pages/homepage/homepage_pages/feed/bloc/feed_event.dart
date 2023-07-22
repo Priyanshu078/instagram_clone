@@ -95,3 +95,11 @@ class UnFollowFeedEvent extends FeedEvent {
   @override
   List<Object> get props => [fromFeed];
 }
+
+class StoryViewEvent extends FeedEvent {
+  final bool viewMyStory;
+  final int? index;
+  const StoryViewEvent({required this.viewMyStory, this.index});
+  @override
+  List<Object> get props => [viewMyStory];
+}

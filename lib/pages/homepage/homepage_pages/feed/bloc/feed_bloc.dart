@@ -16,7 +16,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   FeedBloc(this.pageController)
       : super(FeedInitial(const <Post>[], UserData.temp(), UserData.temp(), 0,
-            0, const [], Story.temp())) {
+            0, const [], StoryData(story: Story.temp(), viewed: false))) {
     on<GetFeed>((event, emit) => getPosts(event, emit));
     on<PostLikeEvent>((event, emit) => likePost(event, emit));
     on<AddFeedComment>((event, emit) => addComment(event, emit));
@@ -38,6 +38,21 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<DeleteMyStory>((event, emit) => deleteMyStory(event, emit));
     on<FollowFeedEvent>((event, emit) => follow(event, emit));
     on<UnFollowFeedEvent>((event, emit) => unfollow(event, emit));
+    on<StoryViewEvent>((event, emit) => viewStory(event, emit));
+  }
+
+  void viewStory(StoryViewEvent event, Emitter emit) {
+    if (event.viewMyStory) {
+      StoryData myStory = state.myStory.copyWith(viewed: true);
+      emit(StoryViewedState(state.posts, state.myData, state.userData,
+          state.tabIndex, state.postsIndex, state.stories, myStory));
+    } else {
+      List<StoryData> stories = List.from(state.stories);
+      stories[event.index!] =
+          StoryData(story: stories[event.index!].story, viewed: true);
+      emit(StoryViewedState(state.posts, state.myData, state.userData,
+          state.tabIndex, state.postsIndex, stories, state.myStory));
+    }
   }
 
   Future<void> unfollow(UnFollowFeedEvent event, Emitter emit) async {
@@ -112,7 +127,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {
     UserData myData = state.myData.copyWith(addedStory: false);
-    Story myStory = Story.temp();
+    StoryData myStory = StoryData(story: Story.temp(), viewed: false);
     emit(MyStoryDeletedState(state.posts, myData, state.userData,
         state.tabIndex, state.postsIndex, state.stories, myStory));
   }
@@ -125,7 +140,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         .doc(myUserId)
         .get();
     var docData = docSnapshot.data()!;
-    Story myStory = Story.fromJson(docData["previous_stories"].last);
+    StoryData myStory = StoryData(
+        story: Story.fromJson(docData["previous_stories"].last), viewed: false);
     UserData myData = state.myData.copyWith(addedStory: true);
     emit(MyStoryFetchedState(state.posts, myData, state.userData,
         state.tabIndex, state.postsIndex, state.stories, myStory));
@@ -289,7 +305,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   Future<void> getPosts(GetFeed event, Emitter emit) async {
     emit(FeedInitial(const <Post>[], UserData.temp(), UserData.temp(), 0, 0,
-        const [], Story.temp()));
+        const [], StoryData(story: Story.temp(), viewed: false)));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString('userId');
     var firestoreCollectionRef = FirebaseFirestore.instance.collection("users");
@@ -310,18 +326,20 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     }
     var storiesCollectionRef = FirebaseFirestore.instance.collection("stories");
     String todaysDate = DateTime.now().toString().split(" ")[0];
-    Story myStory = Story.temp();
+    StoryData myStory = StoryData(story: Story.temp(), viewed: false);
     if (myData.addedStory) {
       var storySnapshot = await storiesCollectionRef.doc(userId).get();
       if (storySnapshot.data()!['previous_stories'].last['date'] !=
           todaysDate) {
         myData = myData.copyWith(addedStory: false);
-        myStory = Story.temp();
+        myStory = StoryData(story: Story.temp(), viewed: false);
         await storiesCollectionRef.doc(userId).update({"addedStory": false});
         await firestoreCollectionRef.doc(userId).update({"addedStory": false});
       } else {
-        myStory =
-            Story.fromJson(storySnapshot.data()!["previous_stories"].last);
+        myStory = StoryData(
+            story:
+                Story.fromJson(storySnapshot.data()!["previous_stories"].last),
+            viewed: false);
       }
     }
     var peopleAddedStoriesSnapshot = await storiesCollectionRef

@@ -167,7 +167,8 @@ class FeedPage extends StatelessWidget {
                   state is FollowingFeedState ||
                   state is FollowedUserFeedState ||
                   state is UnFollowedUserFeedState ||
-                  state is UnFollowingFeedState) {
+                  state is UnFollowingFeedState ||
+                  state is StoryViewedState) {
                 return ListView.builder(
                     itemCount: state.posts.length + 1,
                     itemBuilder: (context, index) {
@@ -182,6 +183,9 @@ class FeedPage extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () {
                                     if (state.myData.addedStory) {
+                                      context.read<FeedBloc>().add(
+                                          const StoryViewEvent(
+                                              viewMyStory: true));
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                               builder: (_) => MultiBlocProvider(
@@ -203,7 +207,8 @@ class FeedPage extends StatelessWidget {
                                                                   PageController())),
                                                     ],
                                                     child: ViewStoryPage(
-                                                      story: state.myStory,
+                                                      story:
+                                                          state.myStory.story,
                                                       inProfile: false,
                                                       index: index,
                                                     ),
@@ -239,18 +244,22 @@ class FeedPage extends StatelessWidget {
                                                   state.myData.profilePhotoUrl,
                                             ),
                                             state.myData.addedStory
-                                                ? Container(
-                                                    height: height * 0.09,
-                                                    width: height * 0.09,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(
-                                                        width: 2,
-                                                        color: Colors
-                                                            .pink.shade900,
-                                                      ),
-                                                    ),
-                                                  )
+                                                ? state.myStory.viewed
+                                                    ? Container()
+                                                    : Container(
+                                                        height: height * 0.09,
+                                                        width: height * 0.09,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          border: Border.all(
+                                                            width: 2,
+                                                            color: Colors
+                                                                .pink.shade900,
+                                                          ),
+                                                        ),
+                                                      )
                                                 : Positioned(
                                                     bottom: 8,
                                                     right: 8,
@@ -292,6 +301,10 @@ class FeedPage extends StatelessWidget {
                                           const EdgeInsets.only(left: 10.5),
                                       child: GestureDetector(
                                         onTap: () {
+                                          context.read<FeedBloc>().add(
+                                              StoryViewEvent(
+                                                  viewMyStory: false,
+                                                  index: index));
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (_) =>
