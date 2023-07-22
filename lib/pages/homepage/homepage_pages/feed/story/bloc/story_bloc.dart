@@ -84,9 +84,11 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
       var docSnapshot = await collectionRef.doc(userId).get();
       var docData = docSnapshot.data();
       if (docData == null) {
-        await collectionRef
-            .doc(userId)
-            .set({"previous_stories": [], "addedStory": false});
+        await collectionRef.doc(userId).set({
+          "addedStory": false,
+          "userId": userId,
+          "previous_stories": [],
+        });
       }
       List previousStories = docData == null ? [] : docData["previous_stories"];
       previousStories.add(story.toJson());

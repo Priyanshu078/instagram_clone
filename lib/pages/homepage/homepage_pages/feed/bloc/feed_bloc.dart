@@ -30,10 +30,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         event.tabIndex,
         state.postsIndex,
         state.stories,
-        Story.temp())));
+        state.myStory)));
     on<FeedPostsIndexChangeEvent>((event, emit) => emit(
         PostIndexChangeFeedState(state.posts, state.myData, state.userData,
-            state.tabIndex, event.postIndex, state.stories, Story.temp())));
+            state.tabIndex, event.postIndex, state.stories, state.myStory)));
     on<GetMyStory>((event, emit) => getMyStory(event, emit));
     on<DeleteMyStory>((event, emit) => deleteMyStory(event, emit));
     on<FollowFeedEvent>((event, emit) => follow(event, emit));
@@ -133,13 +133,13 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
 
   Future<void> fetchUserData(FetchUserData event, Emitter emit) async {
     emit(UserDataLoadingState(state.posts, state.myData, state.userData,
-        state.tabIndex, state.postsIndex, state.stories, Story.temp()));
+        state.tabIndex, state.postsIndex, state.stories, state.myStory));
     String userId = event.userId;
     var docSnapshot =
         await FirebaseFirestore.instance.collection("users").doc(userId).get();
     UserData userData = UserData.fromJson(docSnapshot.data()!);
     emit(UserDataFetchedState(state.posts, state.myData, userData,
-        state.tabIndex, state.postsIndex, state.stories, Story.temp()));
+        state.tabIndex, state.postsIndex, state.stories, state.myStory));
   }
 
   Future<void> addBookmark(BookmarkFeed event, Emitter emit) async {
@@ -160,7 +160,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         .doc(myUserId)
         .update(myData.toJson());
     emit(BookmarkedState(state.posts, myData, state.userData, state.tabIndex,
-        state.postsIndex, state.stories, Story.temp()));
+        state.postsIndex, state.stories, state.myStory));
   }
 
   Future<void> deleteComment(DeleteFeedComment event, Emitter emit) async {
@@ -191,11 +191,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     await docRef.update(documentData);
     if (event.inFeed) {
       emit(CommentDeletedState(posts, state.myData, state.userData,
-          state.tabIndex, state.postsIndex, state.stories, Story.temp()));
+          state.tabIndex, state.postsIndex, state.stories, state.myStory));
     } else {
       UserData userData = state.userData.copyWith(posts: posts);
       emit(CommentDeletedState(state.posts, state.myData, userData,
-          state.tabIndex, state.postsIndex, state.stories, Story.temp()));
+          state.tabIndex, state.postsIndex, state.stories, state.myStory));
     }
   }
 
@@ -230,7 +230,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
       await docRef.update(documentData);
       emit(CommentAddedState(posts, state.myData, state.userData,
-          state.tabIndex, state.postsIndex, state.stories, Story.temp()));
+          state.tabIndex, state.postsIndex, state.stories, state.myStory));
     } else {
       List<Post> posts = List.from(state.userData.posts);
       posts[event.postIndex] =
@@ -242,7 +242,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
           .doc(userId)
           .update(userData.toJson());
       emit(CommentAddedState(state.posts, state.myData, userData,
-          state.tabIndex, state.postsIndex, state.stories, Story.temp()));
+          state.tabIndex, state.postsIndex, state.stories, state.myStory));
     }
   }
 
@@ -279,11 +279,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     }
     if (event.inFeed) {
       emit(PostLikedState(posts, state.myData, state.userData, state.tabIndex,
-          state.postsIndex, state.stories, Story.temp()));
+          state.postsIndex, state.stories, state.myStory));
     } else {
       UserData userData = state.userData.copyWith(posts: posts);
       emit(PostLikedState(state.posts, state.myData, userData, state.tabIndex,
-          state.postsIndex, state.stories, Story.temp()));
+          state.postsIndex, state.stories, state.myStory));
     }
   }
 
@@ -324,8 +324,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
             Story.fromJson(storySnapshot.data()!["previous_stories"].last);
       }
     }
-    var peopleAddedStoriesSnapshot =
-        await storiesCollectionRef.where("addedStory", isEqualTo: true).get();
+    var peopleAddedStoriesSnapshot = await storiesCollectionRef
+        .where("addedStory", isEqualTo: true)
+        .where("userId", isNotEqualTo: userId)
+        .get();
     var peopleAddedStoryDocs = peopleAddedStoriesSnapshot.docs;
     List<StoryData> stories = [];
     for (int i = 0; i < peopleAddedStoryDocs.length; i++) {
