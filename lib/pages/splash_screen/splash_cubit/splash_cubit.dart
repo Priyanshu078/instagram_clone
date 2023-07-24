@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/main.dart';
 import 'package:instagram_clone/pages/splash_screen/splash_cubit/splash_state.dart';

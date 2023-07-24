@@ -1,8 +1,6 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram_clone/main.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
@@ -14,7 +12,6 @@ import 'package:instagram_clone/widgets/profile_widget.dart';
 import '../../constants/colors.dart';
 import 'homepage_pages/profile/profile.dart';
 import 'homepage_pages/search/bloc/search_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
