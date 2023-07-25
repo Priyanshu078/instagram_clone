@@ -7,7 +7,12 @@ abstract class PostsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ChooseImage extends PostsEvent {}
+class ChooseImage extends PostsEvent {
+  final bool fromCamera;
+  const ChooseImage({required this.fromCamera});
+  @override
+  List<Object> get props => [fromCamera];
+}
 
 class CancelEvent extends PostsEvent {}
 

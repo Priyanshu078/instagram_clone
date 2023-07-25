@@ -55,9 +55,31 @@ class _PostPageState extends State<PostPage> {
                     width: width,
                     postButton: true,
                     onPressed: () {
-                      context.read<PostsBloc>().add(ChooseImage());
+                      context
+                          .read<PostsBloc>()
+                          .add(const ChooseImage(fromCamera: true));
                     },
-                    text: "Choose Image",
+                    text: "From Camera",
+                    fontSize: 14,
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    buttonColor: Colors.black,
+                    height: height * 0.08,
+                    buttonIcon: const Icon(Icons.camera_alt_outlined),
+                  ),
+                  SizedBox(
+                    height: height * 0.05,
+                  ),
+                  InstaButton(
+                    borderWidth: 1,
+                    width: width,
+                    postButton: true,
+                    onPressed: () {
+                      context
+                          .read<PostsBloc>()
+                          .add(const ChooseImage(fromCamera: false));
+                    },
+                    text: "From Gallery",
                     fontSize: 14,
                     textColor: Colors.white,
                     fontWeight: FontWeight.w700,

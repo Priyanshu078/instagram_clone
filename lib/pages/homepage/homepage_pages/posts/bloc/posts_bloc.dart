@@ -23,7 +23,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
   }
 
   Future<void> chooseImage(ChooseImage event, Emitter emit) async {
-    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker().pickImage(
+        source: event.fromCamera ? ImageSource.camera : ImageSource.gallery);
     if (image != null) {
       emit(PostReady(image.path));
     } else {
