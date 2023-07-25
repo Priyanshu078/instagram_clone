@@ -6,6 +6,7 @@ import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
 import 'package:instagram_clone/pages/authentication/auth_pages/signup_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/notification/bloc/notification_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/bloc/posts_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
@@ -60,6 +61,9 @@ class _LoginPageState extends State<LoginPage> {
                         create: (context) =>
                             FeedBloc(PageController(initialPage: 0))
                               ..add(const GetFeed(true)),
+                      ),
+                      BlocProvider(
+                        create: (context) => NotificationBloc(),
                       )
                     ],
                     child: const HomePage(),
