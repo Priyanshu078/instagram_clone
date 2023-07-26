@@ -7,6 +7,4 @@ abstract class NotificationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class NotificationsInitial extends NotificationEvent {}
-
-class NotificationsFetched extends NotificationEvent {}
+class FetchNotifications extends NotificationEvent {}

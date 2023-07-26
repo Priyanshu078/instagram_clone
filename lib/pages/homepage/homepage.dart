@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/notification/bloc/notification_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notifitcation.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/post.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
@@ -189,6 +189,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 } else if (index == 3) {
+                  context.read<NotificationBloc>().add(FetchNotifications());
                 } else if (index == 4) {
                   context.read<ProfileBloc>().add(GetUserDetails());
                 }

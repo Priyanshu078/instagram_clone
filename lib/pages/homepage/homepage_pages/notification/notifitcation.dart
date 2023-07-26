@@ -23,12 +23,24 @@ class NotificationPage extends StatelessWidget {
           )),
       body: BlocBuilder<NotificationBloc, NotificationState>(
           builder: (context, state) {
-        return const Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 1,
-            color: Colors.white,
-          ),
-        );
+        if (state is NotificationsInitialState) {
+          return const Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 1,
+              color: Colors.white,
+            ),
+          );
+        } else {
+          return ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return const InstaText(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
+                    text: "Notifications");
+              });
+        }
       }),
     );
   }
