@@ -13,4 +13,15 @@ class Notification {
     return Notification(json['id'], json['username'], json['message'],
         json['imageUrl'], json['userProfilePhoto'], json['date']);
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "username": username,
+      "message": message,
+      "imageUrl": imageUrl,
+      "userProfilePhoto": userProfilePhoto,
+      "date": date,
+    };
+  }
 }
