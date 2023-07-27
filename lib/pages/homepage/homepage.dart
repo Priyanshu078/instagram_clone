@@ -4,7 +4,7 @@ import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/feed.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/bloc/notification_bloc.dart';
-import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notifitcation.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/notification/notification.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/post.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/search_page.dart';

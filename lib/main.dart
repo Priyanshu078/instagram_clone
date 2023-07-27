@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:instagram_clone/firebase_options.dart';
 import 'package:instagram_clone/pages/splash_screen/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/utility/firebase_messaging_service.dart';
 import 'insta_bloc_observer.dart';
 import 'pages/splash_screen/splash_cubit/splash_cubit.dart';
 
@@ -28,10 +29,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  fcmToken = await FirebaseMessaging.instance.getToken();
-  if (kDebugMode) {
-    print("fcm Token $fcmToken");
-  }
+  FirebaseMessagingService().initNotifications();
   Bloc.observer = InstaBlocObserver();
   runApp(const MyApp());
 }

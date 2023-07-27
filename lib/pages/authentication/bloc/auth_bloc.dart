@@ -46,6 +46,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           "previous_stories": [],
           "viewed": false,
         });
+        await FirebaseFirestore.instance
+            .collection("notifications")
+            .doc(userData.id)
+            .set({"notifications": []});
         emit(SignUpDone(state.obscurePassword, state.gender));
       } else {
         emit(FillAllDetails(state.obscurePassword, state.gender));

@@ -32,7 +32,7 @@ class NotificationPage extends StatelessWidget {
           );
         } else {
           return ListView.builder(
-              itemCount: 10,
+              itemCount: state.notifications.length,
               itemBuilder: (context, index) {
                 return const InstaText(
                     fontSize: 16,
