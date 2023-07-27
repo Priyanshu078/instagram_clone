@@ -6,6 +6,7 @@ import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:instagram_clone/utility/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'feed_event.dart';
@@ -279,6 +280,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       likes.remove(userId);
     } else {
       likes.add(userId);
+      String title = posts[event.index].username;
+      String imageUrl = posts[event.index].imageUrl;
+      String body = "liked your post";
+      String message = "liked your image";
+      var snapshot = await collectionRef.doc(posts[event.index].userId).get();
+      String receiverFcmToken = snapshot.data()!["fcmToken"];
+      await NotificationService()
+          .sendNotification(title, imageUrl, body, message, receiverFcmToken);
     }
     posts[event.index] = posts[event.index].copyWith(likes: likes);
     var docSnapshot = await collectionRef.doc(event.userId).get();
