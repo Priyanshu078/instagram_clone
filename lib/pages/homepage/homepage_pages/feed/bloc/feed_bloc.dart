@@ -101,6 +101,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         state.tabIndex, state.postsIndex, state.stories, state.myStory));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
+    String? username = sharedPreferences.getString("username");
     var collectionRef = FirebaseFirestore.instance.collection("users");
     if (event.fromFeed) {
       String userId = state.posts[event.index!].userId;
@@ -129,6 +130,18 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(FollowedUserFeedState(state.posts, myData, userData, state.tabIndex,
           state.postsIndex, state.stories, state.myStory));
     }
+    String title = "New Follower";
+    String imageUrl = "";
+    String body = "$username follows you";
+    String message = "liked your image";
+    var snapshot = await collectionRef
+        .doc(event.fromFeed
+            ? state.posts[event.index!].userId
+            : state.userData.id)
+        .get();
+    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    await NotificationService()
+        .sendNotification(title, imageUrl, body, message, receiverFcmToken);
   }
 
   Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {
@@ -266,11 +279,27 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       emit(CommentAddedState(state.posts, state.myData, userData,
           state.tabIndex, state.postsIndex, state.stories, state.myStory));
     }
+    String title = "Comment";
+    String imageUrl = event.inFeed
+        ? state.posts[event.postIndex].imageUrl
+        : state.userData.posts[event.postIndex].imageUrl;
+    String body = "$username commented on your post";
+    String message = "liked your image";
+    var snapshot = await collectionRef
+        .doc(event.inFeed
+            ? state.posts[event.postIndex].userId
+            : state.userData.posts[event.postIndex].userId)
+        .get();
+    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    await NotificationService()
+        .sendNotification(title, imageUrl, body, message, receiverFcmToken);
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {
+    bool liked = false;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString("userId");
+    String? username = sharedPreferences.getString("username");
     var firestore = FirebaseFirestore.instance;
     var collectionRef = firestore.collection("users");
     List<Post> posts =
@@ -278,16 +307,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     List likes = posts[event.index].likes;
     if (likes.contains(userId)) {
       likes.remove(userId);
+      liked = false;
     } else {
       likes.add(userId);
-      String title = posts[event.index].username;
-      String imageUrl = posts[event.index].imageUrl;
-      String body = "liked your post";
-      String message = "liked your image";
-      var snapshot = await collectionRef.doc(posts[event.index].userId).get();
-      String receiverFcmToken = snapshot.data()!["fcmToken"];
-      await NotificationService()
-          .sendNotification(title, imageUrl, body, message, receiverFcmToken);
+      liked = true;
     }
     posts[event.index] = posts[event.index].copyWith(likes: likes);
     var docSnapshot = await collectionRef.doc(event.userId).get();
@@ -314,6 +337,16 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       UserData userData = state.userData.copyWith(posts: posts);
       emit(PostLikedState(state.posts, state.myData, userData, state.tabIndex,
           state.postsIndex, state.stories, state.myStory));
+    }
+    if (liked) {
+      String title = "Like";
+      String imageUrl = posts[event.index].imageUrl;
+      String body = "$username liked your post";
+      String message = "liked your image";
+      var snapshot = await collectionRef.doc(posts[event.index].userId).get();
+      String receiverFcmToken = snapshot.data()!["fcmToken"];
+      await NotificationService()
+          .sendNotification(title, imageUrl, body, message, receiverFcmToken);
     }
   }
 
