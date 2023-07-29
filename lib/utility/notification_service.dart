@@ -7,7 +7,7 @@ class NotificationService {
       "AAAA2T_W89M:APA91bFMQmluUwVvuCUZwGw3C7QLC4Ih7y0Fp5ffaKlr10ItleDfTosgOObfo1G2zZxGwpPPvYoB1SrIW-hrUvbxWqst9PgeKdg6p7NQ3qPHjig3i_kI2_RgcoixmmzHDWic4fxh9Pcn";
 
   Future<void> sendNotification(String title, String imageUrl, String body,
-      String message, String receiverFcmToken) async {
+      String message, List receiverFcmToken) async {
     await dio.post(
       url,
       options: Options(

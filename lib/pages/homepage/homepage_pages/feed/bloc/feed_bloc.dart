@@ -139,7 +139,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
             ? state.posts[event.index!].userId
             : state.userData.id)
         .get();
-    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    List receiverFcmToken = snapshot.data()!["fcmToken"];
     await NotificationService()
         .sendNotification(title, imageUrl, body, message, receiverFcmToken);
   }
@@ -290,7 +290,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
             ? state.posts[event.postIndex].userId
             : state.userData.posts[event.postIndex].userId)
         .get();
-    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    List receiverFcmToken = snapshot.data()!["fcmToken"];
     await NotificationService()
         .sendNotification(title, imageUrl, body, message, receiverFcmToken);
   }
@@ -344,7 +344,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       String body = "$username liked your post";
       String message = "liked your image";
       var snapshot = await collectionRef.doc(posts[event.index].userId).get();
-      String receiverFcmToken = snapshot.data()!["fcmToken"];
+      List receiverFcmToken = snapshot.data()!["fcmToken"];
       await NotificationService()
           .sendNotification(title, imageUrl, body, message, receiverFcmToken);
     }

@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/main.dart';
+import 'package:instagram_clone/utility/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'posts_event.dart';
@@ -69,6 +70,18 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       await fireStoreCollectionRef.doc(userId).update({"posts": newPosts});
       flutterLocalNotificationsPlugin.cancel(id);
       emit(const PostsInitial(""));
+      String title = "Post";
+      String imageUrlForNotification = "";
+      String body = "$username posted on Instagram";
+      String message = "liked your image";
+      var snapshot = await fireStoreCollectionRef
+          .where("following", arrayContains: userData.id)
+          .get();
+      var docsList = snapshot.docs;
+      List receiverFcmToken = List.generate(
+          docsList.length, (index) => docsList[index].data()["fcmToken"]);
+      await NotificationService().sendNotification(
+          title, imageUrlForNotification, body, message, receiverFcmToken);
     } catch (e) {
       if (kDebugMode) {
         print(e);
