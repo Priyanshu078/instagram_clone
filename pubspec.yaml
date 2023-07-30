@@ -40,7 +40,7 @@ dependencies:
   google_fonts: ^4.0.4
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
-  cloud_firestore: ^4.6.0
+  cloud_firestore: ^4.8.4
   uuid: ^3.0.7
   firebase_storage: ^11.2.1
   shared_preferences: ^2.1.1
