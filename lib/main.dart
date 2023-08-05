@@ -57,8 +57,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context) => SplashCubit()..checkSavedDetails(),
-        child: const SplashScreen(),
-      ),
+          child: const SplashScreen()),
     );
   }
 }

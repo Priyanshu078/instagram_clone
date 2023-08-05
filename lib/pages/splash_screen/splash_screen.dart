@@ -11,61 +11,55 @@ import '../authentication/auth_pages/loginpage.dart';
 import '../authentication/bloc/auth_bloc.dart';
 import '../homepage/homepage_pages/notification/bloc/notification_bloc.dart';
 import 'splash_cubit/splash_cubit.dart';
-import 'splash_cubit/splash_state.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SplashCubit, SplashState>(builder: (context, state) {
-      return AnimatedSplashScreen.withScreenFunction(
+    var dataSaved = false;
+      return AnimatedSplashScreen(
           duration: 3000,
           centered: true,
           splash: Image.asset('assets/images/instagram_logo.jpg'),
           backgroundColor: Colors.black,
-          screenFunction: () async {
-            if (state.dataSaved) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) => HomepageBloc()..add(GetDetails()),
-                  ),
-                  BlocProvider(
-                    create: (context) => ProfileBloc(PageController(
-                      initialPage: 0,
-                    )),
-                  ),
-                  BlocProvider(
-                    create: (context) => PostsBloc(),
-                  ),
-                  BlocProvider(
-                    create: (context) => SearchBloc(
-                      PageController(
-                        initialPage: 1,
-                      ),
-                      FocusNode(),
-                      TextEditingController(),
+          nextScreen: dataSaved
+              ? MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => HomepageBloc()..add(GetDetails()),
                     ),
-                  ),
-                  BlocProvider(
-                    create: (context) =>
-                        FeedBloc(PageController(initialPage: 0))
-                          ..add(const GetFeed(true)),
-                  ),
-                  BlocProvider(
-                    create: (context) => NotificationBloc(),
-                  ),
-                ],
-                child: const HomePage(),
-              );
-            } else {
-              return BlocProvider(
-                create: (context) => AuthBloc(),
-                child: const LoginPage(),
-              );
-            }
-          });
-    });
+                    BlocProvider(
+                      create: (context) => ProfileBloc(PageController(
+                        initialPage: 0,
+                      )),
+                    ),
+                    BlocProvider(
+                      create: (context) => PostsBloc(),
+                    ),
+                    BlocProvider(
+                      create: (context) => SearchBloc(
+                        PageController(
+                          initialPage: 1,
+                        ),
+                        FocusNode(),
+                        TextEditingController(),
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (context) =>
+                          FeedBloc(PageController(initialPage: 0))
+                            ..add(const GetFeed(true)),
+                    ),
+                    BlocProvider(
+                      create: (context) => NotificationBloc(),
+                    ),
+                  ],
+                  child: const HomePage(),
+                )
+              : BlocProvider(
+                  create: (context) => AuthBloc(),
+                  child: const LoginPage(),
+                ));
   }
 }
