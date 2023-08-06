@@ -21,6 +21,7 @@ migrate_working_dir/
 #.vscode/
 
 /lib/firebase_options.dart
+/lib/utility/api_keys.dart
 
 # Flutter/Dart/Pub related
 **/doc/api/

@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
+import 'api_keys.dart';
 
 class NotificationService {
   var dio = Dio();
   String url = "https://fcm.googleapis.com/fcm/send";
-  String serverKey =
-      "AAAA2T_W89M:APA91bFMQmluUwVvuCUZwGw3C7QLC4Ih7y0Fp5ffaKlr10ItleDfTosgOObfo1G2zZxGwpPPvYoB1SrIW-hrUvbxWqst9PgeKdg6p7NQ3qPHjig3i_kI2_RgcoixmmzHDWic4fxh9Pcn";
+  String serverKey = yourServerKey;
 
   Future<void> sendNotification(String title, String imageUrl, String body,
       String message, List receiverFcmToken) async {
