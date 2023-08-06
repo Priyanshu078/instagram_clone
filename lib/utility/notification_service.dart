@@ -7,7 +7,7 @@ class NotificationService {
   String serverKey = yourServerKey;
 
   Future<void> sendNotification(String title, String imageUrl, String body,
-      String message, List receiverFcmToken) async {
+      String receiverFcmToken) async {
     await dio.post(
       url,
       options: Options(
@@ -21,7 +21,6 @@ class NotificationService {
           "title": title,
           "image": imageUrl,
           "body": body,
-          "message": message,
         },
         "to": receiverFcmToken,
       },

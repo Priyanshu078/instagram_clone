@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:instagram_clone/utility/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'search_event.dart';
@@ -104,6 +107,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         state.previousPage));
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
+    String? username = sharedPreferences.getString("username");
     var collectionRef = FirebaseFirestore.instance.collection("users");
     if (event.fromProfile) {
       List followers = state.userData.followers;
@@ -146,6 +150,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           myData,
           state.previousPage));
     }
+    String title = "New Follower";
+    String imageUrl = "";
+    String body = "$username follows you";
+    var snapshot = await collectionRef
+        .doc(event.fromProfile
+            ? state.userData.id
+            : state.posts[event.index!].userId)
+        .get();
+    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    await NotificationService()
+        .sendNotification(title, imageUrl, body, receiverFcmToken);
   }
 
   Future<void> unfollow(UnFollowSearchEvent event, Emitter emit) async {
@@ -253,6 +268,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<void> addComment(AddSearchComment event, Emitter emit) async {
     var sharedPreferences = await SharedPreferences.getInstance();
+    var collectionRef = FirebaseFirestore.instance.collection("users");
     List<Comments> existingComments = List.from(event.comments);
     String comment = event.comment;
     String? myUserId = sharedPreferences.getString('userId');
@@ -268,10 +284,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           posts[event.postIndex].copyWith(comments: existingComments);
       UserData userData = state.userData.copyWith(posts: posts);
       String userId = posts[event.postIndex].userId;
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(userId)
-          .update(userData.toJson());
+      await collectionRef.doc(userId).update(userData.toJson());
       emit(AddedCommentSearchState(
           state.posts,
           state.usersList,
@@ -287,7 +300,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           posts[event.postIndex].copyWith(comments: existingComments);
       String userId = posts[event.postIndex].userId;
       String postId = posts[event.postIndex].id;
-      var collectionRef = FirebaseFirestore.instance.collection("users");
       var documentSnapshot = await collectionRef.doc(userId).get();
       var documentData = documentSnapshot.data()!;
       for (int i = 0; i < documentData['posts'].length; i++) {
@@ -296,10 +308,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
               existingComments.map((comment) => comment.toJson());
         }
       }
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(userId)
-          .update(documentData);
+      await collectionRef.doc(userId).update(documentData);
       emit(AddedCommentSearchState(
           posts,
           state.usersList,
@@ -310,6 +319,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           state.myData,
           state.previousPage));
     }
+    String notificationTitle = "Comment";
+    String imageUrl = state.usersPosts
+        ? state.userData.posts[event.postIndex].imageUrl
+        : state.posts[event.postIndex].imageUrl;
+    String body = "$username commented on your post";
+    var userData = await collectionRef
+        .doc(state.usersPosts
+            ? state.userData.posts[event.postIndex].userId
+            : state.posts[event.postIndex].userId)
+        .get();
+    String receiverFcmToken = userData.data()!['fcmToken'];
+    await NotificationService()
+        .sendNotification(notificationTitle, imageUrl, body, receiverFcmToken);
   }
 
   Future<void> deleteComment(DeleteSearchComment event, Emitter emit) async {
@@ -370,9 +392,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> likePost(SearchLikePostEvent event, Emitter emit) async {
+    bool liked = false;
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
+    String? username = sharedPreferences.getString("username");
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     final collectionRef = firebaseFirestore.collection("users");
     if (event.userPosts) {
@@ -380,8 +404,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       List likes = posts[event.postIndex].likes;
       if (likes.contains(myUserId)) {
         likes.remove(myUserId);
+        liked = false;
       } else {
         likes.add(myUserId);
+        liked = true;
       }
       posts[event.postIndex] = posts[event.postIndex].copyWith(likes: likes);
       UserData userData = state.userData.copyWith(posts: posts);
@@ -431,6 +457,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           }
         }
       }
+    }
+    if (liked) {
+      String notificationTitle = "Like";
+      String imageUrl = event.userPosts
+          ? state.userData.posts[event.postIndex].imageUrl
+          : state.posts[event.postIndex].imageUrl;
+      String body = "$username liked your post";
+      var userData = await collectionRef
+          .doc(event.userPosts
+              ? state.userData.posts[event.postIndex].userId
+              : state.posts[event.postIndex].userId)
+          .get();
+      String receiverFcmToken = userData.data()!['fcmToken'];
+      await NotificationService().sendNotification(
+          notificationTitle, imageUrl, body, receiverFcmToken);
     }
   }
 

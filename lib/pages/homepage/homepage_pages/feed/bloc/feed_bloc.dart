@@ -133,16 +133,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String title = "New Follower";
     String imageUrl = "";
     String body = "$username follows you";
-    String message = "liked your image";
     var snapshot = await collectionRef
         .doc(event.fromFeed
             ? state.posts[event.index!].userId
             : state.userData.id)
         .get();
-    List receiverFcmToken =
-        List.generate(1, (index) => snapshot.data()!["fcmToken"]);
+    String receiverFcmToken = snapshot.data()!["fcmToken"];
     await NotificationService()
-        .sendNotification(title, imageUrl, body, message, receiverFcmToken);
+        .sendNotification(title, imageUrl, body, receiverFcmToken);
   }
 
   Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {
@@ -285,16 +283,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         ? state.posts[event.postIndex].imageUrl
         : state.userData.posts[event.postIndex].imageUrl;
     String body = "$username commented on your post";
-    String message = "liked your image";
     var snapshot = await collectionRef
         .doc(event.inFeed
             ? state.posts[event.postIndex].userId
             : state.userData.posts[event.postIndex].userId)
         .get();
-    List receiverFcmToken =
-        List.generate(1, (index) => snapshot.data()!["fcmToken"]);
+    String receiverFcmToken = snapshot.data()!["fcmToken"];
     await NotificationService()
-        .sendNotification(title, imageUrl, body, message, receiverFcmToken);
+        .sendNotification(title, imageUrl, body, receiverFcmToken);
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {
@@ -344,12 +340,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       String title = "Like";
       String imageUrl = posts[event.index].imageUrl;
       String body = "$username liked your post";
-      String message = "liked your image";
       var snapshot = await collectionRef.doc(posts[event.index].userId).get();
-      List receiverFcmToken =
-          List.generate(1, (index) => snapshot.data()!["fcmToken"]);
+      String receiverFcmToken = snapshot.data()!["fcmToken"];
       await NotificationService()
-          .sendNotification(title, imageUrl, body, message, receiverFcmToken);
+          .sendNotification(title, imageUrl, body, receiverFcmToken);
     }
   }
 

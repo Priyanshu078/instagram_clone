@@ -70,18 +70,16 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       await fireStoreCollectionRef.doc(userId).update({"posts": newPosts});
       flutterLocalNotificationsPlugin.cancel(id);
       emit(const PostsInitial(""));
-      String title = "Post";
-      String imageUrlForNotification = "";
-      String body = "$username posted on Instagram";
-      String message = "liked your image";
-      var snapshot = await fireStoreCollectionRef
-          .where("following", arrayContains: userData.id)
-          .get();
-      var docsList = snapshot.docs;
-      List receiverFcmToken = List.generate(
-          docsList.length, (index) => docsList[index].data()["fcmToken"]);
-      await NotificationService().sendNotification(
-          title, imageUrlForNotification, body, message, receiverFcmToken);
+      // String title = "Post";
+      // String imageUrlForNotification = "";
+      // String body = "$username posted on Instagram";
+      // String message = "liked your image";
+      // var snapshot = userData.followers;
+      // var docsList = snapshot.docs;
+      // List receiverFcmToken = List.generate(
+      //     docsList.length, (index) => docsList[index].data()["fcmToken"]);
+      // await NotificationService().sendNotification(
+      //     title, imageUrlForNotification, body, message, receiverFcmToken);
     } catch (e) {
       if (kDebugMode) {
         print(e);
