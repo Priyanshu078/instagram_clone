@@ -153,14 +153,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     String title = "New Follower";
     String imageUrl = "";
     String body = "$username follows you";
-    var snapshot = await collectionRef
+    var userData = await collectionRef
         .doc(event.fromProfile
             ? state.userData.id
             : state.posts[event.index!].userId)
         .get();
-    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    List receiverFcmToken =
+        List.generate(1, (index) => userData.data()!['fcmToken']);
     await NotificationService()
-        .sendNotification(title, imageUrl, body, receiverFcmToken);
+        .sendNotification(title, imageUrl, body, receiverFcmToken, false);
   }
 
   Future<void> unfollow(UnFollowSearchEvent event, Emitter emit) async {
@@ -329,9 +330,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             ? state.userData.posts[event.postIndex].userId
             : state.posts[event.postIndex].userId)
         .get();
-    String receiverFcmToken = userData.data()!['fcmToken'];
-    await NotificationService()
-        .sendNotification(notificationTitle, imageUrl, body, receiverFcmToken);
+    List receiverFcmToken =
+        List.generate(1, (index) => userData.data()!['fcmToken']);
+    await NotificationService().sendNotification(
+        notificationTitle, imageUrl, body, receiverFcmToken, false);
   }
 
   Future<void> deleteComment(DeleteSearchComment event, Emitter emit) async {
@@ -469,9 +471,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
               ? state.userData.posts[event.postIndex].userId
               : state.posts[event.postIndex].userId)
           .get();
-      String receiverFcmToken = userData.data()!['fcmToken'];
+      List receiverFcmToken =
+          List.generate(1, (index) => userData.data()!['fcmToken']);
       await NotificationService().sendNotification(
-          notificationTitle, imageUrl, body, receiverFcmToken);
+          notificationTitle, imageUrl, body, receiverFcmToken, false);
     }
   }
 

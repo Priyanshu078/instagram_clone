@@ -133,14 +133,15 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String title = "New Follower";
     String imageUrl = "";
     String body = "$username follows you";
-    var snapshot = await collectionRef
+    var userData = await collectionRef
         .doc(event.fromFeed
             ? state.posts[event.index!].userId
             : state.userData.id)
         .get();
-    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    List receiverFcmToken =
+        List.generate(1, (index) => userData.data()!['fcmToken']);
     await NotificationService()
-        .sendNotification(title, imageUrl, body, receiverFcmToken);
+        .sendNotification(title, imageUrl, body, receiverFcmToken, false);
   }
 
   Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {
@@ -283,14 +284,15 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         ? state.posts[event.postIndex].imageUrl
         : state.userData.posts[event.postIndex].imageUrl;
     String body = "$username commented on your post";
-    var snapshot = await collectionRef
+    var userData = await collectionRef
         .doc(event.inFeed
             ? state.posts[event.postIndex].userId
             : state.userData.posts[event.postIndex].userId)
         .get();
-    String receiverFcmToken = snapshot.data()!["fcmToken"];
+    List receiverFcmToken =
+        List.generate(1, (index) => userData.data()!['fcmToken']);
     await NotificationService()
-        .sendNotification(title, imageUrl, body, receiverFcmToken);
+        .sendNotification(title, imageUrl, body, receiverFcmToken, false);
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {
@@ -340,10 +342,11 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       String title = "Like";
       String imageUrl = posts[event.index].imageUrl;
       String body = "$username liked your post";
-      var snapshot = await collectionRef.doc(posts[event.index].userId).get();
-      String receiverFcmToken = snapshot.data()!["fcmToken"];
+      var userData = await collectionRef.doc(posts[event.index].userId).get();
+      List receiverFcmToken =
+          List.generate(1, (index) => userData.data()!['fcmToken']);
       await NotificationService()
-          .sendNotification(title, imageUrl, body, receiverFcmToken);
+          .sendNotification(title, imageUrl, body, receiverFcmToken, false);
     }
   }
 

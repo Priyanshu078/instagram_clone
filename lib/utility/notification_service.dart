@@ -7,7 +7,7 @@ class NotificationService {
   String serverKey = yourServerKey;
 
   Future<void> sendNotification(String title, String imageUrl, String body,
-      String receiverFcmToken) async {
+      List receiverFcmToken, bool isMulticast) async {
     await dio.post(
       url,
       options: Options(
@@ -16,14 +16,23 @@ class NotificationService {
           "Authorization": "key=$serverKey"
         },
       ),
-      data: {
-        "notification": {
-          "title": title,
-          "image": imageUrl,
-          "body": body,
-        },
-        "to": receiverFcmToken,
-      },
+      data: isMulticast
+          ? {
+              "notification": {
+                "title": title,
+                "image": imageUrl,
+                "body": body,
+              },
+              "registration_ids": receiverFcmToken,
+            }
+          : {
+              "notification": {
+                "title": title,
+                "image": imageUrl,
+                "body": body,
+              },
+              "to": receiverFcmToken[0],
+            },
     );
   }
 }
