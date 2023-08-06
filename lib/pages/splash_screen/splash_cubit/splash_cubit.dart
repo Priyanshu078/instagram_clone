@@ -7,15 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SplashCubit extends Cubit<SplashState> {
   SplashCubit() : super(const SplashInitial(false, ""));
 
-  Future<void> checkSavedDetails() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    var userId = sharedPreferences.getString('userId');
-    if (userId != null) {
-      emit(SplashInitial(true, userId));
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(userId)
-          .update({"fcmToken": fcmToken});
-    }
-  }
+  // Future<void> checkSavedDetails() async {
+  //   var sharedPreferences = await SharedPreferences.getInstance();
+  //   var userId = sharedPreferences.getString('userId');
+  //   if (userId != null) {
+  //     emit(SplashInitial(true, userId));
+  //     await FirebaseFirestore.instance
+  //         .collection("users")
+  //         .doc(userId)
+  //         .update({"fcmToken": fcmToken});
+  //   }
+  // }
 }
