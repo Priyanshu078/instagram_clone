@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/main.dart';
+import 'package:instagram_clone/utility/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'story_event.dart';
@@ -102,6 +103,18 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
           .update({"addedStory": true});
       flutterLocalNotificationsPlugin.cancel(id);
       emit(const StoryPosted(""));
+      String title = "New Story";
+      String notificationImageUrl = "";
+      String body = "$username added to their story";
+      var snapshots = await FirebaseFirestore.instance
+          .collection("users")
+          .where("following", arrayContains: userId)
+          .where("id", isNotEqualTo: userId)
+          .get();
+      List receiverFcmToken = List.generate(snapshots.docs.length,
+          (index) => snapshots.docs[index].data()['fcmToken']);
+      await NotificationService().sendNotification(
+          title, notificationImageUrl, body, receiverFcmToken, true);
     } catch (e) {
       if (kDebugMode) {
         print(e);
