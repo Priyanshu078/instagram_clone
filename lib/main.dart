@@ -11,7 +11,7 @@ import 'pages/splash_screen/splash_cubit/splash_cubit.dart';
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin(); // instance of flutterLocalNotificationsPlugin
 const AndroidInitializationSettings androidInitializationSettings =
-    AndroidInitializationSettings('@mipmap/ic_launcher'); // for android
+    AndroidInitializationSettings('@mipmap/notification_icon'); // for android
 const DarwinInitializationSettings darwinInitializationSettings =
     DarwinInitializationSettings(); // for iOS
 InitializationSettings initializationSettings = const InitializationSettings(
