@@ -9,7 +9,7 @@ class Notification {
   Notification(this.id, this.username, this.message, this.imageUrl,
       this.userProfilePhoto, this.date);
 
-  Notification fromJson(Map<String, dynamic> json) {
+  factory Notification.fromJson(Map<String, dynamic> json) {
     return Notification(json['id'], json['username'], json['message'],
         json['imageUrl'], json['userProfilePhoto'], json['date']);
   }

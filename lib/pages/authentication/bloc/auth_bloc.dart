@@ -49,7 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await FirebaseFirestore.instance
             .collection("notifications")
             .doc(userData.id)
-            .set({"notifications": []});
+            .set({"notifications": [], "new_notifications": false});
         emit(SignUpDone(state.obscurePassword, state.gender));
       } else {
         emit(FillAllDetails(state.obscurePassword, state.gender));
