@@ -450,7 +450,9 @@ class FeedPage extends StatelessWidget {
                                 .add(BookmarkFeed(index - 1, true));
                           },
                           sharePressed: () async {
-                            context.read<FeedBloc>().add(ShareFileEvent());
+                            context.read<FeedBloc>().add(ShareFileEvent(
+                                imageUrl: state.posts[index - 1].imageUrl,
+                                caption: state.posts[index - 1].caption));
                           },
                         );
                       }

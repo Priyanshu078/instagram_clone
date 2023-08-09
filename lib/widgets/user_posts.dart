@@ -308,7 +308,11 @@ class UserPosts extends StatelessWidget {
                             .read<FeedBloc>()
                             .add(BookmarkFeed(index, false));
                       },
-                      sharePressed: () {},
+                      sharePressed: () {
+                        context.read<FeedBloc>().add(ShareFileEvent(
+                            caption: state.userData.posts[index].caption,
+                            imageUrl: state.userData.posts[index].imageUrl));
+                      },
                       onUserNamePressed: () {},
                     );
                   },
@@ -393,7 +397,20 @@ class UserPosts extends StatelessWidget {
                                   .read<ProfileBloc>()
                                   .add(BookmarkProfile(index));
                             },
-                            sharePressed: () {},
+                            sharePressed: () {
+                              context.read<ProfileBloc>().add(
+                                  ShareProfileFileEvent(
+                                      imageUrl:
+                                          state.savedPosts
+                                              ? state.savedPostsList[index]
+                                                  .imageUrl
+                                              : state.userData.posts[index]
+                                                  .imageUrl,
+                                      caption: state.savedPosts
+                                          ? state.savedPostsList[index].caption
+                                          : state
+                                              .userData.posts[index].caption));
+                            },
                             onUserNamePressed: () {},
                           );
                         },
@@ -469,7 +486,15 @@ class UserPosts extends StatelessWidget {
                                 .read<SearchBloc>()
                                 .add(BookmarkSearch(index));
                           },
-                          sharePressed: () {},
+                          sharePressed: () {
+                            context.read<SearchBloc>().add(ShareSearchFileEvent(
+                                caption: state.usersPosts
+                                    ? state.userData.posts[index].caption
+                                    : state.posts[index].caption,
+                                imageUrl: state.usersPosts
+                                    ? state.userData.posts[index].imageUrl
+                                    : state.posts[index].imageUrl));
+                          },
                           onDoubleTap: () {
                             context.read<SearchBloc>().add(SearchLikePostEvent(
                                 index,

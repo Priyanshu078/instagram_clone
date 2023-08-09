@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -7,6 +11,8 @@ import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/utility/notification_service.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'feed_event.dart';
@@ -43,7 +49,14 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<ShareFileEvent>((event, emit) => shareFile(event, emit));
   }
 
-  Future<void> shareFile(ShareFileEvent event, Emitter emit) async {}
+  Future<void> shareFile(ShareFileEvent event, Emitter emit) async {
+    var response = await Dio().get(event.imageUrl,
+        options: Options(responseType: ResponseType.bytes));
+    Directory dir = await getTemporaryDirectory();
+    File file = File('${dir.path}/image.png');
+    await file.writeAsBytes(response.data);
+    await Share.shareXFiles([XFile(file.path)], subject: event.caption);
+  }
 
   Future<void> viewStory(StoryViewEvent event, Emitter emit) async {
     var collectionRef = FirebaseFirestore.instance.collection("stories");

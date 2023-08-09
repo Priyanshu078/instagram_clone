@@ -104,4 +104,11 @@ class StoryViewEvent extends FeedEvent {
   List<Object> get props => [viewMyStory];
 }
 
-class ShareFileEvent extends FeedEvent {}
+class ShareFileEvent extends FeedEvent {
+  final String imageUrl;
+  final String caption;
+  const ShareFileEvent({required this.caption, required this.imageUrl});
+
+  @override
+  List<Object> get props => [imageUrl];
+}

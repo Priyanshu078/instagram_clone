@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -10,6 +11,8 @@ import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:uuid/uuid.dart';
@@ -47,9 +50,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<FetchPreviousStories>((event, emit) => fetchStories(event, emit));
     on<AddHighlight>((event, emit) => addHighlight(event, emit));
     on<DeleteHighlight>((event, emit) => deleteHighlight(event, emit));
+    on<ShareProfileFileEvent>((event, emit) => shareFile(event, emit));
   }
 
   final PageController pageController;
+
+  Future<void> shareFile(ShareProfileFileEvent event, Emitter emit) async {
+    var response = await Dio().get(event.imageUrl,
+        options: Options(responseType: ResponseType.bytes));
+    Directory dir = await getTemporaryDirectory();
+    File file = File('${dir.path}/image.png');
+    await file.writeAsBytes(response.data);
+    await Share.shareXFiles([XFile(file.path)], subject: event.caption);
+  }
 
   Future<void> deleteHighlight(DeleteHighlight event, Emitter emit) async {
     emit(DeletingHighLight(state.userData, state.tabIndex, state.postsIndex,

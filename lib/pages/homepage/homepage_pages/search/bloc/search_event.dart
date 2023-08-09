@@ -53,6 +53,15 @@ class SearchLikePostEvent extends SearchEvent {
   List<Object> get props => [postIndex, userPosts, userId, postId];
 }
 
+class ShareSearchFileEvent extends SearchEvent {
+  final String imageUrl;
+  final String caption;
+  const ShareSearchFileEvent({required this.caption, required this.imageUrl});
+
+  @override
+  List<Object> get props => [imageUrl];
+}
+
 class DeleteSearchComment extends SearchEvent {
   final int postIndex;
   final int commentIndex;

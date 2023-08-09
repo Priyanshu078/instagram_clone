@@ -111,3 +111,12 @@ class DeleteHighlight extends ProfileEvent {
   @override
   List<Object> get props => [index];
 }
+
+class ShareProfileFileEvent extends ProfileEvent {
+  final String imageUrl;
+  final String caption;
+
+  const ShareProfileFileEvent({required this.imageUrl, required this.caption});
+  @override
+  List<Object> get props => [imageUrl, caption];
+}

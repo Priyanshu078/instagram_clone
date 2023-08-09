@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -8,6 +10,8 @@ import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/utility/notification_service.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 part 'search_event.dart';
@@ -68,6 +72,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<FollowSearchEvent>((event, emit) => follow(event, emit));
     on<UnFollowSearchEvent>((event, emit) => unfollow(event, emit));
     on<FetchUserDataInSearch>((event, emit) => fetchUserData(event, emit));
+    on<ShareSearchFileEvent>((event, emit) => shareFile(event, emit));
+  }
+
+  Future<void> shareFile(ShareSearchFileEvent event, Emitter emit) async {
+    var response = await Dio().get(event.imageUrl,
+        options: Options(responseType: ResponseType.bytes));
+    Directory dir = await getTemporaryDirectory();
+    File file = File('${dir.path}/image.png');
+    await file.writeAsBytes(response.data);
+    await Share.shareXFiles([XFile(file.path)], subject: event.caption);
   }
 
   Future<void> fetchUserData(FetchUserDataInSearch event, Emitter emit) async {
