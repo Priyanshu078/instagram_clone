@@ -13,6 +13,7 @@ import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
 import 'package:instagram_clone/widgets/profile_photo.dart';
 import 'package:instagram_clone/widgets/user_posts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'bloc/feed_bloc.dart';
 
@@ -448,7 +449,9 @@ class FeedPage extends StatelessWidget {
                                 .read<FeedBloc>()
                                 .add(BookmarkFeed(index - 1, true));
                           },
-                          sharePressed: () {},
+                          sharePressed: () async {
+                            context.read<FeedBloc>().add(ShareFileEvent());
+                          },
                         );
                       }
                     });

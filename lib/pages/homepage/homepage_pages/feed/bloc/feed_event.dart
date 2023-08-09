@@ -103,3 +103,5 @@ class StoryViewEvent extends FeedEvent {
   @override
   List<Object> get props => [viewMyStory];
 }
+
+class ShareFileEvent extends FeedEvent {}

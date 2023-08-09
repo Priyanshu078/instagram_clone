@@ -50,6 +50,7 @@ dependencies:
   flutter_local_notifications: ^15.1.0+1
   firebase_messaging: ^14.6.5
   dio: ^5.3.0
+  share_plus: ^7.1.0
 
 dev_dependencies:
   flutter_test:

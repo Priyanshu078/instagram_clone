@@ -40,7 +40,10 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     on<FollowFeedEvent>((event, emit) => follow(event, emit));
     on<UnFollowFeedEvent>((event, emit) => unfollow(event, emit));
     on<StoryViewEvent>((event, emit) => viewStory(event, emit));
+    on<ShareFileEvent>((event, emit) => shareFile(event, emit));
   }
+
+  Future<void> shareFile(ShareFileEvent event, Emitter emit) async {}
 
   Future<void> viewStory(StoryViewEvent event, Emitter emit) async {
     var collectionRef = FirebaseFirestore.instance.collection("stories");
