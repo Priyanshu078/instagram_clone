@@ -1,4 +1,4 @@
-class Notification {
+class NotificationData {
   String id;
   String username;
   String message;
@@ -6,11 +6,11 @@ class Notification {
   String date;
   String userProfilePhoto;
 
-  Notification(this.id, this.username, this.message, this.imageUrl,
+  NotificationData(this.id, this.username, this.message, this.imageUrl,
       this.userProfilePhoto, this.date);
 
-  factory Notification.fromJson(Map<String, dynamic> json) {
-    return Notification(json['id'], json['username'], json['message'],
+  factory NotificationData.fromJson(Map<String, dynamic> json) {
+    return NotificationData(json['id'], json['username'], json['message'],
         json['imageUrl'], json['userProfilePhoto'], json['date']);
   }
 

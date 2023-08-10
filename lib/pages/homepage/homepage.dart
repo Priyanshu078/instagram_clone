@@ -158,7 +158,10 @@ class _HomePageState extends State<HomePage> {
                     label: "Notification"),
                 BottomNavigationBarItem(
                     icon: ProfileWidget(
-                      url: state.homePageData.url,
+                      url: context
+                          .read<HomepageBloc>()
+                          .sharedPreferences
+                          .getString("profilePhotoUrl")!,
                       height: height * 0.035,
                       width: height * 0.035,
                       wantBorder: state.index == 4 ? true : false,

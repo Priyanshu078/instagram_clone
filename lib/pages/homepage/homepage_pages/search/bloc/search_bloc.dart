@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
+import 'package:instagram_clone/data/notification_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/utility/notification_service.dart';
@@ -122,6 +123,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     String? username = sharedPreferences.getString("username");
+    String? userProfilePhotoUrl =
+        sharedPreferences.getString("profilePhotoUrl");
     var collectionRef = FirebaseFirestore.instance.collection("users");
     if (event.fromProfile) {
       List followers = state.userData.followers;
@@ -176,6 +179,23 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         List.generate(1, (index) => userData.data()!['fcmToken']);
     await NotificationService()
         .sendNotification(title, imageUrl, body, receiverFcmToken, false);
+    var notificationCollectionRef =
+        FirebaseFirestore.instance.collection("notifications");
+    var notificationData =
+        await notificationCollectionRef.doc(userData.data()!['id']).get();
+    var notifications = notificationData['notifications'];
+    NotificationData newNotification = NotificationData(
+      const Uuid().v4(),
+      username!,
+      body,
+      imageUrl,
+      userProfilePhotoUrl!,
+      DateTime.now().toString().split(" ")[0],
+    );
+    notifications.add(newNotification.toJson());
+    await notificationCollectionRef
+        .doc(userData.data()!['id'])
+        .update({"new_notifications": true, "notifications": notifications});
   }
 
   Future<void> unfollow(UnFollowSearchEvent event, Emitter emit) async {
@@ -348,6 +368,23 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         List.generate(1, (index) => userData.data()!['fcmToken']);
     await NotificationService().sendNotification(
         notificationTitle, imageUrl, body, receiverFcmToken, false);
+    var notificationCollectionRef =
+        FirebaseFirestore.instance.collection("notifications");
+    var notificationData =
+        await notificationCollectionRef.doc(userData.data()!['id']).get();
+    var notifications = notificationData['notifications'];
+    NotificationData newNotification = NotificationData(
+      const Uuid().v4(),
+      username!,
+      body,
+      imageUrl,
+      profilePhotoUrl!,
+      DateTime.now().toString().split(" ")[0],
+    );
+    notifications.add(newNotification.toJson());
+    await notificationCollectionRef
+        .doc(userData.data()!['id'])
+        .update({"new_notifications": true, "notifications": notifications});
   }
 
   Future<void> deleteComment(DeleteSearchComment event, Emitter emit) async {
@@ -413,6 +450,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     String? username = sharedPreferences.getString("username");
+    String? profilePhotoUrl = sharedPreferences.getString("profilePhotoUrl");
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     final collectionRef = firebaseFirestore.collection("users");
     if (event.userPosts) {
@@ -489,6 +527,23 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           List.generate(1, (index) => userData.data()!['fcmToken']);
       await NotificationService().sendNotification(
           notificationTitle, imageUrl, body, receiverFcmToken, false);
+      var notificationCollectionRef =
+          FirebaseFirestore.instance.collection("notifications");
+      var notificationData =
+          await notificationCollectionRef.doc(userData.data()!['id']).get();
+      var notifications = notificationData['notifications'];
+      NotificationData newNotification = NotificationData(
+        const Uuid().v4(),
+        username!,
+        body,
+        imageUrl,
+        profilePhotoUrl!,
+        DateTime.now().toString().split(" ")[0],
+      );
+      notifications.add(newNotification.toJson());
+      await notificationCollectionRef
+          .doc(userData.data()!['id'])
+          .update({"new_notifications": true, "notifications": notifications});
     }
   }
 

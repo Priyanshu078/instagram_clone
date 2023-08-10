@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/comment_page.dart';
@@ -453,6 +454,14 @@ class FeedPage extends StatelessWidget {
                             context.read<FeedBloc>().add(ShareFileEvent(
                                 imageUrl: state.posts[index - 1].imageUrl,
                                 caption: state.posts[index - 1].caption));
+                            await Fluttertoast.showToast(
+                                msg: "Please wait !!!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.white,
+                                textColor: Colors.black,
+                                fontSize: 14.0);
                           },
                         );
                       }

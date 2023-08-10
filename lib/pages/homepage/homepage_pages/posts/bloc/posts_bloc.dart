@@ -72,7 +72,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
       emit(const PostsInitial(""));
       String title = "New Post";
       String notificationImageUrl = "";
-      String body = "$username posted a new photo";
+      String body = "$username just posted a photo";
       var snapshots = await FirebaseFirestore.instance
           .collection("users")
           .where("following", arrayContains: userId)

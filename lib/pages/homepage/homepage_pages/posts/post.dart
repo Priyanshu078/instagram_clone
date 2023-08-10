@@ -147,9 +147,8 @@ class _PostPageState extends State<PostPage> {
                             String caption = captionController.text;
                             String userProfilePhotoUrl = context
                                 .read<HomepageBloc>()
-                                .state
-                                .homePageData
-                                .url;
+                                .sharedPreferences
+                                .getString("profilePhotoUrl")!;
                             context
                                 .read<PostsBloc>()
                                 .add(PostImage(caption, userProfilePhotoUrl));

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
@@ -308,10 +309,18 @@ class UserPosts extends StatelessWidget {
                             .read<FeedBloc>()
                             .add(BookmarkFeed(index, false));
                       },
-                      sharePressed: () {
+                      sharePressed: () async {
                         context.read<FeedBloc>().add(ShareFileEvent(
                             caption: state.userData.posts[index].caption,
                             imageUrl: state.userData.posts[index].imageUrl));
+                        await Fluttertoast.showToast(
+                            msg: "Please wait !!!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.white,
+                            textColor: Colors.black,
+                            fontSize: 14.0);
                       },
                       onUserNamePressed: () {},
                     );
@@ -397,7 +406,7 @@ class UserPosts extends StatelessWidget {
                                   .read<ProfileBloc>()
                                   .add(BookmarkProfile(index));
                             },
-                            sharePressed: () {
+                            sharePressed: () async {
                               context.read<ProfileBloc>().add(
                                   ShareProfileFileEvent(
                                       imageUrl:
@@ -410,6 +419,14 @@ class UserPosts extends StatelessWidget {
                                           ? state.savedPostsList[index].caption
                                           : state
                                               .userData.posts[index].caption));
+                              await Fluttertoast.showToast(
+                                  msg: "Please wait !!!",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.white,
+                                  textColor: Colors.black,
+                                  fontSize: 14.0);
                             },
                             onUserNamePressed: () {},
                           );
@@ -486,7 +503,7 @@ class UserPosts extends StatelessWidget {
                                 .read<SearchBloc>()
                                 .add(BookmarkSearch(index));
                           },
-                          sharePressed: () {
+                          sharePressed: () async {
                             context.read<SearchBloc>().add(ShareSearchFileEvent(
                                 caption: state.usersPosts
                                     ? state.userData.posts[index].caption
@@ -494,6 +511,14 @@ class UserPosts extends StatelessWidget {
                                 imageUrl: state.usersPosts
                                     ? state.userData.posts[index].imageUrl
                                     : state.posts[index].imageUrl));
+                            await Fluttertoast.showToast(
+                                msg: "Please wait !!!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.white,
+                                textColor: Colors.black,
+                                fontSize: 14.0);
                           },
                           onDoubleTap: () {
                             context.read<SearchBloc>().add(SearchLikePostEvent(

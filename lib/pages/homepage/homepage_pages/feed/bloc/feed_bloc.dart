@@ -1,12 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
+import 'package:instagram_clone/data/notification_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
 import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
@@ -118,6 +117,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     var sharedPreferences = await SharedPreferences.getInstance();
     String? myUserId = sharedPreferences.getString("userId");
     String? username = sharedPreferences.getString("username");
+    String? userProfilePhotoUrl =
+        sharedPreferences.getString("profilePhotoUrl");
     var collectionRef = FirebaseFirestore.instance.collection("users");
     if (event.fromFeed) {
       String userId = state.posts[event.index!].userId;
@@ -148,7 +149,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     }
     String title = "New Follower";
     String imageUrl = "";
-    String body = "$username follows you";
+    String body = "$username started following you";
     var userData = await collectionRef
         .doc(event.fromFeed
             ? state.posts[event.index!].userId
@@ -158,6 +159,23 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         List.generate(1, (index) => userData.data()!['fcmToken']);
     await NotificationService()
         .sendNotification(title, imageUrl, body, receiverFcmToken, false);
+    var notificationCollectionRef =
+        FirebaseFirestore.instance.collection("notifications");
+    var notificationData =
+        await notificationCollectionRef.doc(userData.data()!['id']).get();
+    var notifications = notificationData['notifications'];
+    NotificationData newNotification = NotificationData(
+      const Uuid().v4(),
+      username!,
+      body,
+      imageUrl,
+      userProfilePhotoUrl!,
+      DateTime.now().toString().split(" ")[0],
+    );
+    notifications.add(newNotification.toJson());
+    await notificationCollectionRef
+        .doc(userData.data()!['id'])
+        .update({"new_notifications": true, "notifications": notifications});
   }
 
   Future<void> deleteMyStory(DeleteMyStory event, Emitter emit) async {
@@ -254,6 +272,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    var userProfilePhotoUrl = sharedPreferences.getString("profilePhotoUrl");
     var collectionRef = firebaseFirestore.collection("users");
     String? profilePhotoUrl = sharedPreferences.getString('profilePhotoUrl');
     String? username = sharedPreferences.getString('username');
@@ -299,7 +318,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     String imageUrl = event.inFeed
         ? state.posts[event.postIndex].imageUrl
         : state.userData.posts[event.postIndex].imageUrl;
-    String body = "$username commented on your post";
+    String body = "$username commented on your photo";
     var userData = await collectionRef
         .doc(event.inFeed
             ? state.posts[event.postIndex].userId
@@ -309,6 +328,23 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         List.generate(1, (index) => userData.data()!['fcmToken']);
     await NotificationService()
         .sendNotification(title, imageUrl, body, receiverFcmToken, false);
+    var notificationCollectionRef =
+        FirebaseFirestore.instance.collection("notifications");
+    var notificationData =
+        await notificationCollectionRef.doc(userData.data()!['id']).get();
+    var notifications = notificationData['notifications'];
+    NotificationData newNotification = NotificationData(
+      const Uuid().v4(),
+      username!,
+      body,
+      imageUrl,
+      userProfilePhotoUrl!,
+      DateTime.now().toString().split(" ")[0],
+    );
+    notifications.add(newNotification.toJson());
+    await notificationCollectionRef
+        .doc(userData.data()!['id'])
+        .update({"new_notifications": true, "notifications": notifications});
   }
 
   Future<void> likePost(PostLikeEvent event, Emitter emit) async {
@@ -316,6 +352,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? userId = sharedPreferences.getString("userId");
     String? username = sharedPreferences.getString("username");
+    String? userProfilePhotoUrl =
+        sharedPreferences.getString("profilePhotoUrl");
     var firestore = FirebaseFirestore.instance;
     var collectionRef = firestore.collection("users");
     List<Post> posts =
@@ -357,12 +395,29 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     if (liked) {
       String title = "Like";
       String imageUrl = posts[event.index].imageUrl;
-      String body = "$username liked your post";
+      String body = "$username liked your photo";
       var userData = await collectionRef.doc(posts[event.index].userId).get();
       List receiverFcmToken =
           List.generate(1, (index) => userData.data()!['fcmToken']);
       await NotificationService()
           .sendNotification(title, imageUrl, body, receiverFcmToken, false);
+      var notificationCollectionRef =
+          FirebaseFirestore.instance.collection("notifications");
+      var notificationData =
+          await notificationCollectionRef.doc(userData.data()!['id']).get();
+      var notifications = notificationData['notifications'];
+      NotificationData newNotification = NotificationData(
+        const Uuid().v4(),
+        username!,
+        body,
+        imageUrl,
+        userProfilePhotoUrl!,
+        DateTime.now().toString().split(" ")[0],
+      );
+      notifications.add(newNotification.toJson());
+      await notificationCollectionRef
+          .doc(userData.data()!['id'])
+          .update({"new_notifications": true, "notifications": notifications});
     }
   }
 
