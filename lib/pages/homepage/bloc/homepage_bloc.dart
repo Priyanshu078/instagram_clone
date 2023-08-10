@@ -23,25 +23,6 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
   Future<void> getDetails(GetDetails event, Emitter emit) async {
     sharedPreferences = await SharedPreferences.getInstance();
     var userId = sharedPreferences.getString("userId");
-    // var storageRef = FirebaseStorage.instance.ref();
-    // const fileName = "profilePhoto.jpg";
-    // try {
-    //   Reference imagesRef = storageRef.child(userId!);
-    //   final profilePhotoRef = imagesRef.child(fileName);
-    //   final imagePath = await profilePhotoRef.getDownloadURL();
-    //   HomePageData homePageData = HomePageData(imagePath);
-    //   var notificationData = await FirebaseFirestore.instance
-    //       .collection("notifications")
-    //       .doc(sharedPreferences.getString("userId"))
-    //       .get();
-    //   var newNotifications = notificationData.data()!['new_notifications'];
-    //   emit(HomepageInitial(state.index, homePageData, newNotifications));
-    // } catch (e) {
-    //   if (kDebugMode) {
-    //     print(e);
-    //   }
-    // var imagePath = await storageRef.child(fileName).getDownloadURL();
-    // HomePageData homePageData = HomePageData(imagePath);
     var notificationData = await FirebaseFirestore.instance
         .collection("notifications")
         .doc(userId)
