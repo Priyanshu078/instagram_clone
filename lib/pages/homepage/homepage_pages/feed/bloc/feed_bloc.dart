@@ -55,7 +55,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     Directory dir = await getTemporaryDirectory();
     File file = File('${dir.path}/image.png');
     await file.writeAsBytes(response.data);
-    await Share.shareXFiles([XFile(file.path)], subject: event.caption);
+    await Share.shareXFiles([XFile(file.path)], text: event.caption);
   }
 
   Future<void> viewStory(StoryViewEvent event, Emitter emit) async {
