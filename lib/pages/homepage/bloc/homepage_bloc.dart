@@ -23,11 +23,16 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
   Future<void> getDetails(GetDetails event, Emitter emit) async {
     sharedPreferences = await SharedPreferences.getInstance();
     var userId = sharedPreferences.getString("userId");
-    var notificationData = await FirebaseFirestore.instance
-        .collection("notifications")
-        .doc(userId)
-        .get();
-    var newNotifications = notificationData.data()!['new_notifications'];
+    var collectionRef = FirebaseFirestore.instance.collection("notifications");
+    var notificationData = await collectionRef.doc(userId).get();
+    bool newNotifications = false;
+    if (notificationData.data() == null) {
+      await collectionRef
+          .doc(userId)
+          .set({"notifications": [], "new_notifications": false});
+    } else {
+      newNotifications = notificationData.data()!['new_notifications'];
+    }
     emit(HomepageInitial(state.index, newNotifications));
   }
 }
