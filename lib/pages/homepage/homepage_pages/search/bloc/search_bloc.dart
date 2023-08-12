@@ -183,7 +183,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         FirebaseFirestore.instance.collection("notifications");
     var notificationData =
         await notificationCollectionRef.doc(userData.data()!['id']).get();
-    var notifications = notificationData['notifications'];
+    var notifications = [];
+    if (notificationData.data() == null) {
+      await notificationCollectionRef
+          .doc(userData.data()!['id'])
+          .set({"notifications": [], "new_notifications": false});
+    } else {
+      notifications = notificationData.data()!['notifications'];
+    }
     NotificationData newNotification = NotificationData(
       const Uuid().v4(),
       username!,
@@ -372,7 +379,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         FirebaseFirestore.instance.collection("notifications");
     var notificationData =
         await notificationCollectionRef.doc(userData.data()!['id']).get();
-    var notifications = notificationData['notifications'];
+    var notifications = [];
+    if (notificationData.data() == null) {
+      await notificationCollectionRef
+          .doc(userData.data()!['id'])
+          .set({"notifications": [], "new_notifications": false});
+    } else {
+      notifications = notificationData.data()!['notifications'];
+    }
     NotificationData newNotification = NotificationData(
       const Uuid().v4(),
       username!,
@@ -531,7 +545,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           FirebaseFirestore.instance.collection("notifications");
       var notificationData =
           await notificationCollectionRef.doc(userData.data()!['id']).get();
-      var notifications = notificationData['notifications'];
+      var notifications = [];
+      if (notificationData.data() == null) {
+        await notificationCollectionRef
+            .doc(userData.data()!['id'])
+            .set({"notifications": [], "new_notifications": false});
+      } else {
+        notifications = notificationData.data()!['notifications'];
+      }
       NotificationData newNotification = NotificationData(
         const Uuid().v4(),
         username!,
