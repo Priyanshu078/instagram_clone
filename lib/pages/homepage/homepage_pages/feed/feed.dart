@@ -142,16 +142,16 @@ class FeedPage extends StatelessWidget {
               width: width * 0.3,
               child: Image.asset('assets/images/instagram.png'),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: SizedBox(
-                  height: AppBar().preferredSize.height * 0.8,
-                  width: width * 0.07,
-                  child: Image.asset('assets/images/messanger.png'),
-                ),
-              ),
-            ],
+            // actions: [
+            //   IconButton(
+            //     onPressed: () {},
+            //     icon: SizedBox(
+            //       height: AppBar().preferredSize.height * 0.8,
+            //       width: width * 0.07,
+            //       child: Image.asset('assets/images/messanger.png'),
+            //     ),
+            //   ),
+            // ],
           ),
           body: BlocBuilder<FeedBloc, FeedState>(
             builder: (context, state) {

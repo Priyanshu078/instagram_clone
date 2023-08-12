@@ -16,9 +16,23 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     on<GetDetails>((event, emit) => getDetails(event, emit));
     on<RefreshUi>((event, emit) =>
         emit(HomepageInitial(state.index, state.newNotifications)));
+    on<SeenNewNotification>(
+        (event, emit) => setNewNotificationsStatus(event, emit));
   }
 
   late final SharedPreferences sharedPreferences;
+
+  Future<void> setNewNotificationsStatus(
+      SeenNewNotification event, Emitter emit) async {
+    String? userId = sharedPreferences.getString("userId");
+    if (state.newNotifications) {
+      await FirebaseFirestore.instance
+          .collection("notifications")
+          .doc(userId)
+          .update({"new_notifications": false});
+      emit(HomepageInitial(state.index, false));
+    }
+  }
 
   Future<void> getDetails(GetDetails event, Emitter emit) async {
     sharedPreferences = await SharedPreferences.getInstance();

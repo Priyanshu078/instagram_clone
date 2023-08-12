@@ -23,3 +23,5 @@ class RefreshUi extends HomepageEvent {
   @override
   List<Object?> get props => [imageUrl];
 }
+
+class SeenNewNotification extends HomepageEvent {}

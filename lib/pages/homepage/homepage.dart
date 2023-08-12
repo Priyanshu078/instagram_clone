@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 BottomNavigationBarItem(
                     icon: SizedBox(
                       // height: height * 0.05,
-                      width: width * 0.060,
+                      width: width * 0.065,
                       child: state.index == 0
                           ? Image.asset('assets/images/home_filled.png')
                           : Image.asset('assets/images/home.png'),
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                 BottomNavigationBarItem(
                     icon: SizedBox(
                         // height: height * 0.05,
-                        width: width * 0.060,
+                        width: width * 0.065,
                         child: state.index == 1
                             ? Image.asset(
                                 'assets/images/search_insta_filled.png')
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                 BottomNavigationBarItem(
                     icon: SizedBox(
                         // height: height * 0.05,
-                        width: width * 0.060,
+                        width: width * 0.065,
                         child: Image.asset('assets/images/post.png')),
                     label: "Post"),
                 BottomNavigationBarItem(
@@ -154,19 +154,21 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                              // height: height * 0.05,
-                              width: width * 0.060,
-                              child: state.index == 3
-                                  ? Image.asset(
-                                      'assets/images/notification_filled.png')
-                                  : Image.asset(
-                                      'assets/images/notification.png')),
-                          const SizedBox(
-                            height: 3,
+                            // height: height * 0.05,
+                            width: state.newNotifications
+                                ? width * 0.055
+                                : width * 0.065,
+                            child: state.index == 3
+                                ? Image.asset(
+                                    'assets/images/notification_filled.png')
+                                : Image.asset('assets/images/notification.png'),
+                          ),
+                          SizedBox(
+                            height: state.newNotifications ? 3 : 0,
                           ),
                           Container(
-                            height: 3,
-                            width: 3,
+                            height: state.newNotifications ? 3 : 0,
+                            width: state.newNotifications ? 3 : 0,
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle, color: Colors.white),
                           )
@@ -180,8 +182,8 @@ class _HomePageState extends State<HomePage> {
                           .read<HomepageBloc>()
                           .sharedPreferences
                           .getString("profilePhotoUrl")!,
-                      height: height * 0.033,
-                      width: height * 0.033,
+                      height: height * 0.035,
+                      width: height * 0.035,
                       wantBorder: state.index == 4 ? true : false,
                       photoSelected: true,
                       editProfileImage: false,
@@ -210,6 +212,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 } else if (index == 3) {
+                  context.read<HomepageBloc>().add(SeenNewNotification());
                   context.read<NotificationBloc>().add(FetchNotifications());
                 } else if (index == 4) {
                   context.read<ProfileBloc>().add(GetUserDetails());
