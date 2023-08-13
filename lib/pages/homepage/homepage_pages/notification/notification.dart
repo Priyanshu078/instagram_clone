@@ -32,24 +32,62 @@ class NotificationPage extends StatelessWidget {
             ),
           );
         } else {
-          return ListView.builder(
-              itemCount: state.notifications.length,
-              itemBuilder: (context, index) {
-                return NotificationTile(
-                    profilePhotoUrl:
-                        state.notifications[index].userProfilePhoto,
-                    username: state.notifications[index].message.split(" ")[0],
-                    date: DateTime.now()
-                        .difference(
-                            DateTime.parse(state.notifications[index].date))
-                        .toString(),
-                    message: state.notifications[index].message
-                        .split(" ")
-                        .sublist(1)
-                        .toString(),
-                    height: height * 0.1,
-                    width: width);
-              });
+          return Padding(
+            padding: const EdgeInsets.only(
+                left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
+            child: ListView.builder(
+                physics: const ClampingScrollPhysics(),
+                itemCount: state.notifications.length,
+                itemBuilder: (context, index) {
+                  String dateTime = "";
+                  int inDays = DateTime.now()
+                      .difference(
+                          DateTime.parse(state.notifications[index].dateTime))
+                      .inDays;
+                  int inHours = DateTime.now()
+                      .difference(
+                          DateTime.parse(state.notifications[index].dateTime))
+                      .inHours;
+                  int inMinutes = DateTime.now()
+                      .difference(
+                          DateTime.parse(state.notifications[index].dateTime))
+                      .inMinutes;
+                  int inSeconds = DateTime.now()
+                      .difference(
+                          DateTime.parse(state.notifications[index].dateTime))
+                      .inSeconds;
+                  if (inDays > 0) {
+                    dateTime = '${inDays}d ';
+                  } else if (inHours > 0) {
+                    dateTime = '${inHours}hr ';
+                  } else if (inMinutes > 0) {
+                    dateTime = '${inMinutes}m ';
+                  } else if (inSeconds > 0) {
+                    dateTime = '${inSeconds}s ';
+                  }
+                  print(DateTime.now()
+                      .difference(
+                          DateTime.parse(state.notifications[index].dateTime))
+                      .inHours);
+                  print(DateTime.now()
+                      .difference(
+                          DateTime.parse(state.notifications[index].dateTime))
+                      .inMinutes);
+                  return NotificationTile(
+                      imageUrl: state.notifications[index].imageUrl,
+                      profilePhotoUrl:
+                          state.notifications[index].userProfilePhoto,
+                      username:
+                          state.notifications[index].message.split(" ")[0],
+                      dateTime: dateTime,
+                      message: state.notifications[index].message.substring(
+                          state.notifications[index].message
+                              .split(" ")[0]
+                              .length),
+                      height: height * 0.1,
+                      width: width);
+                }),
+          );
         }
       }),
     );

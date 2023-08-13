@@ -3,12 +3,12 @@ class NotificationData {
   String username;
   String message;
   String imageUrl;
-  String date;
+  String dateTime;
   String userProfilePhoto;
   String senderUserId;
 
   NotificationData(this.id, this.username, this.message, this.imageUrl,
-      this.userProfilePhoto, this.date, this.senderUserId);
+      this.userProfilePhoto, this.dateTime, this.senderUserId);
 
   factory NotificationData.fromJson(Map<String, dynamic> json) {
     return NotificationData(
@@ -17,7 +17,7 @@ class NotificationData {
         json['message'],
         json['imageUrl'],
         json['userProfilePhoto'],
-        json['date'],
+        json['dateTime'],
         json['senderUserId']);
   }
 
@@ -28,7 +28,7 @@ class NotificationData {
       "message": message,
       "imageUrl": imageUrl,
       "userProfilePhoto": userProfilePhoto,
-      "dateTime": date,
+      "dateTime": dateTime,
       "senderUserId": senderUserId,
     };
   }
