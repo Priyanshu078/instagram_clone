@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/bloc/notification_bloc.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
+import 'package:instagram_clone/widgets/notification_tile.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -34,11 +35,20 @@ class NotificationPage extends StatelessWidget {
           return ListView.builder(
               itemCount: state.notifications.length,
               itemBuilder: (context, index) {
-                return const InstaText(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.normal,
-                    text: "Notifications");
+                return NotificationTile(
+                    profilePhotoUrl:
+                        state.notifications[index].userProfilePhoto,
+                    username: state.notifications[index].message.split(" ")[0],
+                    date: DateTime.now()
+                        .difference(
+                            DateTime.parse(state.notifications[index].date))
+                        .toString(),
+                    message: state.notifications[index].message
+                        .split(" ")
+                        .sublist(1)
+                        .toString(),
+                    height: height * 0.1,
+                    width: width);
               });
         }
       }),

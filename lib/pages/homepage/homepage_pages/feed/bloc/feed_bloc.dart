@@ -177,7 +177,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       body,
       imageUrl,
       userProfilePhotoUrl!,
-      DateTime.now().toString().split(" ")[0],
+      DateTime.now().toString(),
+      myUserId!,
     );
     notifications.add(newNotification.toJson());
     await notificationCollectionRef
@@ -353,7 +354,8 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       body,
       imageUrl,
       userProfilePhotoUrl!,
-      DateTime.now().toString().split(" ")[0],
+      DateTime.now().toString(),
+      myUserId!,
     );
     notifications.add(newNotification.toJson());
     await notificationCollectionRef
@@ -428,13 +430,13 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         notifications = notificationData.data()!['notifications'];
       }
       NotificationData newNotification = NotificationData(
-        const Uuid().v4(),
-        username!,
-        body,
-        imageUrl,
-        userProfilePhotoUrl!,
-        DateTime.now().toString().split(" ")[0],
-      );
+          const Uuid().v4(),
+          username!,
+          body,
+          imageUrl,
+          userProfilePhotoUrl!,
+          DateTime.now().toString(),
+          userId!);
       notifications.add(newNotification.toJson());
       await notificationCollectionRef
           .doc(userData.data()!['id'])

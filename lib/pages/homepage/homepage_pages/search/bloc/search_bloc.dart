@@ -197,7 +197,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       body,
       imageUrl,
       userProfilePhotoUrl!,
-      DateTime.now().toString().split(" ")[0],
+      DateTime.now().toString(),
+      myUserId!,
     );
     notifications.add(newNotification.toJson());
     await notificationCollectionRef
@@ -393,7 +394,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       body,
       imageUrl,
       profilePhotoUrl!,
-      DateTime.now().toString().split(" ")[0],
+      DateTime.now().toString(),
+      myUserId!,
     );
     notifications.add(newNotification.toJson());
     await notificationCollectionRef
@@ -559,7 +561,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         body,
         imageUrl,
         profilePhotoUrl!,
-        DateTime.now().toString().split(" ")[0],
+        DateTime.now().toString(),
+        myUserId!,
       );
       notifications.add(newNotification.toJson());
       await notificationCollectionRef
