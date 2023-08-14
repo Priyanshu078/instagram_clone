@@ -58,19 +58,19 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   }
 
   Future<void> viewStory(StoryViewEvent event, Emitter emit) async {
-    // var collectionRef = FirebaseFirestore.instance.collection("stories");
+    var collectionRef = FirebaseFirestore.instance.collection("stories");
     if (event.viewMyStory) {
       StoryData myStory = state.myStory.copyWith(viewed: true);
-      // await collectionRef.doc(myStory.story.userId).update({"viewed": true});
+      await collectionRef.doc(myStory.story.userId).update({"viewed": true});
       emit(StoryViewedState(state.posts, state.myData, state.userData,
           state.tabIndex, state.postsIndex, state.stories, myStory));
     } else {
       List<StoryData> stories = List.from(state.stories);
       stories[event.index!] =
           StoryData(story: stories[event.index!].story, viewed: true);
-      // await collectionRef
-      //     .doc(stories[event.index!].story.userId)
-      //     .update({"viewed": true});
+      await collectionRef
+          .doc(stories[event.index!].story.userId)
+          .update({"viewed": true});
       emit(StoryViewedState(state.posts, state.myData, state.userData,
           state.tabIndex, state.postsIndex, stories, state.myStory));
     }
