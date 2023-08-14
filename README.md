@@ -1,6 +1,7 @@
 # Instagram_Clone
 This is an Instagram clone developed using Flutter and Firebase.
 
+<image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/a72924d9-896f-46f2-a08b-7b5078093639"  width="400" height="350" >
 ## Features
 ### Authentication
 
@@ -51,6 +52,5 @@ This is an Instagram clone developed using Flutter and Firebase.
 6. User can make their profile public or private
 7. user can logout from the app.
 
-
-![my instagram gif](https://github.com/Priyanshu078/instagram_clone/assets/66347715/a72924d9-896f-46f2-a08b-7b5078093639)
+<!-- ![my instagram gif](https://github.com/Priyanshu078/instagram_clone/assets/66347715/a72924d9-896f-46f2-a08b-7b5078093639) -->
 
