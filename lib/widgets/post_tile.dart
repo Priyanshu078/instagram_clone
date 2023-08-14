@@ -58,7 +58,7 @@ class PostTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
@@ -87,11 +87,11 @@ class PostTile extends StatelessWidget {
                       width: width * 0.02,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: GestureDetector(
                         onTap: onUserNamePressed,
                         child: InstaText(
-                          fontSize: 14,
+                          fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           text: searchState == null

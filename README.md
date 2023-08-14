@@ -22,6 +22,7 @@ This is an Instagram clone developed using Flutter and Firebase.
 
 1. You can add and delete your story
 2. You can view other user stories
+3. You can view your own story
 
 ### Posts
 
