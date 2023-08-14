@@ -53,5 +53,12 @@ This is an Instagram clone developed using Flutter and Firebase.
 6. User can make their profile public or private
 7. user can logout from the app.
 
-<!-- ![my instagram gif](https://github.com/Priyanshu078/instagram_clone/assets/66347715/a72924d9-896f-46f2-a08b-7b5078093639) -->
+### How to Run ?? 
+
+1. Clone this repository.
+2. Create a new firebase project 
+3. Add firebase this repository as specfied in the firebase console
+4. This will create your own firebaseOptions.dart file in this project.
+5. Now you can this project
+6. Run "flutter run" from the console.
 
