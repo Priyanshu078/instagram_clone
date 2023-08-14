@@ -26,8 +26,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           .set({"notifications": [], "new_notifications": false});
     } else {
       List data = snapshots.data()!["notifications"];
-      List<NotificationData> notifications = List.generate(
-          data.length, (index) => NotificationData.fromJson(data[index]));
+      List<NotificationData> notifications = List.generate(data.length,
+          (index) => NotificationData.fromJson(data[data.length - 1 - index]));
       emit(NotificationsFetchedState(notifications));
     }
   }
