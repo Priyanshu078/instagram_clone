@@ -559,10 +559,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                                           ? Container()
                                           : Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 12.0, right: 12.0),
+                                                  left: 8.0, right: 8.0),
                                               child: SizedBox(
                                                 height: height * 0.12,
-                                                width: width * 0.7,
+                                                width: width,
                                                 child: ListView.builder(
                                                   scrollDirection:
                                                       Axis.horizontal,
@@ -581,21 +581,42 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                         children: [
                                                           ProfilePhoto(
                                                             height:
-                                                                height * 0.09,
+                                                                height * 0.1,
                                                             width: height * 0.1,
                                                             wantBorder: true,
                                                             storyAdder: false,
-                                                            imageUrl: "",
+                                                            imageUrl: widget
+                                                                    .inSearch
+                                                                ? searchState
+                                                                    .userData
+                                                                    .stories[
+                                                                        index]
+                                                                    .imageUrl
+                                                                : feedState
+                                                                    .userData
+                                                                    .stories[
+                                                                        index]
+                                                                    .imageUrl,
                                                           ),
                                                           InstaText(
-                                                              fontSize: 12,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              text:
-                                                                  "Party ${index + 1}")
+                                                            fontSize: 10,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            text: widget
+                                                                    .inSearch
+                                                                ? searchState
+                                                                    .userData
+                                                                    .stories[
+                                                                        index]
+                                                                    .caption
+                                                                : feedState
+                                                                    .userData
+                                                                    .stories[
+                                                                        index]
+                                                                    .caption,
+                                                          )
                                                         ],
                                                       ),
                                                     );
@@ -604,7 +625,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                               ),
                                             ),
                                       SizedBox(
-                                        height: height * 0.04,
+                                        height: height * 0.02,
                                       ),
                                       (widget.inSearch
                                               ? searchState

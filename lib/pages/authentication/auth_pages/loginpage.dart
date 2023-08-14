@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
+import 'package:instagram_clone/pages/authentication/auth_pages/reset_password_page.dart';
 import 'package:instagram_clone/pages/authentication/bloc/auth_bloc.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage.dart';
@@ -161,7 +162,12 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                              create: (context) => AuthBloc(),
+                              child: const ResetPasswordPage())));
+                    },
                     child: InstaText(
                         fontSize: 12,
                         color: instablue,

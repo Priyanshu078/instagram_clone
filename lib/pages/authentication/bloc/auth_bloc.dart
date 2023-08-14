@@ -20,6 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RequestLoginEvent>((event, emit) => login(event, emit));
   }
 
+  Future<void> resetPassword(ResetPasswordEvent event, Emitter emit) async {}
+
   Future<void> signUp(RequestSignUpEvent event, Emitter emit) async {
     emit(LoadingState(state.obscurePassword, state.gender));
     try {

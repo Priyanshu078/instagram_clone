@@ -35,3 +35,5 @@ class RequestLoginEvent extends AuthEvent {
   @override
   List<Object> get props => [username, password];
 }
+
+class ResetPasswordEvent extends AuthEvent {}

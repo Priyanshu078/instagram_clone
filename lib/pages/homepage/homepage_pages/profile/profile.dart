@@ -435,11 +435,13 @@ class _ProfilePageState extends State<ProfilePage>
                                               imageUrl: state.userData
                                                   .stories[index].imageUrl,
                                             ),
-                                            const InstaText(
-                                                fontSize: 10,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.normal,
-                                                text: "highlights")
+                                            InstaText(
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              text: state.userData
+                                                  .stories[index].caption,
+                                            )
                                           ],
                                         ),
                                       ),
