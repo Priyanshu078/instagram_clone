@@ -9,12 +9,10 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_blo
 import 'package:instagram_clone/pages/homepage/homepage_pages/posts/bloc/posts_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
-import 'package:instagram_clone/pages/splash_screen/splash_cubit/splash_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../authentication/auth_pages/loginpage.dart';
 import '../authentication/bloc/auth_bloc.dart';
 import '../homepage/homepage_pages/notification/bloc/notification_bloc.dart';
-import 'splash_cubit/splash_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

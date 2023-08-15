@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instagram_clone/main.dart';
 import 'package:instagram_clone/pages/splash_screen/splash_cubit/splash_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   SplashCubit() : super(const SplashInitial(false, ""));

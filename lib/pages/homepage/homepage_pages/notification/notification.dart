@@ -1,8 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/notification/bloc/notification_bloc.dart';
-import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/notification_tile.dart';
 
 class NotificationPage extends StatelessWidget {
@@ -64,14 +64,16 @@ class NotificationPage extends StatelessWidget {
                   } else if (inSeconds > 0) {
                     dateTime = '${inSeconds}s ';
                   }
-                  print(DateTime.now()
-                      .difference(
-                          DateTime.parse(state.notifications[index].dateTime))
-                      .inHours);
-                  print(DateTime.now()
-                      .difference(
-                          DateTime.parse(state.notifications[index].dateTime))
-                      .inMinutes);
+                  if (kDebugMode) {
+                    print(DateTime.now()
+                        .difference(
+                            DateTime.parse(state.notifications[index].dateTime))
+                        .inHours);
+                    print(DateTime.now()
+                        .difference(
+                            DateTime.parse(state.notifications[index].dateTime))
+                        .inMinutes);
+                  }
                   return NotificationTile(
                       imageUrl: state.notifications[index].imageUrl == ""
                           ? null
