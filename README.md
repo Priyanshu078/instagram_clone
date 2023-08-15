@@ -9,8 +9,8 @@ This is an Instagram clone developed using Flutter and Firebase.
 1. SignUp 
 2. Login
 3. Forget Password
-<image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/2dedcd74-1f09-4422-9822-8b820215c0d6"  width="200" height="300" >
-<image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/28982a64-ed0b-49c8-b407-f92ad315e301"  width="200" height="300" >
+<image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/2dedcd74-1f09-4422-9822-8b820215c0d6"  width="150" height="300" >
+<image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/28982a64-ed0b-49c8-b407-f92ad315e301"  width="150" height="300" >
 <image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/7d3c083b-473c-4437-aa2b-2e72c2bad49b"  width="200" height="300" >
 
 
