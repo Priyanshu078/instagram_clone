@@ -18,9 +18,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(ChangedGender(state.obscurePassword, event.gender)));
     on<RequestSignUpEvent>((event, emit) => signUp(event, emit));
     on<RequestLoginEvent>((event, emit) => login(event, emit));
+    on<ResetPasswordEvent>((event, emit) => resetPassword(event, emit));
   }
 
-  Future<void> resetPassword(ResetPasswordEvent event, Emitter emit) async {}
+  Future<void> resetPassword(ResetPasswordEvent event, Emitter emit) async {
+    emit(ResettingPasswordState(state.obscurePassword, state.gender));
+    String username = event.username;
+    String email = event.email;
+    String newPassword = event.password;
+    var collectionRef = FirebaseFirestore.instance.collection("users");
+    var docSnapshot = await collectionRef
+        .where("username", isEqualTo: username)
+        .where("contact", isEqualTo: email)
+        .get();
+    await collectionRef
+        .doc(docSnapshot.docs[0].id)
+        .update({"password": newPassword});
+    emit(PasswordResetSuccessState(state.obscurePassword, state.gender));
+  }
 
   Future<void> signUp(RequestSignUpEvent event, Emitter emit) async {
     emit(LoadingState(state.obscurePassword, state.gender));

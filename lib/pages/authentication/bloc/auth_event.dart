@@ -36,4 +36,13 @@ class RequestLoginEvent extends AuthEvent {
   List<Object> get props => [username, password];
 }
 
-class ResetPasswordEvent extends AuthEvent {}
+class ResetPasswordEvent extends AuthEvent {
+  final String email;
+  final String username;
+  final String password;
+  const ResetPasswordEvent(
+      {required this.email, required this.username, required this.password});
+
+  @override
+  List<Object> get props => [username, password, email];
+}

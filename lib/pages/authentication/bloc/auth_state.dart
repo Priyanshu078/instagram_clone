@@ -78,8 +78,8 @@ class ResettingPasswordState extends AuthState {
   List<Object> get props => [obscurePassword, gender];
 }
 
-class PasswordRestSuccessState extends AuthState {
-  const PasswordRestSuccessState(super.obscurePassword, super.gender);
+class PasswordResetSuccessState extends AuthState {
+  const PasswordResetSuccessState(super.obscurePassword, super.gender);
 
   @override
   List<Object> get props => [obscurePassword, gender];
