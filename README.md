@@ -8,6 +8,7 @@ This is an Instagram clone developed using Flutter and Firebase.
 <image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/2dedcd74-1f09-4422-9822-8b820215c0d6"  width="150" height="300" >
 <image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/28982a64-ed0b-49c8-b407-f92ad315e301"  width="150" height="300" >
 <image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/7d3c083b-473c-4437-aa2b-2e72c2bad49b"  width="150" height="300" >
+    
 ![Screenshot_1692101363](https://github.com/Priyanshu078/instagram_clone/assets/66347715/d1e4b751-364a-4ed4-a087-4a8becd4f52d)
 ![Screenshot_1692101363](https://github.com/Priyanshu078/instagram_clone/assets/66347715/a3f62d3c-8ce3-458c-9bca-95474ab8bc87)
 ![Screenshot_1692101859](https://github.com/Priyanshu078/instagram_clone/assets/66347715/a6a1dc7e-2dad-438e-8a5b-e12387d01241)
