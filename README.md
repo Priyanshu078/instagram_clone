@@ -39,6 +39,7 @@ This is an Instagram clone developed using Flutter and Firebase.
 4. Bookmark Post
 5. Follow the user
 6. unfollow the user
+   
 ### Stories
 
 1. You can add and delete your story
