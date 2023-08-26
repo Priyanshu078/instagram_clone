@@ -10,6 +10,8 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/view_st
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/edit_profile.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/previous_stories.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart'
+    as s;
 import 'package:instagram_clone/widgets/user_posts.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/insta_snackbar.dart';
@@ -415,7 +417,13 @@ class _ProfilePageState extends State<ProfilePage>
                                                                   ProfileBloc>()),
                                                           BlocProvider(
                                                               create: (context) =>
-                                                                  StoryBloc())
+                                                                  StoryBloc()),
+                                                          BlocProvider(
+                                                              create: (context) =>
+                                                                  s.SearchBloc(
+                                                                      PageController(),
+                                                                      FocusNode(),
+                                                                      TextEditingController()))
                                                         ],
                                                         child: ViewStoryPage(
                                                             story: state

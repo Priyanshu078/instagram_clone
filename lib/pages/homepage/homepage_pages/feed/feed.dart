@@ -9,6 +9,8 @@ import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/add_sto
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/bloc/story_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/view_story.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/search/search_page.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/user_profile.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
 import 'package:instagram_clone/widgets/post_tile.dart';
@@ -206,6 +208,12 @@ class FeedPage extends StatelessWidget {
                                                           create: (context) =>
                                                               ProfileBloc(
                                                                   PageController())),
+                                                      BlocProvider(
+                                                          create: (context) =>
+                                                              SearchBloc(
+                                                                  PageController(),
+                                                                  FocusNode(),
+                                                                  TextEditingController()))
                                                     ],
                                                     child: ViewStoryPage(
                                                       story:

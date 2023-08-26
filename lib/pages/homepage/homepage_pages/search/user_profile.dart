@@ -4,6 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/constants/colors.dart';
 import 'package:instagram_clone/pages/homepage/bloc/homepage_bloc.dart';
 import 'package:instagram_clone/pages/homepage/homepage_pages/feed/bloc/feed_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/bloc/story_bloc.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/feed/story/view_story.dart';
+import 'package:instagram_clone/pages/homepage/homepage_pages/profile/bloc/profile_bloc.dart'
+    as p;
 import 'package:instagram_clone/pages/homepage/homepage_pages/search/bloc/search_bloc.dart';
 import 'package:instagram_clone/widgets/insta_button.dart';
 import 'package:instagram_clone/widgets/instatext.dart';
@@ -577,47 +581,70 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                       padding:
                                                           const EdgeInsets.only(
                                                               left: 10.5),
-                                                      child: Column(
-                                                        children: [
-                                                          ProfilePhoto(
-                                                            height:
-                                                                height * 0.1,
-                                                            width: height * 0.1,
-                                                            wantBorder: true,
-                                                            storyAdder: false,
-                                                            imageUrl: widget
-                                                                    .inSearch
-                                                                ? searchState
-                                                                    .userData
-                                                                    .stories[
-                                                                        index]
-                                                                    .imageUrl
-                                                                : feedState
-                                                                    .userData
-                                                                    .stories[
-                                                                        index]
-                                                                    .imageUrl,
-                                                          ),
-                                                          InstaText(
-                                                            fontSize: 10,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            text: widget
-                                                                    .inSearch
-                                                                ? searchState
-                                                                    .userData
-                                                                    .stories[
-                                                                        index]
-                                                                    .caption
-                                                                : feedState
-                                                                    .userData
-                                                                    .stories[
-                                                                        index]
-                                                                    .caption,
-                                                          )
-                                                        ],
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (_) =>
+                                                                      MultiBlocProvider(
+                                                                          providers: [
+                                                                            BlocProvider.value(
+                                                                              value: context.read<SearchBloc>(),
+                                                                            ),
+                                                                            BlocProvider(create: (context) => homePageBloc),
+                                                                            BlocProvider(create: (context) => p.ProfileBloc(PageController())),
+                                                                            BlocProvider(create: (context) => StoryBloc())
+                                                                          ],
+                                                                          child: ViewStoryPage(
+                                                                              story: widget.inSearch ? searchState.userData.stories[index] : feedState.userData.stories[index],
+                                                                              inProfile: widget.inSearch ? (searchState.userData.stories[index].userId == homePageBloc.sharedPreferences.getString("userId")) : (feedState.userData.stories[index].userId == homePageBloc.sharedPreferences.getString("userId")),
+                                                                              index: index))));
+                                                        },
+                                                        child: Column(
+                                                          children: [
+                                                            ProfilePhoto(
+                                                              height:
+                                                                  height * 0.1,
+                                                              width:
+                                                                  height * 0.1,
+                                                              wantBorder: true,
+                                                              storyAdder: false,
+                                                              imageUrl: widget
+                                                                      .inSearch
+                                                                  ? searchState
+                                                                      .userData
+                                                                      .stories[
+                                                                          index]
+                                                                      .imageUrl
+                                                                  : feedState
+                                                                      .userData
+                                                                      .stories[
+                                                                          index]
+                                                                      .imageUrl,
+                                                            ),
+                                                            InstaText(
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              text: widget
+                                                                      .inSearch
+                                                                  ? searchState
+                                                                      .userData
+                                                                      .stories[
+                                                                          index]
+                                                                      .caption
+                                                                  : feedState
+                                                                      .userData
+                                                                      .stories[
+                                                                          index]
+                                                                      .caption,
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
                                                     );
                                                   },
