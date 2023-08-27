@@ -146,7 +146,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                   ),
                   body: SingleChildScrollView(
                     child: SizedBox(
-                      height: height,
+                      height: height - 2.5 * AppBar().preferredSize.height,
                       width: width,
                       child: Column(
                         children: [
