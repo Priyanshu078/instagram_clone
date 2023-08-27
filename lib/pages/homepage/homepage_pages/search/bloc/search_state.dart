@@ -433,8 +433,54 @@ class LoadingUserDataSearchState extends SearchState {
       ];
 }
 
+class DeletedHighLightSearchState extends SearchState {
+  const DeletedHighLightSearchState(
+      super.posts,
+      super.usersList,
+      super.userData,
+      super.tabIndex,
+      super.postsIndex,
+      super.usersPosts,
+      super.myData,
+      super.previousPage);
+  @override
+  List<Object> get props => [
+        posts,
+        usersList,
+        userData,
+        tabIndex,
+        postsIndex,
+        usersPosts,
+        myData,
+        previousPage
+      ];
+}
+
 class DeletingHighLightSearchState extends SearchState {
   const DeletingHighLightSearchState(
+      super.posts,
+      super.usersList,
+      super.userData,
+      super.tabIndex,
+      super.postsIndex,
+      super.usersPosts,
+      super.myData,
+      super.previousPage);
+  @override
+  List<Object> get props => [
+        posts,
+        usersList,
+        userData,
+        tabIndex,
+        postsIndex,
+        usersPosts,
+        myData,
+        previousPage
+      ];
+}
+
+class LoadingUserProfileState extends SearchState {
+  const LoadingUserProfileState(
       super.posts,
       super.usersList,
       super.userData,

@@ -8,6 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:instagram_clone/data/comment_data.dart';
 import 'package:instagram_clone/data/notification_data.dart';
 import 'package:instagram_clone/data/posts_data.dart';
+import 'package:instagram_clone/data/stories.dart';
 import 'package:instagram_clone/data/user_data.dart';
 import 'package:instagram_clone/utility/notification_service.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,15 +28,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             0, 0, true, UserData.temp(), 1)) {
     on<GetPosts>((event, emit) => getPosts(event, emit));
     on<SearchUsers>((event, emit) => searchUsers(event, emit));
-    on<UserProfileEvent>((event, emit) => emit(UserProfileState(
-        state.posts,
-        state.usersList,
-        event.userData,
-        state.tabIndex,
-        state.postsIndex,
-        state.usersPosts,
-        state.myData,
-        1)));
+    on<UserProfileEvent>((event, emit) => getUserProfileData(event, emit));
     on<UserProfileBackEvent>((event, emit) => emit(UsersSearched(
         state.posts,
         state.usersList,
@@ -73,6 +66,50 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<UnFollowSearchEvent>((event, emit) => unfollow(event, emit));
     on<FetchUserDataInSearch>((event, emit) => fetchUserData(event, emit));
     on<ShareSearchFileEvent>((event, emit) => shareFile(event, emit));
+    on<DeleteSearchProfileHighlight>(
+        (event, emit) => deleteSearchProfileHightlight(event, emit));
+  }
+
+  Future<void> getUserProfileData(UserProfileEvent event, Emitter emit) async {
+    emit(LoadingUserProfileState(state.posts, state.usersList, state.userData,
+        state.tabIndex, state.postsIndex, state.usersPosts, state.myData, 1));
+    String userId = event.userData.id;
+    var snapshot =
+        await FirebaseFirestore.instance.collection("users").doc(userId).get();
+    UserData userData = UserData.fromJson(snapshot.data()!);
+    emit(UserProfileState(state.posts, state.usersList, userData,
+        state.tabIndex, state.postsIndex, state.usersPosts, state.myData, 1));
+  }
+
+  Future<void> deleteSearchProfileHightlight(
+      DeleteSearchProfileHighlight event, Emitter emit) async {
+    emit(DeletingHighLightSearchState(
+        state.posts,
+        state.usersList,
+        state.userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        state.myData,
+        state.previousPage));
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String? userId = sharedPreferences.getString("userId");
+    List<Story> hightlights = List.from(state.myData.stories);
+    hightlights.removeAt(event.index);
+    UserData userData = state.userData.copyWith(stories: hightlights);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .update(userData.toJson());
+    emit(DeletedHighLightSearchState(
+        state.posts,
+        state.usersList,
+        userData,
+        state.tabIndex,
+        state.postsIndex,
+        state.usersPosts,
+        userData,
+        state.previousPage));
   }
 
   Future<void> shareFile(ShareSearchFileEvent event, Emitter emit) async {

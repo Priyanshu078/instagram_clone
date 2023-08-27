@@ -16,11 +16,13 @@ class ViewStoryPage extends StatelessWidget {
       {super.key,
       required this.story,
       required this.inProfile,
-      required this.index});
+      required this.index,
+      required this.inSearchProfile});
 
   final Story story;
   final bool inProfile;
   final int index;
+  final bool inSearchProfile;
 
   Widget buildBottomSheet(BuildContext context, double height, double width) {
     return SizedBox(
@@ -48,9 +50,14 @@ class ViewStoryPage extends StatelessWidget {
                 // update myData addedstory false in feed and firestore
                 if (inProfile) {
                   context.read<ProfileBloc>().add(DeleteHighlight(index));
+                } else if (inSearchProfile) {
+                  context
+                      .read<SearchBloc>()
+                      .add(DeleteSearchProfileHighlight(index: index));
                 } else {
                   context.read<StoryBloc>().add(DeleteStory());
                 }
+
                 Navigator.of(context).pop();
               },
             ),
@@ -66,7 +73,11 @@ class ViewStoryPage extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     var sharedPreferences = context.read<HomepageBloc>().sharedPreferences;
     return BlocConsumer<SearchBloc, SearchState>(
-      listener: (context, searchState) {},
+      listener: (context, searchState) {
+        if (searchState is DeletedHighLightSearchState) {
+          Navigator.of(context).pop();
+        }
+      },
       builder: (context, searchState) {
         return BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, profileState) {

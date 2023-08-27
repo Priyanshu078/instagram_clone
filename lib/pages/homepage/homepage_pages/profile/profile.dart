@@ -426,11 +426,13 @@ class _ProfilePageState extends State<ProfilePage>
                                                                       TextEditingController()))
                                                         ],
                                                         child: ViewStoryPage(
-                                                            story: state
-                                                                .userData
-                                                                .stories[index],
-                                                            inProfile: true,
-                                                            index: index),
+                                                          story: state.userData
+                                                              .stories[index],
+                                                          inProfile: true,
+                                                          index: index,
+                                                          inSearchProfile:
+                                                              false,
+                                                        ),
                                                       )));
                                         },
                                         child: Column(

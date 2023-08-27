@@ -99,7 +99,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                   ),
                 );
               } else if (widget.inSearch &&
-                  searchState is LoadingUserDataSearchState) {
+                  (searchState is LoadingUserDataSearchState ||
+                      searchState is LoadingUserProfileState)) {
                 return const Center(
                   child: CircularProgressIndicator(
                     color: Colors.white,
@@ -596,10 +597,18 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                                             BlocProvider(create: (context) => p.ProfileBloc(PageController())),
                                                                             BlocProvider(create: (context) => StoryBloc())
                                                                           ],
-                                                                          child: ViewStoryPage(
-                                                                              story: widget.inSearch ? searchState.userData.stories[index] : feedState.userData.stories[index],
-                                                                              inProfile: widget.inSearch ? (searchState.userData.stories[index].userId == homePageBloc.sharedPreferences.getString("userId")) : (feedState.userData.stories[index].userId == homePageBloc.sharedPreferences.getString("userId")),
-                                                                              index: index))));
+                                                                          child:
+                                                                              ViewStoryPage(
+                                                                            story: widget.inSearch
+                                                                                ? searchState.userData.stories[index]
+                                                                                : feedState.userData.stories[index],
+                                                                            inProfile:
+                                                                                false,
+                                                                            index:
+                                                                                index,
+                                                                            inSearchProfile:
+                                                                                true,
+                                                                          ))));
                                                         },
                                                         child: Column(
                                                           children: [

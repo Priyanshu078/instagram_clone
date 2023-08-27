@@ -118,3 +118,11 @@ class FetchUserDataInSearch extends SearchEvent {
   @override
   List<Object> get props => [userId];
 }
+
+class DeleteSearchProfileHighlight extends SearchEvent {
+  final int index;
+  const DeleteSearchProfileHighlight({required this.index});
+
+  @override
+  List<Object> get props => [index];
+}

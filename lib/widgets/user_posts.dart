@@ -12,7 +12,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/colors.dart';
 
-class UserPosts extends StatelessWidget {
+class UserPosts extends StatefulWidget {
   const UserPosts({
     super.key,
     required this.inProfile,
@@ -21,6 +21,11 @@ class UserPosts extends StatelessWidget {
   final bool inProfile;
   final bool inFeed;
 
+  @override
+  State<UserPosts> createState() => _UserPostsState();
+}
+
+class _UserPostsState extends State<UserPosts> {
   Widget buildBottomSheet(
     BuildContext context,
     double height,
@@ -200,11 +205,11 @@ class UserPosts extends StatelessWidget {
         backgroundColor: Colors.black,
         leading: IconButton(
           onPressed: () async {
-            if (inFeed) {
+            if (widget.inFeed) {
               var bloc = context.read<FeedBloc>();
               bloc.pageController.jumpToPage(1);
             } else {
-              if (inProfile) {
+              if (widget.inProfile) {
                 var bloc = context.read<ProfileBloc>();
                 bloc.pageController.jumpToPage(0);
               } else {
@@ -226,16 +231,16 @@ class UserPosts extends StatelessWidget {
           fontSize: 20,
           color: Colors.white,
           fontWeight: FontWeight.w700,
-          text: inProfile && context.read<ProfileBloc>().state.savedPosts
+          text: widget.inProfile && context.read<ProfileBloc>().state.savedPosts
               ? "Saved"
-              : (inProfile ||
+              : (widget.inProfile ||
                       context.read<SearchBloc>().state.usersPosts ||
-                      inFeed)
+                      widget.inFeed)
                   ? "Posts"
                   : "Explore",
         ),
       ),
-      body: inFeed
+      body: widget.inFeed
           ? BlocBuilder<FeedBloc, FeedState>(
               builder: (context, state) {
                 return ScrollablePositionedList.builder(
@@ -262,7 +267,7 @@ class UserPosts extends StatelessWidget {
                                       context,
                                       height,
                                       width,
-                                      inProfile,
+                                      widget.inProfile,
                                       false,
                                       index,
                                       null,
@@ -289,18 +294,20 @@ class UserPosts extends StatelessWidget {
                       commentPressed: () async {
                         var sharedPreferences =
                             await SharedPreferences.getInstance();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                                  value: context.read<FeedBloc>(),
-                                  child: CommentPage(
-                                    sharedPreferences: sharedPreferences,
-                                    postIndex: index,
-                                    profileState: null,
-                                    searchState: null,
-                                    feedState: state,
-                                    inFeed: false,
-                                  ),
-                                )));
+                        if (mounted) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                    value: context.read<FeedBloc>(),
+                                    child: CommentPage(
+                                      sharedPreferences: sharedPreferences,
+                                      postIndex: index,
+                                      profileState: null,
+                                      searchState: null,
+                                      feedState: state,
+                                      inFeed: false,
+                                    ),
+                                  )));
+                        }
                       },
                       bookmarkPressed: () {
                         context
@@ -326,7 +333,7 @@ class UserPosts extends StatelessWidget {
                 );
               },
             )
-          : inProfile
+          : widget.inProfile
               ? BlocBuilder<ProfileBloc, ProfileState>(
                   builder: (context, state) {
                     if (state is ProfileLoading) {
@@ -364,7 +371,7 @@ class UserPosts extends StatelessWidget {
                                           context,
                                           height,
                                           width,
-                                          inProfile,
+                                          widget.inProfile,
                                           false,
                                           index,
                                           null,
@@ -386,18 +393,21 @@ class UserPosts extends StatelessWidget {
                             commentPressed: () async {
                               var sharedPreferences =
                                   await SharedPreferences.getInstance();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                        value: context.read<ProfileBloc>(),
-                                        child: CommentPage(
-                                          sharedPreferences: sharedPreferences,
-                                          postIndex: index,
-                                          profileState: state,
-                                          searchState: null,
-                                          feedState: null,
-                                          inFeed: false,
-                                        ),
-                                      )));
+                              if (mounted) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                          value: context.read<ProfileBloc>(),
+                                          child: CommentPage(
+                                            sharedPreferences:
+                                                sharedPreferences,
+                                            postIndex: index,
+                                            profileState: state,
+                                            searchState: null,
+                                            feedState: null,
+                                            inFeed: false,
+                                          ),
+                                        )));
+                              }
                             },
                             bookmarkPressed: () {
                               context
@@ -461,7 +471,7 @@ class UserPosts extends StatelessWidget {
                                           context,
                                           height,
                                           width,
-                                          inProfile,
+                                          widget.inProfile,
                                           state.usersPosts,
                                           index,
                                           state,
@@ -483,18 +493,20 @@ class UserPosts extends StatelessWidget {
                           commentPressed: () async {
                             var sharedPreferences =
                                 await SharedPreferences.getInstance();
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                      value: context.read<SearchBloc>(),
-                                      child: CommentPage(
-                                        sharedPreferences: sharedPreferences,
-                                        postIndex: index,
-                                        searchState: state,
-                                        profileState: null,
-                                        feedState: null,
-                                        inFeed: false,
-                                      ),
-                                    )));
+                            if (mounted) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                        value: context.read<SearchBloc>(),
+                                        child: CommentPage(
+                                          sharedPreferences: sharedPreferences,
+                                          postIndex: index,
+                                          searchState: state,
+                                          profileState: null,
+                                          feedState: null,
+                                          inFeed: false,
+                                        ),
+                                      )));
+                            }
                           },
                           bookmarkPressed: () {
                             context
