@@ -593,7 +593,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                                                             BlocProvider.value(
                                                                               value: context.read<SearchBloc>(),
                                                                             ),
-                                                                            BlocProvider(create: (context) => HomepageBloc()),
+                                                                            BlocProvider.value(value: context.read<HomepageBloc>()),
                                                                             BlocProvider(create: (context) => p.ProfileBloc(PageController())),
                                                                             BlocProvider(create: (context) => StoryBloc())
                                                                           ],
