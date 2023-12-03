@@ -1,7 +1,7 @@
 # Instagram Clone 
 This is an Instagram clone developed using Flutter and Firebase.
 
-<image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/f83d9281-0266-4c54-b399-a075fa3b0e59"  width="400" height="350" >
+<image src="https://github.com/Priyanshu078/instagram_clone/assets/66347715/dc753204-3436-4dd6-800e-aa40a5fcf05f"  width="400" height="350" >
 
 ## Snaps
 
