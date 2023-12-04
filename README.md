@@ -81,6 +81,6 @@ This is an Instagram clone developed using Flutter and Firebase.
 1. Clone this repository.
 2. Create a new Firebase project 
 3. Add Firebase to the cloned project as specified in the Firebase console
-4. This will create your own firebaseOptions.dart file in this project.
+4. This will create your firebaseOptions.dart file in this project.
 5. Now you can run this project using "flutter run" from the console.
 
